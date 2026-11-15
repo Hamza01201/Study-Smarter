@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Study Cards Pro</title>
+        <title>The Studying Is Easy</title>
 
         <script
             src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -3167,6 +3167,16 @@ body.drMahtActive .study-footer{display:none !important;}
 #drMahtPro .drAnswerValue{color:#4b3036;font-size:27px}#drMahtPro .drSupported{max-width:650px}#drMahtPro .drSupported b{background:#fff0f2;border-color:#d9aeb5;color:#68464d}
 @media(max-width:650px){#drMahtPro .drMathMain{padding:18px 9px 45px}#drMahtPro .drUniversalSolver{padding:14px;border-radius:25px}#drMahtPro .drSolverRow{padding:7px;gap:6px}#drMahtPro .drRgbInputWrap .drUniversalInput{height:66px!important;font-size:21px!important}#drMahtPro .drEqualsButton{flex-basis:62px;font-size:30px}#drMahtPro .drFunctionKeys{grid-template-columns:repeat(5,1fr);gap:6px}#drMahtPro .drFunctionKey{height:38px;font-size:12px;border-radius:12px}#drMahtPro .drCalcTools{grid-template-columns:repeat(5,1fr);gap:6px}#drMahtPro .drCalcTools button{height:34px;font-size:11px}}
 
+
+
+/* Repaired: Mind Map Pro link controls */
+.mindLinkControls{height:auto!important;min-height:38px!important;display:grid!important;grid-template-columns:minmax(68px,auto) minmax(0,1fr);gap:7px!important;align-items:center!important;overflow:visible!important;}
+.mindLinkControls select{min-width:0!important;width:100%!important;max-width:100%!important;height:29px;box-sizing:border-box;border-radius:8px;padding:4px 6px;}
+.mindLinkControls input[type=color]{width:38px!important;height:28px!important;justify-self:end;}
+.mindLinkControls:has(#mindLinkColor){grid-template-columns:minmax(68px,auto) 42px minmax(76px,1fr);}
+.mindLinkCurveToggle{width:100%;min-height:36px;padding:7px 8px;border-radius:9px;font-size:12px;font-weight:800;white-space:normal;line-height:1.35;box-sizing:border-box;}
+.mindLinkCurveToggle:disabled{opacity:.45;cursor:not-allowed;}
+
 </style>
     </head>
 
@@ -3344,7 +3354,26 @@ body.drMahtActive .study-footer{display:none !important;}
                         onclick="openExamMaker()">
                         <div class="productIcon">📝</div>
                         <div class="productName">Exam Maker Pro</div>
-                        <div class="productDesc">أنشئ ورقة امتحان أو مراجعة وصدّرها PDF بتصميمك</div>
+                        <div class="productDesc">أنشئ ورقة امتحان أو مراجعة
+                            وصدّرها PDF بتصميمك</div>
+                        <span class="productArrow">إنشاء ←</span>
+                    </button>
+
+                    <button class="productCard todoProduct"
+                        onclick="openTaskFlow()">
+                        <div class="productIcon">☑️</div>
+                        <div class="productName">TaskFlow To Do</div>
+                        <div class="productDesc">نظّم مهامك وقوائمك ومواعيدك
+                            بطريقة سهلة وواضحة</div>
+                        <span class="productArrow">فتح ←</span>
+                    </button>
+
+                    <button class="productCard tableProduct"
+                        onclick="openTableStudio()">
+                        <div class="productIcon">▦</div>
+                        <div class="productName">Table Studio Pro</div>
+                        <div class="productDesc">أنشئ جداول قابلة للتعديل
+                            والتنسيق واحفظها في بطاقات</div>
                         <span class="productArrow">إنشاء ←</span>
                     </button>
 
@@ -4028,6 +4057,17 @@ overscroll-behavior-x:contain;
                         <button class="mindProjectBtn"
                             onclick="openEditMindProjectModal()">✏️ تعديل
                             العنوان</button>
+                        <button class="mindProjectBtn" type="button"
+                            onclick="exportMindProjectsToDevice()"
+                            title="تنزيل نسخة من مشاريع الخرائط">⬇️ تنزيل
+                            الخريطة</button>
+                        <button class="mindProjectBtn" type="button"
+                            onclick="document.getElementById('mindProjectImportFile').click()"
+                            title="رفع خريطة محفوظة من الجهاز">⬆️ رفع
+                            خريطة</button>
+                        <input id="mindProjectImportFile" type="file"
+                            accept=".json,application/json" hidden
+                            onchange="importMindProjectsFromDevice(event)">
                     </div>
 
                     <button onclick="addMindNode()">＋ إضافة عقدة</button>
@@ -4040,6 +4080,54 @@ overscroll-behavior-x:contain;
                         <input id="mindColor" type="color" value="#5b5bf7"
                             onchange="changeSelectedNodeColor()">
                     </div>
+                    <div class="mindToolbarRow mindStyleControls">
+                        <span>لون الكلام:</span>
+                        <input id="mindTextColor" type="color" value="#ffffff"
+                            onchange="changeSelectedNodeTextColor()"
+                            title="تغيير لون نص العقدة المحددة">
+                    </div>
+                    <section class="mindLinkEditor"
+                        aria-label="إعدادات الربطة المحددة">
+                        <div class="mindLinkEditorTitle">🔗 إعدادات الربطة</div>
+                        <div
+                            class="mindToolbarRow mindStyleControls mindLinkControls mindLinkSelectRow">
+                            <label for="mindLinkSelect">الربطة المحددة</label>
+                            <select id="mindLinkSelect"
+                                onchange="loadSelectedMindLinkStyle()"
+                                title="اختر ربطة واحدة لتعديلها"><option
+                                    value>اختر ربطة</option></select>
+                        </div>
+                        <div
+                            class="mindToolbarRow mindStyleControls mindLinkControls mindLinkColorRow">
+                            <label for="mindLinkColor">لون الربطة</label>
+                            <input id="mindLinkColor" type="color"
+                                value="#8b8bff"
+                                onchange="changeSelectedMindLinkStyle()"
+                                title="تغيير لون الربطة المحددة فقط">
+                            <select id="mindLinkPattern"
+                                onchange="changeSelectedMindLinkStyle()"
+                                title="نمط خط الربط"><option
+                                    value="solid">متصل</option><option
+                                    value="dashed">متقطع</option><option
+                                    value="dotted">منقّط</option></select>
+                        </div>
+                        <div class="mindCurveLabel">شكل الربطة</div>
+                        <div class="mindCurveChoices" role="group"
+                            aria-label="شكل الربطة">
+                            <button type="button" class="mindCurveChoice"
+                                data-curve="straight"
+                                onclick="setSelectedMindLinkCurve('straight')"
+                                disabled>مستقيمة</button>
+                            <button type="button" class="mindCurveChoice"
+                                data-curve="gentle"
+                                onclick="setSelectedMindLinkCurve('gentle')"
+                                disabled>انحناء بسيط</button>
+                            <button type="button" class="mindCurveChoice"
+                                data-curve="right-angle"
+                                onclick="setSelectedMindLinkCurve('right-angle')"
+                                disabled>زاوية 90°</button>
+                        </div>
+                    </section>
 
                     <button class="mindUnlinkSelected"
                         onclick="unlinkSelectedMindNode()">🔓 فك ربط العقدة
@@ -5053,6 +5141,8 @@ function showProductSelector(){
 if(!currentUser) return;
 const examScreen = document.getElementById("examMaker");
 if(examScreen) examScreen.classList.add("hidden");
+document.getElementById("taskFlowApp")?.classList.add("hidden");
+document.getElementById("tableStudioApp")?.classList.add("hidden");
 
 document.getElementById("authScreen")
 .classList.add("hidden");
@@ -7867,6 +7957,40 @@ if(dropdown && !dropdown.contains(event.target)) closeMindProjectDropdown();
 });
 
 
+function exportMindProjectsToDevice(){
+    try{
+        if(!Array.isArray(mindProjects) || !mindProjects.length){toast("⚠️ لا توجد خرائط لتنزيلها");return;}
+        syncActiveMindMap();
+        const payload={format:"StudySmarter-MindMaps",version:1,exportedAt:new Date().toISOString(),activeProjectId:activeMindProjectId,projects:mindProjects};
+        const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json;charset=utf-8"});
+        const url=URL.createObjectURL(blob);const a=document.createElement("a");
+        const active=mindProjects.find(p=>p.id===activeMindProjectId);
+        const safe=(active?.title||"MindMaps").replace(/[\\/:*?"<>|]+/g,"_").trim()||"MindMaps";
+        a.href=url;a.download=safe+"_backup.json";document.body.appendChild(a);a.click();a.remove();
+        setTimeout(()=>URL.revokeObjectURL(url),1500);toast("⬇️ تم تنزيل نسخة احتياطية من جميع خرائطك");
+    }catch(error){console.error(error);toast("⚠️ تعذر تنزيل الخرائط");}
+}
+async function importMindProjectsFromDevice(event){
+    const input=event?.target;const file=input?.files?.[0];if(!file)return;
+    try{
+        const data=JSON.parse(await file.text());
+        if(data?.format!=="StudySmarter-MindMaps" || !Array.isArray(data.projects) || !data.projects.length)throw new Error("Invalid mind map backup");
+        const imported=data.projects.filter(p=>p && typeof p.title==="string" && Array.isArray(p.nodes) && Array.isArray(p.links));
+        if(!imported.length)throw new Error("No valid projects");
+        const clones=imported.map(p=>({...p,id:"mind_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,9),nodes:p.nodes,links:p.links}));
+        if(!Array.isArray(mindProjects))mindProjects=[];
+        mindProjects.push(...clones);
+        const requested=imported.findIndex(p=>p.id===data.activeProjectId);
+        const chosen=clones[requested>=0?requested:0];
+        activeMindProjectId=chosen.id;mindMap={nodes:chosen.nodes,links:chosen.links};
+        selectedMindNodeId=null;mindConnectMode=false;mindConnectFrom=null;
+        saveMindProjects();renderMindProjects();renderMindMap();updateMindMode();restoreMindProjectView(chosen,true);
+        hideMindProjectShelf();toast(`✅ تم رفع ${clones.length} مشروع/مشاريع وإضافتها إلى خرائطك`);
+        if(typeof cloudSaveCurrentUserNow==="function")try{await cloudSaveCurrentUserNow();}catch(e){console.warn("Cloud sync after import failed",e);toast("📦 تم الاستيراد محليًا؛ ستتم المزامنة عند توفر الاتصال");}
+    }catch(error){console.error("Mind map import error:",error);toast("⚠️ الملف غير صالح أو ليس نسخة خرائط StudySmarter");}
+    finally{if(input)input.value="";}
+}
+
 function restoreMindProjectView(project, fallbackCenter=false){
 
 if(project?.view?.initialized){
@@ -8521,6 +8645,7 @@ document.createElement("div");
 
 text.className =
 "mindNodeText";
+if(node.textColor) text.style.color = node.textColor;
 
 text.textContent =
 node.text || "عقدة جديدة";
@@ -8683,6 +8808,9 @@ if(node){
 document.getElementById("mindColor")
 .value =
 node.color || "#5b5bf7";
+const textColorInput = document.getElementById("mindTextColor");
+if(textColorInput) textColorInput.value = node.textColor || "#ffffff";
+refreshMindLinkSelect();
 
 }
 
@@ -9069,33 +9197,33 @@ const y2 =
 to.y +
 (toElement.offsetHeight * toScale) / 2;
 
-const line =
-document.createElementNS(
-"http://www.w3.org/2000/svg",
-"line"
-);
-
-line.setAttribute(
-"x1",
-x1
-);
-
-line.setAttribute(
-"y1",
-y1
-);
-
-line.setAttribute(
-"x2",
-x2
-);
-
-line.setAttribute(
-"y2",
-y2
-);
-
-svg.appendChild(line);
+const curveType = link.curveType || (link.curved ? 'gentle' : 'straight');
+const shape = document.createElementNS("http://www.w3.org/2000/svg", curveType === 'straight' ? "line" : "path");
+if(curveType !== 'straight'){
+    const dx=x2-x1, dy=y2-y1, length=Math.hypot(dx,dy)||1;
+    if(curveType==='right-angle'){
+        /* Orthogonal connector: every turn is exactly 90 degrees. */
+        const midX=x1+dx/2;
+        shape.setAttribute("d", `M ${x1} ${y1} L ${midX} ${y1} L ${midX} ${y2} L ${x2} ${y2}`);
+    }else{
+        const nx=-dy/length, ny=dx/length;
+        const bend=Math.min(55,Math.max(16,length*.09));
+        const mx=(x1+x2)/2+nx*bend, my=(y1+y2)/2+ny*bend;
+        shape.setAttribute("d", `M ${x1} ${y1} Q ${mx} ${my} ${x2} ${y2}`);
+    }
+    shape.setAttribute("fill", "none");
+}else{
+    shape.setAttribute("x1",x1);shape.setAttribute("y1",y1);shape.setAttribute("x2",x2);shape.setAttribute("y2",y2);
+}
+shape.setAttribute("stroke", link.color || "#8b8bff");
+shape.style.setProperty("stroke", link.color || "#8b8bff", "important");
+shape.setAttribute("stroke-width", String(link.width || 3));
+shape.style.setProperty("stroke-width", String(link.width || 3), "important");
+shape.style.setProperty("opacity", "0.85", "important");
+shape.setAttribute("stroke-linecap", "round");
+if(link.pattern === "dashed") shape.setAttribute("stroke-dasharray", "10 7");
+else if(link.pattern === "dotted") shape.setAttribute("stroke-dasharray", "2 7");
+svg.appendChild(shape);
 
 });
 
@@ -9244,6 +9372,76 @@ saveMindMap();
 
 renderMindMap();
 
+}
+
+
+function changeSelectedNodeTextColor(){
+    const node = getSelectedMindNode();
+    if(!node){ toast("✏️ اختار عقدة أولًا"); return; }
+    const input = document.getElementById("mindTextColor");
+    if(!input) return;
+    node.textColor = input.value;
+    saveMindMap();
+    renderMindMap();
+}
+
+function getSelectedMindLink(){
+    const select = document.getElementById("mindLinkSelect");
+    if(!select || select.value === "") return null;
+    const node = getSelectedMindNode();
+    if(!node) return null;
+    const related = (mindMap.links || []).filter(link => link.from === node.id || link.to === node.id);
+    return related[Number(select.value)] || null;
+}
+
+function refreshMindLinkSelect(){
+    const select=document.getElementById('mindLinkSelect');
+    const node=getSelectedMindNode();
+    if(!select)return;
+    const related=node?(mindMap.links||[]).filter(link=>link.from===node.id||link.to===node.id):[];
+    select.innerHTML='<option value="">اختر ربطة</option>'+related.map((link,i)=>{
+        const otherId=link.from===node.id?link.to:link.from;
+        const other=(mindMap.nodes||[]).find(n=>n.id===otherId);
+        const label=(other?.text||'عقدة').replace(/[<>]/g,'').slice(0,24);
+        return `<option value="${i}">ربطة مع: ${label}</option>`;
+    }).join('');
+    select.value=related.length?'0':'';
+    loadSelectedMindLinkStyle();
+}
+function loadSelectedMindLinkStyle(){
+    const link=getSelectedMindLink();
+    const color=document.getElementById('mindLinkColor');
+    const pattern=document.getElementById('mindLinkPattern');
+    if(color){color.disabled=!link;if(link)color.value=link.color||'#8b8bff';}
+    if(pattern){pattern.disabled=!link;if(link)pattern.value=link.pattern||'solid';}
+    const curve=link?.curveType||(link?.curved?'gentle':'straight');
+    document.querySelectorAll('.mindCurveChoice').forEach(button=>{
+        button.disabled=!link;
+        const active=!!link&&button.dataset.curve===curve;
+        button.classList.toggle('active',active);
+        button.setAttribute('aria-pressed',String(active));
+    });
+}
+function changeSelectedMindLinkStyle(){
+    const link=getSelectedMindLink();
+    if(!link){toast('🔗 اختر ربطة محددة أولًا');return;}
+    const color=document.getElementById('mindLinkColor');
+    const pattern=document.getElementById('mindLinkPattern');
+    if(color)link.color=color.value;
+    if(pattern)link.pattern=pattern.value;
+    saveMindMap();drawMindConnections();
+}
+function setSelectedMindLinkCurve(type){
+    const link=getSelectedMindLink();
+    if(!link){toast('🔗 اختر ربطة محددة أولًا');return;}
+    link.curveType=['straight','gentle','right-angle'].includes(type)?type:'straight';
+    link.curved=link.curveType!=='straight';
+    saveMindMap();loadSelectedMindLinkStyle();drawMindConnections();
+}
+function toggleSelectedMindLinkCurve(){
+    const link=getSelectedMindLink();if(!link)return;
+    const current=link.curveType||(link.curved?'gentle':'straight');
+    setSelectedMindLinkCurve(current==='straight'?'gentle':'straight');
 }
 
 
@@ -10028,13 +10226,27 @@ body:has(#app:not(.hidden))
 
 /* ================= EXAM MAKER PRO (isolated styles) ================= */
 .examProduct{--exam-glow:#3c83d5;background:linear-gradient(145deg,#edf5ff,#fff);border:1px solid #c9def8!important}
+body.dark .examProduct{background:linear-gradient(145deg,#1b2238,#151b2e)!important;border-color:#303a59!important;color:#f1f4ff!important;box-shadow:inset 0 1px 0 #ffffff08}
+body.dark .examProduct .productName{color:#f4f6ff!important}
+body.dark .examProduct .productDesc{color:#aab4ce!important}
+body.dark .examProduct .productArrow{color:#7c83ff!important}
+.mindStyleControls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mindStyleControls input[type=color]{width:38px!important;height:30px!important;padding:2px;border:1px solid #65708b;border-radius:8px;background:transparent;cursor:pointer}
+.mindStyleControls select{max-width:105px;min-width:85px;padding:6px 8px;border-radius:8px;border:1px solid #68738e;background:var(--card,#fff);color:var(--text,inherit)}
 .examProduct:hover{box-shadow:0 12px 30px #367dcc30!important;transform:translateY(-4px)}
 .examMaker{position:fixed;inset:0;z-index:10020;overflow:auto;background:radial-gradient(circle at 10% 0%,#dcecff 0,transparent 35%),#eef2f8;color:#172033;font-family:Tahoma,Arial,sans-serif}
 .examTopbar{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px 24px;background:#ffffffed;backdrop-filter:blur(14px);border-bottom:1px solid #dbe3ef;box-shadow:0 5px 20px #1c355010}
 .examBrand{font-size:21px;font-weight:900;color:#173b72}.examTopbar small{color:#718096}.examTopActions{display:flex;gap:9px;flex-wrap:wrap}
 .examLayout{display:grid;grid-template-columns:310px minmax(0,1fr);gap:20px;max-width:1500px;margin:auto;padding:20px}
 .examTools{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 110px);overflow:auto;background:#fff;border:1px solid #e0e7f0;border-radius:20px;padding:18px;box-shadow:0 12px 35px #18375b12}
-.examTools h3{margin:0 0 16px;color:#173b72}.examTools label{display:flex;flex-direction:column;gap:6px;margin:11px 0;font-size:12px;font-weight:800;color:#46546a}.examTools input:not([type=color]):not([type=range]),.examTools select{width:100%;min-width:0;padding:10px;border:1px solid #d9e2ee;border-radius:10px;background:#fbfdff;color:#172033;outline:none}.examTools input:focus,.examTools select:focus{border-color:#3985dc;box-shadow:0 0 0 3px #3985dc20}.examTools input[type=color]{width:100%;height:38px;border:0;background:transparent;cursor:pointer}.examTools input[type=range]{width:100%;accent-color:#2878d0}.examTwo{display:grid;grid-template-columns:1fr 1fr;gap:9px}.examToolButtons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}.examBtn{border:1px solid #d5e0ed;border-radius:11px;padding:10px 13px;background:#f5f8fc;color:#23344d;font-weight:800;cursor:pointer;transition:.2s;box-shadow:0 2px 0 #00000005}.examBtn:hover{transform:translateY(-2px);filter:brightness(1.03);box-shadow:0 8px 18px #24558b20}.examBtn:active{transform:scale(.97)}.examBtn.primary{background:linear-gradient(135deg,#2469b8,#4698ed);color:#fff;border-color:transparent}.examBtn.ghost{background:#fff}.examHint{font-size:11px;line-height:1.8;color:#7b8798;margin:14px 0 0}.examWorkspace{min-width:0}.examWorkspaceBar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;color:#68778c;font-size:13px}.examPaper{--exam-head:#173b72;--exam-text:#202938;--exam-accent:#2878d0;--exam-paper:#fff;--exam-font:Tahoma,Arial,sans-serif;--exam-font-size:16px;width:min(100%,850px);min-height:1100px;margin:0 auto;padding:48px 55px;background:var(--exam-paper);color:var(--exam-text);font-family:var(--exam-font);font-size:var(--exam-font-size);line-height:1.9;box-shadow:0 15px 50px #18375b20;border-radius:4px;transition:background .25s,color .25s;animation:examPaperIn .45s ease both}.examPaperHead{text-align:center;border-bottom:2px solid var(--exam-accent);padding-bottom:18px;margin-bottom:22px}.examSchool{font-weight:800;color:var(--exam-accent);min-height:28px}.examPaperHead h1{font-size:1.75em;color:var(--exam-head);margin:5px 0 0;outline:none}.examSubject{font-weight:800;color:var(--exam-accent)}.examMeta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;text-align:right;margin-top:15px;font-size:.88em}.examPaper[data-header="modern"] .examPaperHead{background:linear-gradient(120deg,color-mix(in srgb,var(--exam-accent) 10%,transparent),transparent);padding:20px;border-radius:15px;border:0;border-right:5px solid var(--exam-accent)}.examPaper[data-header="minimal"] .examPaperHead{border:0;border-bottom:1px solid #aaa}.examQuestion{position:relative;margin:20px 0;padding:13px 15px;border:1px solid #e2e8f0;border-radius:13px;animation:examQuestionIn .3s ease both;break-inside:avoid}.examQuestion:hover{border-color:var(--exam-accent);box-shadow:0 5px 18px #2878d012}.examQuestionTitle{font-weight:800;outline:none;min-height:28px}.examQuestionType{font-size:.72em;color:var(--exam-accent);font-weight:900;margin-bottom:4px}.examChoices{display:grid;grid-template-columns:1fr 1fr;gap:5px 18px;margin-top:8px}.examChoice{outline:none;min-height:26px}.examEssayLines{margin-top:12px;display:grid;gap:23px}.examEssayLines span{border-bottom:1px dotted #9aa7b7;height:1px}.examQuestionControls{display:flex;gap:6px;justify-content:flex-start;margin-top:10px;opacity:.65}.examQuestion:hover .examQuestionControls{opacity:1}.examQuestionControls button{border:0;background:#edf4fc;color:#31577e;border-radius:7px;padding:4px 8px;cursor:pointer;font-size:11px}.examQuestionControls button.delete{color:#b42332;background:#fff0f0}.examEmpty{text-align:center;padding:55px 10px;color:#98a4b4;border:2px dashed #dce4ef;border-radius:14px}.examPaperFooter{text-align:center;color:var(--exam-accent);font-weight:800;border-top:1px solid #dce3ec;margin-top:35px;padding-top:12px;outline:none}.examPaper [contenteditable=true]:focus{outline:2px dashed var(--exam-accent);outline-offset:3px;border-radius:3px}.examPaper [data-placeholder]:empty:before{content:attr(data-placeholder);color:#a0aab8}.examSection{font-size:1.12em;font-weight:900;color:var(--exam-head);border-right:4px solid var(--exam-accent);padding:5px 12px;margin:24px 0 10px;break-after:avoid}.examSection:focus{outline:2px dashed var(--exam-accent)}
+.examTools h3{margin:0 0 16px;color:#173b72}.examTools label{display:flex;flex-direction:column;gap:6px;margin:11px 0;font-size:12px;font-weight:800;color:#46546a}.examTools input:not([type=color]):not([type=range]),.examTools select{width:100%;min-width:0;padding:10px;border:1px solid #d9e2ee;border-radius:10px;background:#fbfdff;color:#172033;outline:none}.examTools input:focus,.examTools select:focus{border-color:#3985dc;box-shadow:0 0 0 3px #3985dc20}.examTools input[type=color]{width:100%;height:38px;border:0;background:transparent;cursor:pointer}.examTools input[type=range]{width:100%;accent-color:#2878d0}.examTwo{display:grid;grid-template-columns:1fr 1fr;gap:9px}.examToolButtons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}.examBtn{border:1px solid #d5e0ed;border-radius:11px;padding:10px 13px;background:#f5f8fc;color:#23344d;font-weight:800;cursor:pointer;transition:.2s;box-shadow:0 2px 0 #00000005}.examBtn:hover{transform:translateY(-2px);filter:brightness(1.03);box-shadow:0 8px 18px #24558b20}.examBtn:active{transform:scale(.97)}.examBtn.primary{background:linear-gradient(135deg,#2469b8,#4698ed);color:#fff;border-color:transparent}.examBtn.ghost{background:#fff}.examHint{font-size:11px;line-height:1.8;color:#7b8798;margin:14px 0 0}.examWorkspace{min-width:0}.examWorkspaceBar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;color:#68778c;font-size:13px}.examPaper{--exam-head:#173b72;--exam-text:#202938;--exam-accent:#2878d0;--exam-paper:#fff;--exam-font:Tahoma,Arial,sans-serif;--exam-font-size:16px;width:min(100%,850px);min-height:1100px;margin:0 auto;padding:48px 55px;background:var(--exam-paper);color:var(--exam-text);font-family:var(--exam-font);font-size:var(--exam-font-size);line-height:1.9;box-shadow:0 15px 50px #18375b20;border-radius:4px;transition:background .25s,color .25s;animation:examPaperIn .45s ease both}.examPaperHead{text-align:center;border-bottom:2px solid var(--exam-accent);padding-bottom:18px;margin-bottom:22px}.examSchool{font-weight:800;color:var(--exam-accent);min-height:28px}.examPaperHead h1{font-size:1.75em;color:var(--exam-head);margin:5px 0 0;outline:none}.examSubject{font-weight:800;color:var(--exam-accent)}.examMeta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;text-align:right;margin-top:15px;font-size:.88em}.examPaper[data-header="modern"] .examPaperHead{background:linear-gradient(120deg,color-mix(in srgb,var(--exam-accent) 10%,transparent),transparent);padding:20px;border-radius:15px;border:0;border-right:5px solid var(--exam-accent)}.examPaper[data-header="minimal"] .examPaperHead{border:0;border-bottom:1px solid #aaa}.examQuestion{position:relative;margin:20px 0;padding:13px 15px;border:1px solid #e2e8f0;border-radius:13px;animation:examQuestionIn .3s ease both;break-inside:avoid}.examQuestion:hover{border-color:var(--exam-accent);box-shadow:0 5px 18px #2878d012}.examQuestionTitle{font-weight:800;outline:none;min-height:28px}.examQuestionType{font-size:.72em;color:var(--exam-accent);font-weight:900;margin-bottom:4px}.examChoices{display:grid;grid-template-columns:1fr 1fr;gap:5px 18px;margin-top:8px}.examChoice{outline:none;min-height:26px}.examEssayLines{margin-top:12px;display:grid;gap:23px}.examEssayLines span{border-bottom:1px dotted #9aa7b7;height:1px}.examQuestionControls{display:flex;gap:6px;justify-content:flex-start;margin-top:10px;opacity:.65}.examQuestion:hover .examQuestionControls{opacity:1}.examQuestionControls button{border:0;background:#edf4fc;color:#31577e;border-radius:7px;padding:4px 8px;cursor:pointer;font-size:11px}.examQuestionControls button.delete{color:#b42332;background:#fff0f0}.examEmpty{text-align:center;padding:55px 10px;color:#98a4b4;border:2px dashed #dce4ef;border-radius:14px}.examPaperFooter{text-align:center;color:var(--exam-accent);font-weight:800;border-top:1px solid #dce3ec;margin-top:35px;padding-top:12px;outline:none}.examPaper [contenteditable=true]:focus{outline:2px dashed var(--exam-accent);outline-offset:3px;border-radius:3px}.examPaper [data-placeholder]:empty:before{content:attr(data-placeholder);color:#a0aab8}.examSectionWrap{display:flex;align-items:center;gap:8px;margin:24px 0 10px;break-after:avoid}
+.examSection{flex:1;min-width:0;font-size:1.12em;font-weight:900;color:var(--exam-head);border-right:4px solid var(--exam-accent);padding:5px 12px;margin:0;outline:none;overflow-wrap:anywhere}
+.examSection:focus{outline:2px dashed var(--exam-accent);outline-offset:2px}
+.examSectionDelete{flex:0 0 auto;border:0;border-radius:8px;padding:6px 10px;background:#fff0f0;color:#b42332;font-size:11px;font-weight:800;cursor:pointer;transition:.2s}
+.examSectionDelete:hover{background:#d94354;color:#fff;transform:translateY(-1px)}
+.examMaker.exam-dark .examSectionDelete{background:#482b37;color:#ffc4cc}
+.examMaker.exam-dark .examSectionDelete:hover{background:#b9253d;color:#fff}
+@media print{.examSectionDelete{display:none!important}}
 
 .examChoices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 22px;margin-top:10px}
 .examChoice{display:flex;align-items:flex-start;gap:7px;min-width:0;outline:none;min-height:30px;padding:3px 5px;border-radius:7px}
@@ -10060,52 +10272,446 @@ body:has(#app:not(.hidden))
 
 .examFormatTools{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.examColorText{display:flex;align-items:center;gap:5px;font-size:11px;color:#64748b}.examColorText input{width:32px;height:30px;border:0;background:transparent;cursor:pointer}
 
+
+/* Exam Maker Pro: independent light/dark appearance */
+.examMaker.exam-dark{background:radial-gradient(circle at 10% 0%,#263b5a 0,transparent 35%),#101827;color:#e6edf7;color-scheme:dark}
+.examMaker.exam-dark .examTopbar{background:#172235ed;border-color:#334155;box-shadow:0 5px 20px #0003}
+.examMaker.exam-dark .examBrand,.examMaker.exam-dark .examTools h3{color:#a9ceff}
+.examMaker.exam-dark .examTopbar small,.examMaker.exam-dark .examWorkspaceBar{color:#a8b6ca}
+.examMaker.exam-dark .examTools{background:#1b293d;border-color:#34445d;box-shadow:0 12px 35px #0003}
+.examMaker.exam-dark .examTools label,.examMaker.exam-dark .examColorText{color:#c4d0e0}
+.examMaker.exam-dark .examTools input:not([type=color]):not([type=range]),.examMaker.exam-dark .examTools select{background:#111c2d;color:#edf4ff;border-color:#3a4a63}
+.examMaker.exam-dark .examBtn{background:#26364d;color:#e4edf9;border-color:#40536d}
+.examMaker.exam-dark .examBtn.ghost{background:#202e43;color:#e4edf9}
+.examMaker.exam-dark .examBtn.primary{background:linear-gradient(135deg,#245b9b,#347fc9);color:#fff;border-color:transparent}
+.examMaker.exam-dark .examHint{color:#a7b5c9}
+.examMaker.exam-dark .examGroupActions{background:#1a293d;border-color:#435773}
+.examMaker.exam-dark .examQuestionControls button{background:#2a3c55;color:#dbeafe}
+.examMaker.exam-dark .examQuestionControls button.delete,.examMaker.exam-dark .examGroupControls button{background:#482b37;color:#ffc4cc}
+.examMaker.exam-dark .examEmpty{color:#a9b8cc;border-color:#465a76}
+.examMaker.exam-dark .examSubQuestions{border-color:#49617e;background:#18283d}
+.examMaker.exam-dark .examSubQuestion{border-color:#40536d;background:#202f45;color:#e6edf7}
+.examMaker.exam-dark .examSubQuestionPrompt{color:#e6edf7}
+.examSubQuestions{margin:12px 0 4px;padding:10px 12px;border-right:3px solid var(--exam-accent);border-radius:10px;background:#f5f8fc}
+.examSubQuestion{margin:9px 0;padding:9px 11px;border:1px solid #dce5f0;border-radius:9px;background:#fff;break-inside:avoid}
+.examSubQuestionHead{display:flex;align-items:flex-start;gap:7px;font-weight:800}
+.examSubQuestionNumber{flex:0 0 auto;color:var(--exam-accent)}
+.examSubQuestionPrompt{flex:1;min-width:0;outline:none}
+.examSubQuestionLines{display:grid;gap:17px;margin:10px 0 3px}
+.examSubQuestionLines span{height:1px;border-bottom:1px dotted #9aa7b7}
+.examSubQuestionDelete{margin-top:5px;border:0;border-radius:7px;padding:4px 8px;background:#fff0f0;color:#b42332;cursor:pointer;font-size:11px}
+.examAddSubQuestion{border:1px dashed var(--exam-accent)!important;background:color-mix(in srgb,var(--exam-accent) 8%,transparent)!important;color:var(--exam-accent)!important}
+@media print{.examAddSubQuestion,.examSubQuestionDelete{display:none!important}.examSubQuestions{background:transparent!important}}
+
+
+/* Link editor: aligned controls with clear spacing */
+.mindLinkEditor{width:100%;display:flex;flex-direction:column;gap:7px;padding:9px;background:var(--card2);border:1px solid var(--border);border-radius:12px;box-sizing:border-box;min-width:0;}
+.mindLinkEditorTitle{font-size:12px;font-weight:900;color:var(--text);text-align:center;padding:2px 0 5px;border-bottom:1px solid var(--border);}
+.mindLinkEditor .mindToolbarRow{width:100%;min-width:0;height:auto!important;min-height:38px!important;padding:6px 8px!important;display:grid!important;align-items:center;gap:7px!important;box-sizing:border-box;overflow:visible!important;}
+.mindLinkEditor .mindLinkSelectRow{grid-template-columns:1fr!important;}
+.mindLinkEditor .mindLinkSelectRow label,.mindLinkEditor .mindLinkColorRow label{font-size:11px;line-height:1.3;white-space:nowrap;}
+.mindLinkEditor select{width:100%!important;min-width:0!important;max-width:100%!important;height:32px!important;box-sizing:border-box;padding:4px 7px!important;border-radius:8px!important;}
+.mindLinkEditor .mindLinkColorRow{grid-template-columns:minmax(0,1fr) 42px minmax(0,1fr)!important;}
+.mindLinkEditor input[type=color]{width:40px!important;height:30px!important;min-width:40px!important;padding:2px!important;justify-self:center;}
+.mindCurveLabel{font-size:11px;font-weight:900;color:var(--muted);text-align:right;margin-top:2px;}
+.mindCurveChoices{display:grid;grid-template-columns:1fr;gap:6px;width:100%;}
+.mindCurveChoice{width:100%;min-height:34px;padding:7px 8px;border:1px solid var(--border)!important;border-radius:8px;background:var(--card)!important;color:var(--text)!important;font-size:11px;font-weight:800;line-height:1.25;white-space:normal;box-sizing:border-box;transition:background .15s,border-color .15s,transform .15s;}
+.mindCurveChoice:hover:not(:disabled){border-color:var(--primary)!important;transform:translateY(-1px);}
+.mindCurveChoice.active{background:color-mix(in srgb,var(--primary) 16%,var(--card))!important;border:1px solid var(--primary)!important;color:var(--primary)!important;box-shadow:inset 0 0 0 1px var(--primary);}
+.mindCurveChoice:disabled{opacity:.4;cursor:not-allowed;}
+
+/* Exam Maker: image position follows the selected language */
+.examQuestionBody{display:grid;grid-template-columns:minmax(0,1fr) minmax(110px,190px);grid-template-areas:"content image";gap:14px;align-items:start;direction:ltr}
+/* Arabic (RTL): image on the LEFT, question content on the RIGHT */
+.examMaker[dir="rtl"] .examQuestionBody{grid-template-columns:minmax(110px,190px) minmax(0,1fr);grid-template-areas:"image content"}
+/* English (LTR): question content on the LEFT, image on the RIGHT */
+.examMaker[dir="ltr"] .examQuestionBody{grid-template-columns:minmax(0,1fr) minmax(110px,190px);grid-template-areas:"content image"}
+.examQuestionBody:not(:has(.examQuestionImageWrap)){display:block}
+.examQuestionContent{grid-area:content;min-width:0;direction:ltr;text-align:start}
+.examMaker[dir="rtl"] .examQuestionContent{direction:rtl;text-align:right}
+.examMaker[dir="ltr"] .examQuestionContent{direction:ltr;text-align:left}
+.examQuestionImageWrap{grid-area:image;position:relative;margin:0;max-width:100%;width:100%;text-align:center;align-self:start}
+.examQuestionImage{display:block;width:100%;max-width:190px;max-height:190px;object-fit:contain;margin:0 auto;border-radius:9px;border:1px solid #e2e8f0}
+.examQuestionImageWrap .examImageRemove{display:block;margin:5px auto 0}
+@media(max-width:560px){.examQuestionBody{grid-template-columns:minmax(86px,115px) minmax(0,1fr);gap:8px}.examMaker[dir="rtl"] .examQuestionBody{grid-template-columns:minmax(86px,115px) minmax(0,1fr);grid-template-areas:"image content"}.examMaker[dir="ltr"] .examQuestionBody{grid-template-columns:minmax(0,1fr) minmax(86px,115px);grid-template-areas:"content image"}.examQuestionImage{max-width:115px;max-height:150px}}
+@media print{.examQuestionBody{break-inside:avoid}.examQuestionImage{max-height:145px}}
+.examLanguageToggle{min-width:82px;font-weight:900}
+
+
+.examLayout[hidden],.examCardsView[hidden]{display:none!important}
+.examCardsView{max-width:1400px;margin:0 auto;padding:26px 24px 50px}
+.examCardsHead{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+.examCardsHead h2{margin:0 0 6px;font-size:25px;color:#173b72}.examCardsHead p{margin:0;color:#718096;font-size:13px}
+.examCardsGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+.examProjectCard{position:relative;min-height:175px;padding:18px;border:1px solid #dce5f0;border-radius:18px;background:linear-gradient(145deg,#fff,#f4f8fd);box-shadow:0 8px 24px #18375b0d;display:flex;flex-direction:column;gap:10px;transition:.2s}
+.examProjectCard:hover{transform:translateY(-3px);border-color:#8bb9e9;box-shadow:0 14px 30px #2878d018}
+.examProjectOpen{border:0;background:none;text-align:right;padding:0;cursor:pointer;color:inherit;flex:1}
+.examProjectIcon{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:#e7f1ff;color:#2469b8;font-size:21px;margin-bottom:10px}
+.examProjectName{display:block;font-weight:900;font-size:16px;color:#173b72;overflow-wrap:anywhere}.examProjectMeta{display:block;color:#7b8798;font-size:12px;margin-top:6px}
+.examProjectActions{display:flex;justify-content:flex-end;gap:8px;border-top:1px solid #e8eef5;padding-top:10px}
+.examProjectActions button{border:0;border-radius:9px;padding:7px 11px;font-weight:800;cursor:pointer;background:#eaf2fc;color:#285b91}.examProjectActions .delete{background:#fff0f0;color:#b42332}
+.examCardsEmpty{grid-column:1/-1;text-align:center;padding:55px 15px;border:2px dashed #d5e1ef;border-radius:18px;color:#8190a4;background:#ffffff80}
+.examMaker.exam-dark .examCardsHead h2,.examMaker.exam-dark .examProjectName{color:#b9d7ff}.examMaker.exam-dark .examCardsHead p,.examMaker.exam-dark .examProjectMeta{color:#a7b5c9}
+.examMaker.exam-dark .examProjectCard{background:linear-gradient(145deg,#1b293d,#172438);border-color:#34445d}.examMaker.exam-dark .examProjectIcon{background:#263d5b;color:#b9d7ff}.examMaker.exam-dark .examProjectActions{border-color:#34445d}.examMaker.exam-dark .examProjectActions button{background:#263b55;color:#dbeafe}.examMaker.exam-dark .examProjectActions .delete{background:#482b37;color:#ffc4cc}.examMaker.exam-dark .examCardsEmpty{background:#1b293d;border-color:#465a76;color:#a9b8cc}
+@media(max-width:600px){.examCardsView{padding:18px 12px 35px}.examCardsHead{align-items:stretch}.examNewCardBtn{width:100%}.examCardsGrid{grid-template-columns:1fr}}
+@media print{#examCardsView,#examMyCardsBtn,#examMinimizeBtn{display:none!important}}
+
+
+/* TaskFlow To Do */
+.todoProduct{--pc:#168b83}.tableProduct{--pc:#a16bd6}
+.productCard.todoProduct:before,.productCard.tableProduct:before{background:color-mix(in srgb,var(--pc) 8%,transparent);opacity:.75}
+.taskFlowApp,.tableStudioApp{min-height:100vh;padding:20px;background:var(--tf-bg,#f5f7fb);color:var(--tf-text,#243047);font-family:Tahoma,Arial,sans-serif;box-sizing:border-box}
+.tfTop,.tsTop{max-width:1450px;margin:0 auto 18px;padding:15px 20px;display:flex;align-items:center;justify-content:space-between;gap:15px;border:1px solid var(--tf-border,#e4e9f1);border-radius:18px;background:var(--tf-card,#fff);box-shadow:0 6px 24px #1b2a440b}
+.tfBrand,.tsBrand{font-size:22px;font-weight:900;color:var(--tf-accent,#2563a6)}.tfTop small,.tsTop small{display:block;color:var(--tf-muted,#8290a4);margin-top:4px}
+.tfTopActions,.tsTopActions{display:flex;gap:8px;flex-wrap:wrap}
+.tfBtn,.tsBtn{border:1px solid var(--tf-border,#dfe6ef);background:var(--tf-card,#fff);color:var(--tf-text,#243047);border-radius:10px;padding:9px 13px;font-weight:800;cursor:pointer;transition:.18s}
+.tfBtn:hover,.tsBtn:hover{transform:translateY(-1px);box-shadow:0 5px 14px #1d35551a}
+.tsBtn.primary{background:#3268c7;color:#fff;border-color:#3268c7}.tsBtn.danger{color:#b42332;background:#fff0f0;border-color:#ffd6d6}
+.tfShell{max-width:1450px;min-height:calc(100vh - 120px);margin:auto;display:grid;grid-template-columns:250px minmax(0,1fr);gap:18px}
+.tfSidebar,.tfMain,.tsTools,.tsWork{background:var(--tf-card,#fff);border:1px solid var(--tf-border,#e4e9f1);border-radius:18px;box-shadow:0 8px 28px #1b2a4408}
+.tfSidebar{padding:16px;display:flex;flex-direction:column;gap:7px}.tfNav{border:0;background:transparent;text-align:right;padding:12px;border-radius:10px;color:var(--tf-text,#243047);font-weight:800;cursor:pointer}.tfNav.active,.tfNav:hover{background:var(--tf-soft,#edf4ff);color:var(--tf-accent,#2563a6)}
+.tfListsTitle{display:flex;justify-content:space-between;align-items:center;margin:18px 5px 5px;font-weight:900;color:var(--tf-muted,#8290a4)}.tfListsTitle button{border:0;background:var(--tf-soft,#edf4ff);border-radius:8px;width:28px;height:28px;cursor:pointer;color:var(--tf-accent,#2563a6)}
+.tfListItem{display:flex;gap:5px;align-items:center}.tfListItem button:first-child{flex:1;text-align:right;border:0;background:transparent;padding:10px;border-radius:9px;color:var(--tf-text,#243047);cursor:pointer}.tfListItem button:first-child.active{background:var(--tf-soft,#edf4ff);font-weight:900;color:var(--tf-accent,#2563a6)}.tfListItem .tfListDelete{border:0;background:transparent;color:#b42332;cursor:pointer}
+.tfMain{padding:28px;min-width:0}.tfHeading{display:flex;justify-content:space-between;align-items:center;gap:10px}.tfHeading h1{margin:0;font-size:27px}.tfHeading p{margin:7px 0 20px;color:var(--tf-muted,#8290a4)}.tfCount{background:var(--tf-soft,#edf4ff);color:var(--tf-accent,#2563a6);padding:7px 12px;border-radius:20px;font-weight:900;font-size:12px}
+.tfAddBox{display:flex;gap:8px;padding:8px;border:1px solid var(--tf-border,#dfe6ef);border-radius:13px;background:var(--tf-card,#fff);margin-bottom:18px}.tfAddBox input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--tf-text,#243047);padding:8px;font-size:14px}.tfAddBox button{border:0;background:#2876c7;color:#fff;border-radius:9px;padding:9px 17px;font-weight:900;cursor:pointer}
+.tfTaskList{display:grid;gap:8px}.tfTask{display:flex;align-items:center;gap:10px;padding:13px 12px;border:1px solid var(--tf-border,#e7ecf3);border-radius:12px;background:var(--tf-card,#fff);transition:.18s}.tfTask:hover{border-color:#a8c4e7;transform:translateY(-1px)}.tfTask input[type=checkbox]{width:18px;height:18px;accent-color:#2e8b77}.tfTaskText{flex:1;min-width:0;outline:0;overflow-wrap:anywhere}.tfTask.done .tfTaskText{text-decoration:line-through;color:var(--tf-muted,#8290a4)}.tfTask small{color:var(--tf-muted,#8290a4);font-size:11px}.tfTask button{border:0;background:transparent;cursor:pointer;color:var(--tf-muted,#8290a4);font-size:17px}.tfTask button.star.active{color:#e6a326}.tfEmpty{text-align:center;padding:55px 10px;color:var(--tf-muted,#8290a4);display:none}
+.taskFlowApp.tf-dark,.tableStudioApp.ts-dark{--tf-bg:#101827;--tf-card:#1b293d;--tf-text:#e5edf8;--tf-muted:#a5b3c7;--tf-border:#35465e;--tf-soft:#263b55;--tf-accent:#9bc5ff;color-scheme:dark}
+.tf-dark .tfTask,.tf-dark .tfAddBox{background:#172438}.tf-dark .tfBtn,.ts-dark .tsBtn{background:#263b55;color:#e5edf8;border-color:#40536d}.tf-dark .tfAddBox button{background:#2d75c5}
+@media(max-width:760px){.tfShell{grid-template-columns:1fr}.tfSidebar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.tfListsTitle{grid-column:1/-1}.tfMain{padding:18px}.tfTop,.tsTop{align-items:flex-start;flex-direction:column}}
+/* TaskFlow refinement — Microsoft To Do inspired */
+#taskFlowApp{--tf-accent:#2564cf;--tf-soft:#edf3ff;--tf-bg:#f3f6fc;background:radial-gradient(ellipse at 8% 0%,#dce9ff88,transparent 38%),var(--tf-bg)}
+#taskFlowApp .tfTop{border:0;border-radius:16px;background:linear-gradient(115deg,#1768c7,#3b82d8);color:#fff;box-shadow:0 10px 28px #2466b322;padding:17px 22px}
+#taskFlowApp .tfBrand{color:#fff;font-size:24px;letter-spacing:-.5px}#taskFlowApp .tfTop small{color:#e5efff}
+#taskFlowApp .tfTop .tfBtn{background:#ffffff20;color:#fff;border-color:#ffffff55;backdrop-filter:blur(8px)}
+#taskFlowApp .tfShell{grid-template-columns:270px minmax(0,1fr);gap:16px}
+#taskFlowApp .tfSidebar{background:#f8faff;border:1px solid #e1e9f6;box-shadow:0 5px 22px #24456d0a;border-radius:14px;padding:13px}
+#taskFlowApp .tfNav{display:flex;align-items:center;gap:11px;min-height:44px;font-size:14px;color:#42536d}
+#taskFlowApp .tfNav.active{background:#e5efff;color:#175db8;box-shadow:inset -3px 0 #2674d9}
+#taskFlowApp .tfListsTitle{margin-top:22px;color:#78879b;font-size:12px;letter-spacing:.3px}
+#taskFlowApp .tfListItem button:first-child{font-size:13px;color:#465a75}
+#taskFlowApp .tfMain{background:transparent;border:0;box-shadow:none;padding:30px 34px}
+#taskFlowApp .tfHeading h1{font-size:30px;letter-spacing:-.6px;color:#26364d}
+#taskFlowApp .tfHeading p{font-size:13px;color:#8794a7}
+#taskFlowApp .tfCount{background:#e6efff;color:#2766b9;border-radius:7px}
+#taskFlowApp .tfAddBox{background:#fff;border:1px solid #dfe7f2;border-radius:10px;box-shadow:0 3px 12px #1d35550a;padding:6px;margin:5px 0 20px}
+#taskFlowApp .tfAddBox input{font-size:14px;padding:11px 12px}
+#taskFlowApp .tfAddBox button{background:#246bc5;border-radius:8px;padding:9px 20px}
+#taskFlowApp .tfTask{background:#fff;border:1px solid #e4eaf2;border-radius:9px;padding:14px 13px;box-shadow:0 2px 7px #1b355008;min-height:48px}
+#taskFlowApp .tfTask:hover{border-color:#b9cce7;box-shadow:0 5px 14px #234b7b12;transform:translateY(-1px)}
+#taskFlowApp .tfTask input[type=checkbox]{appearance:none;width:19px;height:19px;border:1.7px solid #9aaabd;border-radius:50%;background:#fff;display:grid;place-content:center;cursor:pointer;flex:0 0 19px}
+#taskFlowApp .tfTask input[type=checkbox]:checked{background:#2774cf;border-color:#2774cf}
+#taskFlowApp .tfTask input[type=checkbox]:checked:before{content:'✓';font-size:12px;line-height:1;color:#fff;font-weight:900}
+#taskFlowApp .tfTaskText{font-size:14px;color:#35465d;line-height:1.6}
+#taskFlowApp .tfTask.done{background:#f9fbfe;border-style:dashed}
+#taskFlowApp .tfTask button{width:30px;height:30px;border-radius:7px;font-size:16px}
+#taskFlowApp .tfTask button:hover{background:#edf3fb;color:#345a8a}
+#taskFlowApp .tfTask button.star.active{background:#fff7e5}
+#taskFlowApp .tfEmpty{background:#fff;border:1px dashed #d6e0ee;border-radius:12px;color:#8a99ad}
+#taskFlowApp.tf-dark{background:radial-gradient(ellipse at 8% 0%,#1c3557aa,transparent 38%),#101827}
+#taskFlowApp.tf-dark .tfSidebar,#taskFlowApp.tf-dark .tfMain{background:#1b293d;border-color:#35465e}
+#taskFlowApp.tf-dark .tfHeading h1,#taskFlowApp.tf-dark .tfTaskText{color:#e5edf8}
+#taskFlowApp.tf-dark .tfTask,#taskFlowApp.tf-dark .tfAddBox,#taskFlowApp.tf-dark .tfEmpty{background:#172438;border-color:#35465e}
+#taskFlowApp.tf-dark .tfTask input[type=checkbox]{background:#172438;border-color:#8092aa}
+#taskFlowApp.tf-dark .tfTask input[type=checkbox]:checked{background:#438be0;border-color:#438be0}
+#taskFlowApp.tf-dark .tfNav{color:#c2d0e3}#taskFlowApp.tf-dark .tfNav.active{background:#263b55;color:#b8d5ff}
+#taskFlowApp.tf-dark .tfCount{background:#263b55;color:#b8d5ff}
+#taskFlowApp.tf-dark .tfTask.done{background:#1a293d}
+@media(max-width:760px){#taskFlowApp .tfMain{padding:18px 12px}#taskFlowApp .tfShell{grid-template-columns:1fr}#taskFlowApp .tfSidebar{background:var(--tf-card);display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* App-wide polished confirmation dialog and toast */
+.studyUiOverlay{position:fixed;inset:0;z-index:99999;background:#101a2c88;backdrop-filter:blur(5px);display:grid;place-items:center;padding:18px;animation:studyFade .16s ease}
+.studyUiDialog{width:min(420px,100%);background:var(--card,#fff);color:var(--text,#243047);border:1px solid var(--border,#e3e9f2);border-radius:20px;padding:23px;box-shadow:0 24px 80px #08152b45;animation:studyPop .2s ease}
+.studyUiDialog h3{margin:0 0 9px;font-size:19px}.studyUiDialog p{margin:0 0 20px;color:var(--muted,#8290a4);line-height:1.8;font-size:13px}.studyUiDialog input{width:100%;box-sizing:border-box;padding:11px;border:1px solid var(--border,#dce4ef);border-radius:10px;background:var(--card,#fff);color:var(--text,#243047);margin-bottom:16px}
+.studyUiActions{display:flex;justify-content:flex-end;gap:8px}.studyUiActions button{border:0;border-radius:10px;padding:10px 17px;font-weight:800;cursor:pointer}.studyUiCancel{background:#eef2f7;color:#536176}.studyUiOk{background:#246bc5;color:#fff}.studyUiOk.danger{background:#d84b58}
+.studyToast{position:fixed;z-index:100000;bottom:24px;left:24px;max-width:min(360px,calc(100vw - 48px));padding:13px 17px;border-radius:13px;background:#1d3554;color:#fff;box-shadow:0 12px 35px #07152b35;font-size:13px;font-weight:800;display:flex;align-items:center;gap:9px;animation:studyToastIn .22s ease}
+@keyframes studyFade{from{opacity:0}to{opacity:1}}@keyframes studyPop{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}@keyframes studyToastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+/* Table Studio */
+.tsShelf{max-width:1450px;margin:auto}.tsShelfHead{display:flex;justify-content:space-between;align-items:center;gap:15px;margin:15px 0 20px;flex-wrap:wrap}.tsShelfHead h2{margin:0 0 5px}.tsShelfHead p,.tsHint{color:var(--tf-muted,#8290a4);font-size:12px}.tsCards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:15px}.tsCard{padding:18px;border:1px solid var(--tf-border,#e4e9f1);border-radius:17px;background:var(--tf-card,#fff);box-shadow:0 8px 24px #1b2a440b;display:flex;flex-direction:column;gap:12px;transition:.2s}.tsCard:hover{transform:translateY(-3px);box-shadow:0 14px 28px #1b2a4418}.tsCard h3{margin:0}.tsCard p{color:var(--tf-muted,#8290a4);font-size:12px;margin:0}.tsCardActions{display:flex;gap:7px;margin-top:auto}.tsCardActions button{flex:1}
+.tsEditor{max-width:1450px;margin:auto;display:grid;grid-template-columns:270px minmax(0,1fr);gap:16px}.tsEditor[hidden]{display:none!important}.tsTools{padding:17px;display:flex;flex-direction:column;gap:11px;height:max-content}.tsTools h3{margin:0 0 5px}.tsTools label{display:grid;gap:6px;font-size:12px;font-weight:800}.tsTools input:not([type=checkbox]):not([type=color]),.tsTools select{width:100%;min-width:0;box-sizing:border-box;border:1px solid var(--tf-border,#dfe6ef);border-radius:8px;padding:8px;background:var(--tf-card,#fff);color:var(--tf-text,#243047)}.tsTools input[type=color]{width:100%;height:34px;border:0;background:transparent}.tsTools .tsCheck{display:flex;align-items:center;gap:8px}.tsToolGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.tsWork{padding:18px;min-width:0;overflow:auto}.tsWorkBar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;color:var(--tf-muted,#8290a4);font-size:12px}.tsTableWrap{overflow:auto;border-radius:14px;transition:.2s}.tsTableWrap.ts-shadow{box-shadow:0 12px 35px #162c4b20}.tsTableWrap.ts-round{border-radius:14px}.tsTable{border-collapse:separate;border-spacing:0;width:100%;min-width:520px;background:var(--ts-cell,#fff);color:var(--ts-text,#25324a);font-family:var(--ts-font,Tahoma,Arial,sans-serif);font-size:var(--ts-size,14px)}.tsTable th,.tsTable td{border-left:1px solid var(--ts-border,#d9e2f0);border-top:1px solid var(--ts-border,#d9e2f0);padding:12px 14px;min-width:85px;outline:0}.tsTable tr:last-child td{border-bottom:1px solid var(--ts-border,#d9e2f0)}.tsTable tr th:last-child,.tsTable tr td:last-child{border-right:1px solid var(--ts-border,#d9e2f0)}.tsTable th{background:var(--ts-head,#3867d6);color:#fff;font-weight:900;text-align:center}.tsTable td{background:var(--ts-cell,#fff)}.tsTable.ts-zebra tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--ts-head,#3867d6) 7%,var(--ts-cell,#fff))}.tsTable td:focus,.tsTable th:focus{box-shadow:inset 0 0 0 2px var(--ts-head,#3867d6)}
+.ts-dark .tsCard{background:#1b293d;border-color:#35465e}.ts-dark .tsWork,.ts-dark .tsTools{background:#1b293d;border-color:#35465e}
+@media(max-width:900px){.tsEditor{grid-template-columns:1fr}.tsTools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.tsTools h3,.tsHint{grid-column:1/-1}}
+@media(max-width:560px){.tsTools{grid-template-columns:1fr}.tsTopActions{width:100%}.tsTopActions button{flex:1}}
+.examShelfActions{display:flex;gap:8px;flex-wrap:wrap}
+
 </style>
+
+        <!-- ================= TASKFLOW TO DO ================= -->
+        <section id="taskFlowApp" class="taskFlowApp hidden" dir="rtl">
+            <header class="tfTop">
+                <div><div class="tfBrand">☑️ TaskFlow</div><small>رتّب يومك،
+                        خطوة بخطوة</small></div>
+                <div class="tfTopActions">
+                    <button class="tfBtn" onclick="tfToggleTheme()"
+                        id="tfThemeBtn">🌙 الوضع الداكن</button>
+                    <button class="tfBtn" onclick="showProductSelector()">↩
+                        المنصات</button>
+                </div>
+            </header>
+            <div class="tfShell">
+                <aside class="tfSidebar">
+                    <button class="tfNav active"
+                        onclick="tfSetView('today',this)">☀️ يومي</button>
+                    <button class="tfNav"
+                        onclick="tfSetView('important',this)">⭐ مهم</button>
+                    <button class="tfNav" onclick="tfSetView('all',this)">📋 كل
+                        المهام</button>
+                    <button class="tfNav" onclick="tfSetView('done',this)">✓
+                        مكتملة</button>
+                    <div class="tfListsTitle">قوائمي <button
+                            onclick="tfAddList()"
+                            title="إضافة قائمة">＋</button></div>
+                    <div id="tfLists"></div>
+                </aside>
+                <main class="tfMain">
+                    <div class="tfHeading"><div><h1 id="tfViewTitle">يومي</h1><p
+                                id="tfViewSub">ابدأ بأهم خطوة
+                                عندك</p></div><span id="tfCount"
+                            class="tfCount">0 مهام</span></div>
+                    <div class="tfAddBox"><input id="tfNewTask"
+                            placeholder="أضف مهمة..."
+                            onkeydown="if(event.key==='Enter')tfAddTask()"><button
+                            onclick="tfAddTask()">إضافة</button></div>
+                    <div id="tfTaskList" class="tfTaskList"></div>
+                    <div id="tfEmpty" class="tfEmpty">✨ لا توجد مهام هنا
+                        الآن</div>
+                </main>
+            </div>
+        </section>
+
+        <!-- ================= TABLE STUDIO PRO ================= -->
+        <section id="tableStudioApp" class="tableStudioApp hidden" dir="rtl">
+            <header class="tsTop">
+                <div><div class="tsBrand">▦ Table Studio Pro</div><small>أنشئ
+                        جداولك ونسّقها بطريقتك</small></div>
+                <div class="tsTopActions">
+                    <button class="tsBtn" onclick="tsToggleTheme()"
+                        id="tsThemeBtn">🌙 الوضع الداكن</button>
+                    <button class="tsBtn" onclick="showProductSelector()">↩
+                        المنصات</button>
+                    <button class="tsBtn primary" onclick="tsShowShelf()">▦
+                        جداولي</button>
+                    <button class="tsBtn primary" onclick="tsExportCurrent()">⬇
+                        تصدير</button>
+                    <button class="tsBtn" onclick="tsMinimize()">▁ تصغير إلى
+                        بطاقة</button>
+                </div>
+            </header>
+            <div id="tsShelf" class="tsShelf">
+                <div class="tsShelfHead"><div><h2>جداولي المحفوظة</h2><p>كل جدول
+                            في بطاقة مستقلة، افتحه وعدّله في أي
+                            وقت.</p></div><button class="tsBtn primary"
+                        onclick="tsCreateNew()">＋ جدول جديد</button></div>
+                <div id="tsCards" class="tsCards"></div>
+            </div>
+            <div id="tsEditor" class="tsEditor" hidden>
+                <aside class="tsTools">
+                    <h3>تنسيق الجدول</h3>
+                    <label>اسم الجدول<input id="tsTitle" value="جدول جديد"
+                            oninput="tsSaveDraft()"></label>
+                    <div class="tsToolGrid">
+                        <label>عدد الصفوف<input id="tsRows" type="number"
+                                min="1" max="30" value="5"></label>
+                        <label>عدد الأعمدة<input id="tsCols" type="number"
+                                min="1" max="12" value="4"></label>
+                    </div>
+                    <button class="tsBtn primary"
+                        onclick="tsResizeTable()">تطبيق الحجم</button>
+                    <label>لون الرأس<input id="tsHeadColor" type="color"
+                            value="#3867d6" oninput="tsApplyStyle()"></label>
+                    <label>لون النص<input id="tsTextColor" type="color"
+                            value="#25324a" oninput="tsApplyStyle()"></label>
+                    <label>لون الخلفية<input id="tsCellColor" type="color"
+                            value="#ffffff" oninput="tsApplyStyle()"></label>
+                    <label>لون الحدود<input id="tsBorderColor" type="color"
+                            value="#d9e2f0" oninput="tsApplyStyle()"></label>
+                    <label>نوع الخط<select id="tsFont"
+                            onchange="tsApplyStyle()"><option
+                                value="Tahoma,Arial,sans-serif">Tahoma</option><option
+                                value="Arial,sans-serif">Arial</option><option
+                                value="'Cairo',Tahoma,sans-serif">Cairo</option><option
+                                value="'Times New Roman',serif">Times New
+                                Roman</option></select></label>
+                    <label>حجم الخط <output id="tsFontOut">14px</output><input
+                            id="tsFontSize" type="range" min="11" max="24"
+                            value="14"
+                            oninput="document.getElementById('tsFontOut').value=this.value+'px';tsApplyStyle()"></label>
+                    <label class="tsCheck"><input id="tsZebra" type="checkbox"
+                            checked onchange="tsApplyStyle()"> صفوف متبادلة
+                        اللون</label>
+                    <label class="tsCheck"><input id="tsShadow" type="checkbox"
+                            checked onchange="tsApplyStyle()"> ظل وتأثير
+                        رفع</label>
+                    <label class="tsCheck"><input id="tsRound" type="checkbox"
+                            checked onchange="tsApplyStyle()"> حواف
+                        دائرية</label>
+                    <button class="tsBtn" onclick="tsAddRow()">＋ إضافة
+                        صف</button>
+                    <button class="tsBtn" onclick="tsAddColumn()">＋ إضافة
+                        عمود</button>
+                    <button class="tsBtn danger" onclick="tsClearTable()">مسح
+                        محتوى الجدول</button>
+                    <p class="tsHint">اضغط داخل أي خلية واكتب مباشرة. التغييرات
+                        تُحفظ تلقائيًا في بطاقتك.</p>
+                </aside>
+                <main class="tsWork">
+                    <div class="tsWorkBar"><button class="tsBtn"
+                            onclick="tsShowShelf()">← العودة
+                            للبطاقات</button><span>اضغط على الخلايا لتعديلها
+                            مباشرة</span></div>
+                    <div id="tsTableWrap" class="tsTableWrap"><table
+                            id="tsTable" class="tsTable"><thead><tr><th
+                                        contenteditable="true">العنوان 1</th><th
+                                        contenteditable="true">العنوان 2</th><th
+                                        contenteditable="true">العنوان 3</th><th
+                                        contenteditable="true">العنوان
+                                        4</th></tr></thead><tbody></tbody></table></div>
+                </main>
+            </div>
+        </section>
 
         <!-- ================= EXAM MAKER PRO ================= -->
         <section id="examMaker" class="examMaker hidden" dir="rtl">
-          <header class="examTopbar">
-            <div><div class="examBrand">📝 Exam Maker Pro</div><small>مصمم أوراق الامتحانات والمراجعات</small></div>
-            <div class="examTopActions">
-              <button onclick="showProductSelector()" class="examBtn ghost">↩ المنصات</button>
-              <button onclick="examExportPDF()" class="examBtn primary">⬇ تصدير PDF</button><button onclick="appExportBackup()" class="examBtn">نسخة احتياطية</button><button onclick="appImportBackup()" class="examBtn">استعادة نسخة</button>
+            <header class="examTopbar">
+                <div><div class="examBrand">📝 Exam Maker Pro</div><small>مصمم
+                        أوراق الامتحانات والمراجعات</small></div>
+                <div class="examTopActions">
+                    <button id="examThemeToggle" onclick="examToggleTheme()"
+                        class="examBtn ghost" type="button">🌙 الوضع
+                        الداكن</button><button id="examLanguageToggle"
+                        onclick="examToggleLanguage()"
+                        class="examBtn ghost examLanguageToggle"
+                        type="button">English</button><button
+                        onclick="showProductSelector()" class="examBtn ghost">↩
+                        المنصات</button>
+                    <button id="examMyCardsBtn" onclick="examShowCards()"
+                        class="examBtn">▦ امتحاناتي</button><button
+                        id="examMinimizeBtn" onclick="examMinimizeToCard()"
+                        class="examBtn primary">▁ تصغير وحفظ</button>
+                    <button onclick="examExportPDF()" class="examBtn primary">⬇
+                        تصدير PDF</button><button onclick="appExportBackup()"
+                        class="examBtn">نسخة احتياطية</button><button
+                        onclick="appImportBackup()" class="examBtn">استعادة
+                        نسخة</button>
+                </div>
+            </header>
+            <div id="examCardsView" class="examCardsView">
+                <div class="examCardsHead"><div><h2>امتحاناتي</h2><p>احفظ كل
+                            امتحان في بطاقة مستقلة، وافتحه أو احذفه وقتما
+                            تريد.</p></div><div class="examShelfActions"><button
+                            class="examBtn" type="button"
+                            onclick="document.getElementById('examCardImportFile').click()">⬆
+                            رفع امتحان</button><input id="examCardImportFile"
+                            type="file" accept=".json,application/json" hidden
+                            onchange="examImportCardFile(event)"><button
+                            class="examBtn primary examNewCardBtn"
+                            onclick="examCreateNew()">＋ إنشاء امتحان
+                            جديد</button></div></div>
+                <div id="examCardsGrid" class="examCardsGrid"></div>
             </div>
-          </header>
-          <div class="examLayout">
-            <aside class="examTools">
-              <h3>إعدادات الورقة</h3>
-              <label>عنوان الورقة<input id="examTitle" value="امتحان المراجعة" oninput="examUpdateHead()"></label>
-              <label>المادة<input id="examSubject" placeholder="مثال: اللغة العربية" oninput="examUpdateHead()"></label>
-              <div class="examTwo"><label>الصف<input id="examGrade" placeholder="الصف الدراسي" oninput="examUpdateHead()"></label><label>الزمن<input id="examDuration" placeholder="ساعتان" oninput="examUpdateHead()"></label></div>
-              <label>اسم المدرسة / الجهة<input id="examSchool" placeholder="اسم المدرسة" oninput="examUpdateHead()"></label>
-              <label>لون العنوان<input id="examHeadColor" type="color" value="#173b72" oninput="examStyle('--exam-head',this.value)"></label>
-              <label>لون النص<input id="examTextColor" type="color" value="#202938" oninput="examStyle('--exam-text',this.value)"></label>
-              <label>لون التمييز<input id="examAccent" type="color" value="#2878d0" oninput="examStyle('--exam-accent',this.value)"></label>
-              <label>لون خلفية الورقة<input id="examPaperColor" type="color" value="#ffffff" oninput="examStyle('--exam-paper',this.value)"></label>
-              <label>نوع الخط<select id="examFont" onchange="examStyle('--exam-font',this.value)"><option value="Tahoma, Arial, sans-serif">Tahoma</option><option value="Arial, sans-serif">Arial</option><option value="'Times New Roman', serif">Times New Roman</option><option value="'Cairo', Tahoma, sans-serif">Cairo</option></select></label>
-              <label>حجم الخط <output id="examFontSizeOut">16px</output><input type="range" min="12" max="24" value="16" oninput="document.getElementById('examFontSizeOut').value=this.value+'px';examStyle('--exam-font-size',this.value+'px')"></label>
-              <label>نمط رأس الورقة<select id="examHeaderStyle" onchange="document.getElementById('examPaper').dataset.header=this.value"><option value="classic">كلاسيكي</option><option value="modern">حديث</option><option value="minimal">بسيط</option></select></label>
-              <div class="examToolButtons"><button class="examBtn primary" onclick="examAddQuestion('mcq')">＋ سؤال اختياري</button><button class="examBtn" onclick="examAddQuestion('essay')">＋ سؤال مقالي</button><button class="examBtn" onclick="examAddSection()">＋ عنوان قسم</button><button class="examBtn" onclick="examAddGroup()">＋ مجموعة أسئلة</button><button class="examBtn ghost" onclick="examResetStyle()">استعادة التنسيق</button></div>
-              <p class="examHint">يمكنك تعديل نص السؤال والاختيارات مباشرة، وتغيير الألوان والخطوط قبل حفظ الورقة PDF.</p>
-            </aside>
-            <main class="examWorkspace">
-              <div class="examWorkspaceBar"><span>معاينة الورقة — اضغط على النص لتعديله</span><div class="examFormatTools"><button class="examBtn" onclick="examFormat('bold')"><b>B</b></button><button class="examBtn" onclick="examFormat('italic')"><i>I</i></button><button class="examBtn" onclick="examFormat('underline')"><u>U</u></button><label class="examColorText">لون النص المحدد <input id="examSelectionColor" type="color" value="#d12d45" onmousedown="examRememberSelection()" oninput="examApplySelectionColor(this.value)"></label><button class="examBtn primary" onclick="examExportPDF()">طباعة / حفظ PDF</button></div></div>
-              <article id="examPaper" class="examPaper" data-header="classic">
-                <div class="examPaperHead">
-                  <div class="examSchool" contenteditable="true" data-placeholder="اسم المدرسة / الجهة">اسم المدرسة</div>
-                  <h1 id="examPaperTitle" contenteditable="true">امتحان المراجعة</h1>
-                  <div class="examSubject" id="examPaperSubject" contenteditable="true">المادة: ....................</div>
-                  <div class="examMeta"><span>الاسم: ................................................</span><span>الصف: <b id="examPaperGrade">................</b></span><span>الزمن: <b id="examPaperDuration">................</b></span></div>
-                </div>
-                <div id="examQuestions" class="examQuestions">
-                  <div class="examEmpty">ابدأ بإضافة سؤال اختياري أو مقالي من لوحة الإعدادات.</div>
-                </div>
-                <footer class="examPaperFooter" contenteditable="true">مع أطيب التمنيات بالتوفيق والنجاح</footer>
-              </article>
-            </main>
-          </div>
+            <div id="examLayout" class="examLayout" hidden>
+                <aside class="examTools">
+                    <h3>إعدادات الورقة</h3>
+                    <label>عنوان الورقة<input id="examTitle"
+                            value="امتحان المراجعة"
+                            oninput="examUpdateHead()"></label>
+                    <label>المادة<input id="examSubject"
+                            placeholder="مثال: اللغة العربية"
+                            oninput="examUpdateHead()"></label>
+                    <div class="examTwo"><label>الصف<input id="examGrade"
+                                placeholder="الصف الدراسي"
+                                oninput="examUpdateHead()"></label><label>الزمن<input
+                                id="examDuration" placeholder="ساعتان"
+                                oninput="examUpdateHead()"></label></div>
+                    <label>اسم المدرسة / الجهة<input id="examSchool"
+                            placeholder="اسم المدرسة"
+                            oninput="examUpdateHead()"></label>
+                    <label>لون العنوان<input id="examHeadColor" type="color"
+                            value="#173b72"
+                            oninput="examStyle('--exam-head',this.value)"></label>
+                    <label>لون النص<input id="examTextColor" type="color"
+                            value="#202938"
+                            oninput="examStyle('--exam-text',this.value)"></label>
+                    <label>لون التمييز<input id="examAccent" type="color"
+                            value="#2878d0"
+                            oninput="examStyle('--exam-accent',this.value)"></label>
+                    <label>لون خلفية الورقة<input id="examPaperColor"
+                            type="color" value="#ffffff"
+                            oninput="examStyle('--exam-paper',this.value)"></label>
+                    <label>نوع الخط<select id="examFont"
+                            onchange="examStyle('--exam-font',this.value)"><option
+                                value="Tahoma, Arial, sans-serif">Tahoma</option><option
+                                value="Arial, sans-serif">Arial</option><option
+                                value="'Times New Roman', serif">Times New
+                                Roman</option><option
+                                value="'Cairo', Tahoma, sans-serif">Cairo</option></select></label>
+                    <label>حجم الخط <output
+                            id="examFontSizeOut">16px</output><input
+                            type="range" min="12" max="24" value="16"
+                            oninput="document.getElementById('examFontSizeOut').value=this.value+'px';examStyle('--exam-font-size',this.value+'px')"></label>
+                    <label>نمط رأس الورقة<select id="examHeaderStyle"
+                            onchange="document.getElementById('examPaper').dataset.header=this.value;examSaveDraft()"><option
+                                value="classic">كلاسيكي</option><option
+                                value="modern">حديث</option><option
+                                value="minimal">بسيط</option></select></label>
+                    <div class="examToolButtons"><button class="examBtn primary"
+                            onclick="examAddQuestion('mcq')">＋ سؤال
+                            اختياري</button><button class="examBtn"
+                            onclick="examAddQuestion('essay')">＋ سؤال
+                            مقالي</button><button class="examBtn"
+                            onclick="examAddSection()">＋ عنوان
+                            قسم</button><button class="examBtn"
+                            onclick="examAddGroup()">＋ مجموعة
+                            أسئلة</button><button class="examBtn ghost"
+                            onclick="examResetStyle()">استعادة
+                            التنسيق</button></div>
+                    <p class="examHint">يمكنك تعديل نص السؤال والاختيارات
+                        مباشرة، وتغيير الألوان والخطوط قبل حفظ الورقة PDF.</p>
+                </aside>
+                <main class="examWorkspace">
+                    <div class="examWorkspaceBar"><span>معاينة الورقة — اضغط على
+                            النص لتعديله</span><div
+                            class="examFormatTools"><button class="examBtn"
+                                onclick="examFormat('bold')"><b>B</b></button><button
+                                class="examBtn"
+                                onclick="examFormat('italic')"><i>I</i></button><button
+                                class="examBtn"
+                                onclick="examFormat('underline')"><u>U</u></button><label
+                                class="examColorText">لون النص المحدد <input
+                                    id="examSelectionColor" type="color"
+                                    value="#d12d45"
+                                    onmousedown="examRememberSelection()"
+                                    oninput="examApplySelectionColor(this.value)"></label><button
+                                class="examBtn primary"
+                                onclick="examExportPDF()">طباعة / حفظ
+                                PDF</button></div></div>
+                    <article id="examPaper" class="examPaper"
+                        data-header="classic">
+                        <div class="examPaperHead">
+                            <div class="examSchool" contenteditable="true"
+                                data-placeholder="اسم المدرسة / الجهة">اسم
+                                المدرسة</div>
+                            <h1 id="examPaperTitle"
+                                contenteditable="true">امتحان المراجعة</h1>
+                            <div class="examSubject" id="examPaperSubject"
+                                contenteditable="true">المادة:
+                                ....................</div>
+                            <div class="examMeta"><span>الاسم:
+                                    ................................................</span><span>الصف:
+                                    <b
+                                        id="examPaperGrade">................</b></span><span>الزمن:
+                                    <b
+                                        id="examPaperDuration">................</b></span></div>
+                        </div>
+                        <div id="examQuestions" class="examQuestions">
+                            <div class="examEmpty">ابدأ بإضافة سؤال اختياري أو
+                                مقالي من لوحة الإعدادات.</div>
+                        </div>
+                        <footer class="examPaperFooter"
+                            contenteditable="true">مع أطيب التمنيات بالتوفيق
+                            والنجاح</footer>
+                    </article>
+                </main>
+            </div>
         </section>
-
 
         <!-- ==================================================
      STUDY CARDS PRO FOOTER
@@ -10123,21 +10729,46 @@ body:has(#app:not(.hidden))
 
         </div>
 
-    <script>
+        <script>
 
 /* Exam Maker Pro - self-contained module */
+const EXAM_THEME_KEY='examMakerThemeV1';
+function examApplyTheme(theme){
+ const root=document.getElementById('examMaker');if(!root)return;
+ const dark=theme==='dark';root.classList.toggle('exam-dark',dark);
+ const btn=document.getElementById('examThemeToggle');if(btn){btn.textContent=dark?'☀️ الوضع الفاتح':'🌙 الوضع الداكن';btn.title=dark?'التبديل إلى الوضع الفاتح':'التبديل إلى الوضع الداكن'}
+ try{localStorage.setItem(EXAM_THEME_KEY,dark?'dark':'light')}catch(e){}
+}
+function examToggleTheme(){const root=document.getElementById('examMaker');examApplyTheme(root&&root.classList.contains('exam-dark')?'light':'dark')}
+let examLanguage='ar';
+const examTranslations={
+ 'مصمم أوراق الامتحانات والمراجعات':'Exam papers and revision designer','الوضع الداكن':'Dark mode','الوضع الفاتح':'Light mode','↩ المنصات':'↩ Platforms','⬇ تصدير PDF':'⬇ Export PDF','نسخة احتياطية':'Backup','استعادة نسخة':'Restore backup','إعدادات الورقة':'Paper settings','عنوان الورقة':'Paper title','امتحان المراجعة':'Revision exam','المادة':'Subject','مثال: اللغة العربية':'e.g. Arabic','الصف':'Grade','الصف الدراسي':'Grade','الزمن':'Duration','ساعتان':'Two hours','اسم المدرسة / الجهة':'School / organization','اسم المدرسة':'School name','لون العنوان':'Title color','لون النص':'Text color','لون التمييز':'Accent color','لون خلفية الورقة':'Paper background','نوع الخط':'Font','حجم الخط':'Font size','نمط رأس الورقة':'Header style','كلاسيكي':'Classic','حديث':'Modern','بسيط':'Minimal','＋ سؤال اختياري':'＋ Multiple choice','＋ سؤال مقالي':'＋ Essay question','＋ عنوان قسم':'＋ Section heading','＋ مجموعة أسئلة':'＋ Question group','استعادة التنسيق':'Reset style','يمكنك تعديل نص السؤال والاختيارات مباشرة، وتغيير الألوان والخطوط قبل حفظ الورقة PDF.':'Edit questions and choices directly, and customize colors and fonts before exporting to PDF.','معاينة الورقة — اضغط على النص لتعديله':'Paper preview — click text to edit','لون النص المحدد':'Selected text color','طباعة / حفظ PDF':'Print / Save PDF','الاسم:':'Name:','ابدأ بإضافة سؤال اختياري أو مقالي من لوحة الإعدادات.':'Add a multiple-choice or essay question from the settings panel to begin.','مع أطيب التمنيات بالتوفيق والنجاح':'Best wishes for success','اختياري':'Multiple choice','مقالي':'Essay','اضغط هنا واكتب نص السؤال...':'Click here and type the question...','اكتب الاختيار...':'Enter an option...','＋ إضافة سؤال فرعي':'＋ Add sub-question','↑':'↑','↓':'↓','＋ سطر':'＋ Line','▧ صورة':'▧ Image','حذف':'Delete','أعلى':'Move up','أسفل':'Move down','زيادة مساحة':'Add answer line','إضافة صورة':'Add image','حذف السؤال':'Delete question','إزالة الصورة':'Remove image','＋ سؤال فرعي':'＋ Sub-question','اكتب نص السؤال الفرعي...':'Enter sub-question...','حذف السؤال الفرعي':'Delete sub-question','اكتب عنوان المجموعة...':'Enter group title...','مجموعة أسئلة — أضف الأسئلة الخاصة بهذا السؤال الشامل من الأزرار بالأسفل':'Question group — add its questions using the buttons below','＋ سؤال اختياري':'＋ Multiple choice','＋ سؤال مقالي':'＋ Essay question','حذف المجموعة بكل أسئلتها':'Delete group and all its questions','حذف مجموعة الأسئلة؟':'Delete question group?','سيتم حذف المجموعة وجميع الأسئلة والصور الموجودة بداخلها. لا يمكن التراجع عن هذا الإجراء.':'The group, all its questions, and images will be deleted. This cannot be undone.','إلغاء':'Cancel','نعم، احذف':'Yes, delete','حذف السؤال؟':'Delete question?','هل تريد حذف هذا السؤال من ورقة الامتحان؟ لن يمكن استعادته بعد الحذف.':'Delete this question from the exam paper? This cannot be undone.','اختر ملف صورة صالحًا.':'Choose a valid image file.','حجم الصورة كبير. اختر صورة أقل من 12 ميجابايت.':'Image is too large. Choose an image smaller than 12 MB.','تعذر قراءة الصورة.':'Could not read the image.','تعذر تحميل الصورة.':'Could not load the image.','اكتب عنوان القسم...':'Enter section title...','المادة:':'Subject: ','حذف العنوان':'Delete heading','حذف عنوان القسم':'Delete section title'
+};
+function examApplyLanguage(lang){
+ examLanguage=lang==='en'?'en':'ar';const root=document.getElementById('examMaker');if(!root)return;
+ const reverse=Object.fromEntries(Object.entries(examTranslations).map(([ar,en])=>[en,ar]));const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let textNode;while((textNode=walker.nextNode())){const raw=textNode.nodeValue;const trimmed=raw.trim();if(!trimmed)continue;const translated=examLanguage==='en'?(examTranslations[trimmed]||trimmed):(reverse[trimmed]||trimmed);if(translated!==trimmed){const lead=raw.match(/^\s*/)?.[0]||'';const tail=raw.match(/\s*$/)?.[0]||'';textNode.nodeValue=lead+translated+tail;}}
+ root.querySelectorAll('[placeholder],[title],[data-placeholder]').forEach(el=>{['placeholder','title','data-placeholder'].forEach(attr=>{const val=el.getAttribute(attr);if(!val)return;const ar=el.dataset['examAr'+attr.replace(/(^|-)(.)/g,(_,a,c)=>c.toUpperCase())]||val;if(!el.dataset['examAr'+attr.replace(/(^|-)(.)/g,(_,a,c)=>c.toUpperCase())])el.dataset['examAr'+attr.replace(/(^|-)(.)/g,(_,a,c)=>c.toUpperCase())]=val;const key=el.dataset['examAr'+attr.replace(/(^|-)(.)/g,(_,a,c)=>c.toUpperCase())];if(examTranslations[key])el.setAttribute(attr,examLanguage==='en'?examTranslations[key]:key);});});
+ root.dir=examLanguage==='en'?'ltr':'rtl';const toggle=document.getElementById('examLanguageToggle');if(toggle)toggle.textContent=examLanguage==='en'?'العربية':'English';
+ const brand=root.querySelector('.examBrand');if(brand)brand.textContent='📝 Exam Maker Pro';
+ const subj=document.getElementById('examPaperSubject');if(subj){const value=(document.getElementById('examSubject')?.value||'....................');subj.textContent=(examLanguage==='en'?'Subject: ':'المادة: ')+value;}
+ try{localStorage.setItem('examMakerLanguageV1',examLanguage)}catch(e){}
+}
+function examToggleLanguage(){examApplyLanguage(examLanguage==='ar'?'en':'ar');examSaveDraft()}
 function openExamMaker(){
   if(!currentUser)return;
-  ['authScreen','productSelector','app','mindMapApp','drMahtPro'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('hidden')});
+  ['authScreen','productSelector','app','mindMapApp','drMahtPro','taskFlowApp','tableStudioApp'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.add('hidden')});
   document.body.classList.remove('drMahtActive');
   document.getElementById('examMaker').classList.remove('hidden');
-  examLoadDraft();
+  let savedTheme='';try{savedTheme=localStorage.getItem(EXAM_THEME_KEY)||''}catch(e){}
+  examApplyTheme(savedTheme||(document.body.classList.contains('dark')?'dark':'light'));
+  let lang='ar';try{lang=localStorage.getItem('examMakerLanguageV1')||'ar'}catch(e){}examApplyLanguage(lang);
+  examShowCards();
 }
-function examStyle(prop,value){document.getElementById('examPaper').style.setProperty(prop,value)}
+function examStyle(prop,value){document.getElementById('examPaper').style.setProperty(prop,value);examSaveDraft()}
 function examUpdateHead(){
  const val=(id)=>document.getElementById(id).value;
  document.getElementById('examPaperTitle').textContent=val('examTitle')||' ';
- document.getElementById('examPaperSubject').textContent='المادة: '+(val('examSubject')||'....................');
+ document.getElementById('examPaperSubject').textContent=(examLanguage==='en'?'Subject: ':'المادة: ')+(val('examSubject')||'....................');
  document.getElementById('examPaperGrade').textContent=val('examGrade')||'................';
  document.getElementById('examPaperDuration').textContent=val('examDuration')||'................';
  const school=document.querySelector('.examSchool');if(school && val('examSchool'))school.textContent=val('examSchool');
@@ -10148,17 +10779,37 @@ function examAddQuestion(type,targetContainer=null){
  const groups=wrap.querySelectorAll('.examGroup');const target=targetContainer|| (groups.length?groups[groups.length-1].querySelector('.examGroupItems'):wrap);
  const n=wrap.querySelectorAll('.examQuestion').length+1;const card=document.createElement('section');card.className='examQuestion';card.dataset.type=type;
  const typeLabel=document.createElement('div');typeLabel.className='examQuestionType';typeLabel.textContent=type==='mcq'?'اختياري':'مقالي';card.appendChild(typeLabel);
+ const body=document.createElement('div');body.className='examQuestionBody';const content=document.createElement('div');content.className='examQuestionContent';body.appendChild(content);card.appendChild(body);
  const title=document.createElement('div');title.className='examQuestionTitle';
  const number=document.createElement('span');number.className='examQuestionNumber';number.textContent=n+' ـ';
  const prompt=document.createElement('span');prompt.className='examQuestionPrompt';prompt.contentEditable='true';prompt.dataset.placeholder='اضغط هنا واكتب نص السؤال...';
- title.append(number,prompt);card.appendChild(title);
+ title.append(number,prompt);content.appendChild(title);
  if(type==='mcq'){
    const choices=document.createElement('div');choices.className='examChoices';
-   ['أ','ب','ج','د'].forEach(letter=>{const c=document.createElement('div');c.className='examChoice';const lab=document.createElement('span');lab.className='examChoiceLabel';lab.textContent='('+letter+')';const txt=document.createElement('span');txt.className='examChoiceText';txt.contentEditable='true';txt.dataset.placeholder='اكتب الاختيار...';c.append(lab,txt);choices.appendChild(c)});card.appendChild(choices)
- }else{const lines=document.createElement('div');lines.className='examEssayLines';for(let i=0;i<4;i++)lines.appendChild(document.createElement('span'));card.appendChild(lines)}
+   ['أ','ب','ج','د'].forEach(letter=>{const c=document.createElement('div');c.className='examChoice';const lab=document.createElement('span');lab.className='examChoiceLabel';lab.textContent='('+letter+')';const txt=document.createElement('span');txt.className='examChoiceText';txt.contentEditable='true';txt.dataset.placeholder='اكتب الاختيار...';c.append(lab,txt);choices.appendChild(c)});content.appendChild(choices)
+ }else{
+   const lines=document.createElement('div');lines.className='examEssayLines';for(let i=0;i<4;i++)lines.appendChild(document.createElement('span'));card.appendChild(lines);
+   const subWrap=document.createElement('div');subWrap.className='examSubQuestions';subWrap.dataset.subquestions='true';content.appendChild(subWrap);
+   const addSub=document.createElement('button');addSub.type='button';addSub.className='examBtn examAddSubQuestion';addSub.dataset.action='add-subquestion';addSub.textContent='＋ إضافة سؤال فرعي';content.appendChild(addSub);
+ }
  const controls=document.createElement('div');controls.className='examQuestionControls';
  [['↑','أعلى','up'],['↓','أسفل','down'],['＋ سطر','زيادة مساحة','line'],['▧ صورة','إضافة صورة','image'],['حذف','حذف السؤال','delete']].forEach(([txt,titleText,action])=>{const b=document.createElement('button');b.type='button';b.textContent=txt;b.title=titleText;b.dataset.action=action;if(action==='delete')b.className='delete';controls.appendChild(b)});
- card.appendChild(controls);target.appendChild(card);examRenumberQuestions();examSaveDraft();card.scrollIntoView({behavior:'smooth',block:'center'});prompt.focus();
+ card.appendChild(controls);target.appendChild(card);examRenumberQuestions();examSaveDraft();card.scrollIntoView({behavior:'smooth',block:'center'});examApplyLanguage(examLanguage);prompt.focus();
+}
+function examAddSubQuestion(parentCard){
+ if(!parentCard||parentCard.dataset.type!=='essay')return;
+ let wrap=parentCard.querySelector('.examSubQuestions');if(!wrap){wrap=document.createElement('div');wrap.className='examSubQuestions';wrap.dataset.subquestions='true';parentCard.insertBefore(wrap,parentCard.querySelector('.examQuestionControls'))}
+ const item=document.createElement('div');item.className='examSubQuestion';
+ const head=document.createElement('div');head.className='examSubQuestionHead';
+ const number=document.createElement('span');number.className='examSubQuestionNumber';number.textContent=String.fromCharCode(0x623+Math.min(wrap.children.length,27))+')';
+ const prompt=document.createElement('span');prompt.className='examSubQuestionPrompt';prompt.contentEditable='true';prompt.dataset.placeholder='اكتب نص السؤال الفرعي...';head.append(number,prompt);item.appendChild(head);
+ const lines=document.createElement('div');lines.className='examSubQuestionLines';for(let i=0;i<2;i++)lines.appendChild(document.createElement('span'));item.appendChild(lines);
+ const del=document.createElement('button');del.type='button';del.className='examSubQuestionDelete';del.dataset.action='delete-subquestion';del.textContent='حذف السؤال الفرعي';item.appendChild(del);
+ wrap.appendChild(item);examRenumberSubQuestions(parentCard);examApplyLanguage(examLanguage);examSaveDraft();prompt.focus();
+}
+function examRenumberSubQuestions(parentCard){
+ if(!parentCard)return;const labels=['أ','ب','ج','د','هـ','و','ز','ح','ط','ي'];
+ parentCard.querySelectorAll(':scope > .examSubQuestions > .examSubQuestion').forEach((item,i)=>{const n=item.querySelector('.examSubQuestionNumber');if(n)n.textContent=(labels[i]||String(i+1))+') '});
 }
 function examAddGroup(){
  const wrap=document.getElementById('examQuestions');const empty=wrap.querySelector('.examEmpty');if(empty)empty.remove();
@@ -10170,7 +10821,7 @@ function examAddGroup(){
  [['＋ سؤال اختياري','add-mcq'],['＋ سؤال مقالي','add-essay']].forEach(([label,action])=>{const b=document.createElement('button');b.type='button';b.className='examBtn';b.textContent=label;b.dataset.action=action;actions.appendChild(b)});
  group.appendChild(actions);
  const controls=document.createElement('div');controls.className='examGroupControls';const del=document.createElement('button');del.type='button';del.dataset.action='delete-group';del.textContent='حذف المجموعة بكل أسئلتها';controls.appendChild(del);group.appendChild(controls);
- wrap.appendChild(group);title.focus();examSaveDraft();
+ wrap.appendChild(group);examApplyLanguage(examLanguage);title.focus();examSaveDraft();
 }
 function examRenumberQuestions(){document.querySelectorAll('#examQuestions .examQuestion').forEach((q,i)=>{const n=q.querySelector('.examQuestionNumber');if(n)n.textContent=(i+1)+' ـ'})}
 function examConfirmDelete(title,message){
@@ -10191,14 +10842,22 @@ async function examPickQuestionImage(card){
  input.onchange=()=>{const file=input.files&&input.files[0];if(!file){input.remove();return}if(!file.type.startsWith('image/')){alert('اختر ملف صورة صالحًا.');input.remove();return}if(file.size>12*1024*1024){alert('حجم الصورة كبير. اختر صورة أقل من 12 ميجابايت.');input.remove();return}
   const reader=new FileReader();reader.onload=()=>{
    const img=new Image();img.onload=()=>{const max=1500,scale=Math.min(1,max/Math.max(img.width,img.height));const canvas=document.createElement('canvas');canvas.width=Math.round(img.width*scale);canvas.height=Math.round(img.height*scale);const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,canvas.width,canvas.height);const data=canvas.toDataURL('image/jpeg',.84);
-    let box=card.querySelector('.examQuestionImageWrap');if(!box){box=document.createElement('div');box.className='examQuestionImageWrap';const controls=card.querySelector('.examQuestionControls');card.insertBefore(box,controls)}
-    box.innerHTML='';const picture=document.createElement('img');picture.className='examQuestionImage';picture.src=data;picture.alt='صورة مرفقة بالسؤال';box.appendChild(picture);const remove=document.createElement('button');remove.type='button';remove.className='examImageRemove';remove.textContent='إزالة الصورة';remove.dataset.action='image-delete';box.appendChild(remove);examSaveDraft();input.remove();
+    let body=card.querySelector('.examQuestionBody');if(!body){body=document.createElement('div');body.className='examQuestionBody';const content=document.createElement('div');content.className='examQuestionContent';const type=card.querySelector('.examQuestionType');let node=type?type.nextElementSibling:null;while(node&& !node.classList.contains('examQuestionControls')){const next=node.nextElementSibling;content.appendChild(node);node=next}if(type)type.after(body);body.append(content)}let box=card.querySelector('.examQuestionImageWrap');if(!box){box=document.createElement('div');box.className='examQuestionImageWrap';body.insertBefore(box,body.firstChild)}
+    box.innerHTML='';const picture=document.createElement('img');picture.className='examQuestionImage';picture.src=data;picture.alt='صورة مرفقة بالسؤال';box.appendChild(picture);const remove=document.createElement('button');remove.type='button';remove.className='examImageRemove';remove.textContent='إزالة الصورة';remove.dataset.action='image-delete';box.appendChild(remove);examApplyLanguage(examLanguage);examSaveDraft();input.remove();
    };img.onerror=()=>{alert('تعذر قراءة الصورة.');input.remove()};img.src=reader.result;
   };reader.onerror=()=>{alert('تعذر تحميل الصورة.');input.remove()};reader.readAsDataURL(file);
  };input.click();
 }
 document.addEventListener('click',async e=>{
  const b=e.target.closest('#examQuestions button[data-action]');if(!b)return;const wrap=document.getElementById('examQuestions');if(!wrap||!wrap.contains(b))return;const action=b.dataset.action;
+ if(action==='delete-section'){
+  const section=b.closest('.examSectionWrap');
+  if(section&&await examConfirmDelete('حذف عنوان القسم؟','هل تريد حذف عنوان هذا القسم؟ سيتم حذف العنوان فقط ولن تتأثر الأسئلة الموجودة بعده.'))section.remove();
+  if(!wrap.querySelector('.examQuestion,.examSectionWrap,.examGroup'))wrap.innerHTML='<div class="examEmpty">ابدأ بإضافة سؤال اختياري أو مقالي من لوحة الإعدادات.</div>';
+  examSaveDraft();return;
+ }
+ if(action==='add-subquestion'){const card=b.closest('.examQuestion');examAddSubQuestion(card);return}
+ if(action==='delete-subquestion'){const item=b.closest('.examSubQuestion');const parent=b.closest('.examQuestion');if(item)item.remove();examRenumberSubQuestions(parent);examSaveDraft();return}
  if(action==='add-mcq'||action==='add-essay'){const group=b.closest('.examGroup');if(group){examAddQuestion(action==='add-mcq'?'mcq':'essay',group.querySelector('.examGroupItems'));examSaveDraft()}return}
  if(action==='delete-group'){const group=b.closest('.examGroup');if(group&&await examConfirmDelete('حذف مجموعة الأسئلة؟','سيتم حذف المجموعة وجميع الأسئلة والصور الموجودة بداخلها. لا يمكن التراجع عن هذا الإجراء.'))group.remove()}
  else {const card=b.closest('.examQuestion');if(!card)return;
@@ -10212,18 +10871,130 @@ document.addEventListener('click',async e=>{
  if(!wrap.querySelector('.examQuestion,.examSection,.examGroup'))wrap.innerHTML='<div class="examEmpty">ابدأ بإضافة سؤال اختياري أو مقالي من لوحة الإعدادات.</div>';
  examRenumberQuestions();examSaveDraft();
 });
-function examAddSection(){const wrap=document.getElementById('examQuestions');const e=wrap.querySelector('.examEmpty');if(e)e.remove();const h=document.createElement('h2');h.className='examSection';h.contentEditable='true';h.dataset.placeholder='اكتب عنوان القسم...';wrap.appendChild(h);h.focus();examSaveDraft()}
+function examAddSection(){
+ const wrap=document.getElementById('examQuestions');const e=wrap.querySelector('.examEmpty');if(e)e.remove();
+ const row=document.createElement('div');row.className='examSectionWrap';
+ const h=document.createElement('h2');h.className='examSection';h.contentEditable='true';h.dataset.placeholder='اكتب عنوان القسم...';
+ const del=document.createElement('button');del.type='button';del.className='examSectionDelete';del.dataset.action='delete-section';del.textContent='حذف العنوان';del.title='حذف عنوان القسم';
+ row.append(h,del);wrap.appendChild(row);examApplyLanguage(examLanguage);h.focus();examSaveDraft()
+}
 function examResetStyle(){const vals={examHeadColor:'#173b72',examTextColor:'#202938',examAccent:'#2878d0',examPaperColor:'#ffffff'};Object.entries(vals).forEach(([id,v])=>{document.getElementById(id).value=v;const prop={'examHeadColor':'--exam-head','examTextColor':'--exam-text','examAccent':'--exam-accent','examPaperColor':'--exam-paper'}[id];examStyle(prop,v)});document.getElementById('examFont').value='Tahoma, Arial, sans-serif';examStyle('--exam-font','Tahoma, Arial, sans-serif');examStyle('--exam-font-size','16px');examSaveDraft()}
-function examSaveDraft(){try{const el=document.getElementById('examPaper');if(!el)return;const draft={html:el.innerHTML,style:el.getAttribute('style'),header:el.dataset.header,fields:['examTitle','examSubject','examGrade','examDuration','examSchool'].reduce((a,id)=>(a[id]=document.getElementById(id)?.value||'',a),{})};localStorage.setItem('examMakerDraftV1_'+(currentUser?.email||'guest'),JSON.stringify(draft));if(currentUser){currentUser.examMakerDraft=draft;saveCurrentUser()}}catch(e){}}
-function examLoadDraft(){try{const raw=localStorage.getItem('examMakerDraftV1_'+(currentUser?.email||'guest'));const d=currentUser?.examMakerDraft||(raw?JSON.parse(raw):null);if(!d)return;if(d.html)document.getElementById('examPaper').innerHTML=d.html;if(d.style)document.getElementById('examPaper').setAttribute('style',d.style);if(d.header)document.getElementById('examPaper').dataset.header=d.header;Object.entries(d.fields||{}).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.value=v});examUpdateHead()}catch(e){}}
+const EXAM_PROJECTS_KEY='examMakerProjectsV2_';
+let examCurrentProjectId=null;
+const examBlankPaperHTML=document.getElementById('examPaper')?.innerHTML||'';
+function examProjectStorageKey(){return EXAM_PROJECTS_KEY+(currentUser?.email||'guest')}
+function examGetProjects(){
+ try{
+  const stored=localStorage.getItem(examProjectStorageKey());
+  let list=stored!==null?JSON.parse(stored):null;
+  if(!Array.isArray(list)&&Array.isArray(currentUser?.examMakerProjects))list=currentUser.examMakerProjects;
+  // An explicitly saved empty array means the user deleted every card.
+  // Only migrate the legacy single draft when no projects list exists at all.
+  if(!Array.isArray(list)){
+   list=[];
+   const raw=localStorage.getItem('examMakerDraftV1_'+(currentUser?.email||'guest'));
+   const legacy=currentUser?.examMakerDraft||(raw?JSON.parse(raw):null);
+   if(legacy){list=[{id:'exam-'+Date.now(),title:legacy.fields?.examTitle||'امتحان المراجعة',subject:legacy.fields?.examSubject||'',updatedAt:Date.now(),draft:legacy}];examPersistProjects(list)}
+  }
+  return list;
+ }catch(e){return []}
+}
+function examPersistProjects(list){try{localStorage.setItem(examProjectStorageKey(),JSON.stringify(list));if(currentUser){currentUser.examMakerProjects=list;saveCurrentUser()}}catch(e){}}
+function examCaptureDraft(){const el=document.getElementById('examPaper');if(!el)return null;return {html:el.innerHTML,style:el.getAttribute('style'),header:el.dataset.header,fields:['examTitle','examSubject','examGrade','examDuration','examSchool'].reduce((a,id)=>(a[id]=document.getElementById(id)?.value||'',a),{})}}
+function examSaveDraft(){try{const draft=examCaptureDraft();if(!draft)return;localStorage.setItem('examMakerDraftV1_'+(currentUser?.email||'guest'),JSON.stringify(draft));if(currentUser)currentUser.examMakerDraft=draft;if(examCurrentProjectId){const list=examGetProjects();const project=list.find(x=>x.id===examCurrentProjectId);if(project){project.draft=draft;project.title=draft.fields.examTitle||'امتحان بدون عنوان';project.subject=draft.fields.examSubject||'';project.updatedAt=Date.now();examPersistProjects(list)}}if(currentUser)saveCurrentUser()}catch(e){}}
+function examLoadDraft(d){try{const source=d||(()=>{const raw=localStorage.getItem('examMakerDraftV1_'+(currentUser?.email||'guest'));return currentUser?.examMakerDraft||(raw?JSON.parse(raw):null)})();const paper=document.getElementById('examPaper');if(!source){paper.innerHTML=examBlankPaperHTML;paper.removeAttribute('style');paper.dataset.header='classic';['examTitle','examSubject','examGrade','examDuration','examSchool'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.value=['امتحان المراجعة','','','',''][i]});examUpdateHead();return}if(source.html){paper.innerHTML=source.html;document.querySelectorAll('#examQuestions .examQuestion').forEach(card=>{if(!card.querySelector('.examQuestionBody')){const body=document.createElement('div');body.className='examQuestionBody';const content=document.createElement('div');content.className='examQuestionContent';const type=card.querySelector('.examQuestionType');let node=type?type.nextElementSibling:null;while(node&& !node.classList.contains('examQuestionControls')){const next=node.nextElementSibling;if(!node.classList.contains('examQuestionImageWrap'))content.appendChild(node);node=next}body.appendChild(content);const image=card.querySelector('.examQuestionImageWrap');if(image)body.insertBefore(image,content);if(type)type.after(body)}})}if(source.style)paper.setAttribute('style',source.style);else paper.removeAttribute('style');if(source.header)paper.dataset.header=source.header;Object.entries(source.fields||{}).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.value=v});examUpdateHead()}catch(e){}}
+function examShowCards(){examSaveDraftIfEditing();document.getElementById('examCardsView').hidden=false;document.getElementById('examLayout').hidden=true;document.getElementById('examMinimizeBtn').hidden=true;document.getElementById('examMyCardsBtn').hidden=true;examRenderCards()}
+function examSaveDraftIfEditing(){if(examCurrentProjectId&&!document.getElementById('examLayout').hidden)examSaveDraft()}
+function examRenderCards(){const grid=document.getElementById('examCardsGrid');if(!grid)return;const list=examGetProjects().sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));grid.innerHTML='';if(!list.length){grid.innerHTML='<div class="examCardsEmpty">📚<br><strong>لا توجد امتحانات محفوظة حتى الآن</strong><br>اضغط «إنشاء امتحان جديد» لبدء أول امتحان.</div>';return}list.forEach(project=>{const card=document.createElement('article');card.className='examProjectCard';const open=document.createElement('button');open.type='button';open.className='examProjectOpen';open.innerHTML='<span class="examProjectIcon">📝</span><span class="examProjectName"></span><span class="examProjectMeta"></span>';open.querySelector('.examProjectName').textContent=project.title||'امتحان بدون عنوان';const count=(project.draft?.html?.match(/class="examQuestion(?:\s|"|')/g)||[]).length;open.querySelector('.examProjectMeta').textContent=(project.subject?project.subject+' • ':'')+count+' سؤال • '+new Date(project.updatedAt||Date.now()).toLocaleDateString('ar-EG');open.onclick=()=>examOpenProject(project.id);const actions=document.createElement('div');actions.className='examProjectActions';const del=document.createElement('button');del.type='button';del.className='delete';del.textContent='حذف البطاقة';del.onclick=async()=>{if(!await examConfirmDelete('حذف الامتحان؟','سيتم حذف بطاقة الامتحان ومحتواها المحفوظ. لا يمكن التراجع عن ذلك.'))return;examPersistProjects(examGetProjects().filter(x=>x.id!==project.id));if(examCurrentProjectId===project.id)examCurrentProjectId=null;examRenderCards()};const edit=document.createElement('button');edit.type='button';edit.textContent='فتح الامتحان';edit.onclick=()=>examOpenProject(project.id);const download=document.createElement('button');download.type='button';download.textContent='⬇ تنزيل';download.onclick=()=>examDownloadProject(project.id);actions.append(edit,download,del);card.append(open,actions);grid.appendChild(card)})}
+function examOpenProject(id){const project=examGetProjects().find(x=>x.id===id);if(!project)return;examCurrentProjectId=id;examLoadDraft(project.draft);document.getElementById('examCardsView').hidden=true;document.getElementById('examLayout').hidden=false;document.getElementById('examMinimizeBtn').hidden=false;document.getElementById('examMyCardsBtn').hidden=false;examApplyLanguage(examLanguage)}
+function examCreateNew(){examSaveDraftIfEditing();const id='exam-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);const draft={html:examBlankPaperHTML,style:'',header:'classic',fields:{examTitle:'امتحان جديد',examSubject:'',examGrade:'',examDuration:'',examSchool:''}};const list=examGetProjects();list.unshift({id,title:'امتحان جديد',subject:'',updatedAt:Date.now(),draft});examPersistProjects(list);examOpenProject(id);document.getElementById('examTitle').focus();document.getElementById('examTitle').select()}
+function examMinimizeToCard(){examSaveDraft();examCurrentProjectId=null;examShowCards()}
+
 let examSavedRange=null;
 function examRememberSelection(){const sel=window.getSelection();if(sel&&sel.rangeCount)examSavedRange=sel.getRangeAt(0).cloneRange()}
 function examApplySelectionColor(color){const sel=window.getSelection();if(!sel)return;if(examSavedRange){sel.removeAllRanges();sel.addRange(examSavedRange)}if(sel.rangeCount&&document.getElementById('examPaper').contains(sel.anchorNode)){document.execCommand('foreColor',false,color);examRememberSelection();examSaveDraft()}}
 function examFormat(command){document.execCommand(command,false,null);examSaveDraft()}
 function examExportPDF(){examUpdateHead();window.print()}
-document.addEventListener('input',e=>{if(e.target.closest('#examPaper'))examSaveDraft()});
+document.addEventListener('input',e=>{if(e.target.closest('#examPaper')||e.target.closest('#examTools')||['examTitle','examSubject','examGrade','examDuration','examSchool'].includes(e.target.id))examSaveDraft()});
+
+
+/* ===== Exam card standalone export/import ===== */
+function examDownloadProject(id){
+ const project=examGetProjects().find(x=>x.id===id);if(!project)return;
+ const payload={format:'StudySmarterExamCard',version:1,exportedAt:new Date().toISOString(),project};
+ const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=(project.title||'exam-card').replace(/[\\/:*?"<>|]+/g,'_')+'.json';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+}
+function examImportCardFile(event){
+ const file=event.target.files?.[0];event.target.value='';if(!file)return;
+ const reader=new FileReader();reader.onload=()=>{
+  try{const data=JSON.parse(reader.result);const project=data.project||data;
+   if(!project||!project.draft||!project.draft.html)throw new Error('invalid');
+   const list=examGetProjects();const copy=JSON.parse(JSON.stringify(project));copy.id='exam-import-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);copy.title=(copy.title||'امتحان مستورد')+' (نسخة)';copy.updatedAt=Date.now();list.unshift(copy);examPersistProjects(list);examRenderCards();alert('تم رفع الامتحان وإضافته كبطاقة جديدة.');
+  }catch(e){alert('الملف غير صالح أو لا يحتوي على بطاقة امتحان محفوظة.');}
+ };reader.readAsText(file);
+}
+
+/* ===== Polished UI messages ===== */
+function studyToast(message,icon='✓'){let old=document.querySelector('.studyToast');if(old)old.remove();const el=document.createElement('div');el.className='studyToast';el.innerHTML='<span style="font-size:17px">'+icon+'</span><span></span>';el.lastChild.textContent=message;document.body.appendChild(el);setTimeout(()=>el.remove(),2300)}
+function studyDialog({title='تأكيد',message='',ok='تأكيد',cancel='إلغاء',danger=false,input=false,placeholder='' }={}){return new Promise(resolve=>{const overlay=document.createElement('div');overlay.className='studyUiOverlay';const dialog=document.createElement('div');dialog.className='studyUiDialog';const h=document.createElement('h3');h.textContent=title;const p=document.createElement('p');p.textContent=message;dialog.append(h,p);let field=null;if(input){field=document.createElement('input');field.placeholder=placeholder;dialog.appendChild(field)}const actions=document.createElement('div');actions.className='studyUiActions';const no=document.createElement('button');no.className='studyUiCancel';no.textContent=cancel;const yes=document.createElement('button');yes.className='studyUiOk'+(danger?' danger':'');yes.textContent=ok;actions.append(no,yes);dialog.append(actions);overlay.append(dialog);document.body.append(overlay);const finish=value=>{overlay.remove();resolve(value)};no.onclick=()=>finish(input?null:false);yes.onclick=()=>finish(input?(field.value.trim()||null):true);overlay.onclick=e=>{if(e.target===overlay)finish(input?null:false)};if(field){field.focus();field.addEventListener('keydown',e=>{if(e.key==='Enter')finish(field.value.trim()||null);if(e.key==='Escape')finish(null)})}else{yes.focus();overlay.addEventListener('keydown',e=>{if(e.key==='Escape')finish(false);if(e.key==='Enter')finish(true)})}})}
+function tfCompletionSound(){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const ctx=new C(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.type='sine';osc.frequency.setValueAtTime(660,ctx.currentTime);osc.frequency.exponentialRampToValueAtTime(880,ctx.currentTime+.075);gain.gain.setValueAtTime(.0001,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(.045,ctx.currentTime+.012);gain.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.16);osc.connect(gain);gain.connect(ctx.destination);osc.start();osc.stop(ctx.currentTime+.17);osc.onended=()=>ctx.close()}catch(e){}}
+
+/* ===== TaskFlow To Do ===== */
+const TF_KEY='studySmarterTaskFlowV1_';
+let tfState={tasks:[],lists:[{id:'inbox',name:'مهامي'}],view:'today',activeList:'inbox',theme:'light'};
+function tfStorageKey(){return TF_KEY+(currentUser?.email||'guest')}
+function tfLoad(){try{const d=JSON.parse(localStorage.getItem(tfStorageKey())||'null')||currentUser?.taskFlowData;if(d)tfState={...tfState,...d};}catch(e){}tfRender()}
+function tfSave(){try{localStorage.setItem(tfStorageKey(),JSON.stringify(tfState));if(currentUser){currentUser.taskFlowData=tfState;saveCurrentUser()}}catch(e){}}
+function openTaskFlow(){
+ if(!currentUser)return;
+ ['authScreen','productSelector','app','mindMapApp','drMahtPro','examMaker','tableStudioApp'].forEach(id=>document.getElementById(id)?.classList.add('hidden'));
+ document.body.classList.remove('drMahtActive');document.getElementById('taskFlowApp').classList.remove('hidden');
+ tfLoad();tfApplyTheme();
+}
+function tfApplyTheme(){const root=document.getElementById('taskFlowApp');root.classList.toggle('tf-dark',tfState.theme==='dark');document.getElementById('tfThemeBtn').textContent=tfState.theme==='dark'?'☀️ الوضع الفاتح':'🌙 الوضع الداكن'}
+function tfToggleTheme(){tfState.theme=tfState.theme==='dark'?'light':'dark';tfApplyTheme();tfSave()}
+function tfSetView(view,btn){tfState.view=view;tfState.activeList=view==='list'?tfState.activeList:'inbox';document.querySelectorAll('.tfNav').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');tfRender()}
+function tfAddTask(){const input=document.getElementById('tfNewTask');const title=input.value.trim();if(!title)return;tfState.tasks.unshift({id:'task-'+Date.now()+Math.random().toString(36).slice(2,5),title,done:false,important:false,listId:tfState.activeList||'inbox',createdAt:Date.now()});input.value='';tfSave();tfRender();studyToast('تمت إضافة المهمة','＋')}
+async function tfAddList(){const name=await studyDialog({title:'قائمة جديدة',message:'اكتب اسم القائمة التي تريد تنظيم مهامك بداخلها.',ok:'إنشاء القائمة',input:true,placeholder:'اسم القائمة'});if(!name)return;const list={id:'list-'+Date.now(),name};tfState.lists.push(list);tfState.view='list';tfState.activeList=list.id;tfSave();tfRender();studyToast('تم إنشاء القائمة','☷')}
+async function tfDeleteList(id){if(id==='inbox')return;const ok=await studyDialog({title:'حذف القائمة؟',message:'سيتم نقل المهام الموجودة بها إلى «مهامي».',ok:'حذف القائمة',danger:true});if(!ok)return;tfState.tasks.forEach(t=>{if(t.listId===id)t.listId='inbox'});tfState.lists=tfState.lists.filter(l=>l.id!==id);tfState.activeList='inbox';tfState.view='today';tfSave();tfRender();studyToast('تم حذف القائمة','🗑')}
+function tfRender(){
+ const lists=document.getElementById('tfLists');if(!lists)return;lists.innerHTML='';
+ tfState.lists.forEach(l=>{const row=document.createElement('div');row.className='tfListItem';const b=document.createElement('button');b.textContent='☷ '+l.name;b.classList.toggle('active',tfState.view==='list'&&tfState.activeList===l.id);b.onclick=()=>{tfState.view='list';tfState.activeList=l.id;tfRender()};row.appendChild(b);if(l.id!=='inbox'){const d=document.createElement('button');d.className='tfListDelete';d.textContent='×';d.title='حذف القائمة';d.onclick=()=>tfDeleteList(l.id);row.appendChild(d)}lists.appendChild(row)});
+ const titles={today:'يومي',important:'مهم',all:'كل المهام',done:'مكتملة',list:(tfState.lists.find(l=>l.id===tfState.activeList)?.name||'قائمتي')};document.getElementById('tfViewTitle').textContent=titles[tfState.view]||'مهامي';
+ document.getElementById('tfViewSub').textContent=tfState.view==='today'?'ابدأ بأهم خطوة عندك':tfState.view==='important'?'المهام التي وضعتها في قائمة المهم':tfState.view==='done'?'إنجازاتك التي أكملتها':'نظرة منظمة على مهامك';
+ let items=tfState.tasks.filter(t=>tfState.view==='all'||(tfState.view==='today'&&!t.done)||(tfState.view==='important'&&t.important&&!t.done)||(tfState.view==='done'&&t.done)||(tfState.view==='list'&&t.listId===tfState.activeList));
+ if(tfState.view!=='done')items=items.filter(t=>!t.done);
+ document.getElementById('tfCount').textContent=items.length+' مهام';const box=document.getElementById('tfTaskList');box.innerHTML='';document.getElementById('tfEmpty').style.display=items.length?'none':'block';
+ items.forEach(t=>{const row=document.createElement('div');row.className='tfTask'+(t.done?' done':'');const check=document.createElement('input');check.type='checkbox';check.checked=!!t.done;check.onchange=()=>{t.done=check.checked;if(t.done)tfCompletionSound();tfSave();tfRender();if(t.done)studyToast('أحسنت! تم إكمال المهمة','✓')};const text=document.createElement('div');text.className='tfTaskText';text.textContent=t.title;text.contentEditable='true';text.onblur=()=>{t.title=text.textContent.trim()||t.title;tfSave()};const star=document.createElement('button');star.className='star'+(t.important?' active':'');star.textContent='★';star.title='مهمة مهمة';star.onclick=()=>{t.important=!t.important;tfSave();tfRender()};const del=document.createElement('button');del.textContent='×';del.title='حذف المهمة';del.onclick=async()=>{if(await studyDialog({title:'حذف المهمة؟',message:'لن تظهر هذه المهمة في قائمتك بعد الحذف.',ok:'حذف المهمة',danger:true})){tfState.tasks=tfState.tasks.filter(x=>x.id!==t.id);tfSave();tfRender();studyToast('تم حذف المهمة','🗑')}};row.append(check,text,star,del);box.appendChild(row)});
+}
+
+/* ===== Table Studio Pro ===== */
+const TS_KEY='studySmarterTableStudioV1_';
+let tsCurrentId=null,tsTheme='light';
+function tsKey(){return TS_KEY+(currentUser?.email||'guest')}
+function tsGetCards(){try{const local=JSON.parse(localStorage.getItem(tsKey())||'null');return Array.isArray(local)?local:(currentUser?.tableStudioCards||[])}catch(e){return currentUser?.tableStudioCards||[]}}
+function tsSaveCards(cards){try{localStorage.setItem(tsKey(),JSON.stringify(cards));if(currentUser){currentUser.tableStudioCards=cards;saveCurrentUser()}}catch(e){}}
+function tsCurrent(){return tsGetCards().find(c=>c.id===tsCurrentId)}
+function tsCapture(){const table=document.getElementById('tsTable');if(!table)return null;return {title:document.getElementById('tsTitle').value||'جدول بدون عنوان',html:table.innerHTML,headColor:document.getElementById('tsHeadColor').value,textColor:document.getElementById('tsTextColor').value,cellColor:document.getElementById('tsCellColor').value,borderColor:document.getElementById('tsBorderColor').value,font:document.getElementById('tsFont').value,fontSize:document.getElementById('tsFontSize').value,zebra:document.getElementById('tsZebra').checked,shadow:document.getElementById('tsShadow').checked,round:document.getElementById('tsRound').checked}}
+function tsSaveDraft(){if(!tsCurrentId)return;const cards=tsGetCards(),c=cards.find(x=>x.id===tsCurrentId);if(c){Object.assign(c,tsCapture(),{updatedAt:Date.now()});tsSaveCards(cards)}}
+function openTableStudio(){if(!currentUser)return;['authScreen','productSelector','app','mindMapApp','drMahtPro','examMaker','taskFlowApp'].forEach(id=>document.getElementById(id)?.classList.add('hidden'));document.body.classList.remove('drMahtActive');document.getElementById('tableStudioApp').classList.remove('hidden');try{tsTheme=localStorage.getItem('tsThemeV1_'+(currentUser?.email||'guest'))||'light'}catch(e){}tsApplyTheme();tsShowShelf()}
+function tsApplyTheme(){const root=document.getElementById('tableStudioApp');root.classList.toggle('ts-dark',tsTheme==='dark');document.getElementById('tsThemeBtn').textContent=tsTheme==='dark'?'☀️ الوضع الفاتح':'🌙 الوضع الداكن';try{localStorage.setItem('tsThemeV1_'+(currentUser?.email||'guest'),tsTheme)}catch(e){}}
+function tsToggleTheme(){tsTheme=tsTheme==='dark'?'light':'dark';tsApplyTheme()}
+function tsShowShelf(){tsSaveDraft();document.getElementById('tsShelf').hidden=false;document.getElementById('tsEditor').hidden=true;tsRenderCards()}
+function tsRenderCards(){const box=document.getElementById('tsCards');if(!box)return;box.innerHTML='';const cards=tsGetCards().sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));if(!cards.length){box.innerHTML='<div class="tsCard"><h3>📊 لا توجد جداول بعد</h3><p>أنشئ أول جدول واحفظه في بطاقة.</p></div>';return}cards.forEach(c=>{const card=document.createElement('article');card.className='tsCard';const h=document.createElement('h3');h.textContent='▦ '+c.title;const p=document.createElement('p');p.textContent='آخر تعديل: '+new Date(c.updatedAt||Date.now()).toLocaleDateString('ar-EG');const actions=document.createElement('div');actions.className='tsCardActions';const open=document.createElement('button');open.className='tsBtn primary';open.textContent='فتح';open.onclick=()=>tsOpenCard(c.id);const del=document.createElement('button');del.className='tsBtn danger';del.textContent='حذف';del.onclick=async()=>{if(await studyDialog({title:'حذف بطاقة الجدول؟',message:'سيتم حذف الجدول المحفوظ نهائيًا من بطاقاتك.',ok:'حذف البطاقة',danger:true})){tsSaveCards(tsGetCards().filter(x=>x.id!==c.id));tsRenderCards();studyToast('تم حذف بطاقة الجدول','🗑')}};actions.append(open,del);card.append(h,p,actions);box.appendChild(card)})}
+function tsCreateNew(){const id='table-'+Date.now()+'-'+Math.random().toString(36).slice(2,6);const cards=tsGetCards();cards.unshift({id,title:'جدول جديد',updatedAt:Date.now(),html:'',headColor:'#3867d6',textColor:'#25324a',cellColor:'#ffffff',borderColor:'#d9e2f0',font:'Tahoma,Arial,sans-serif',fontSize:'14',zebra:true,shadow:true,round:true});tsSaveCards(cards);tsOpenCard(id)}
+function tsOpenCard(id){tsCurrentId=id;const c=tsCurrent();if(!c)return;document.getElementById('tsShelf').hidden=true;document.getElementById('tsEditor').hidden=false;document.getElementById('tsTitle').value=c.title||'';document.getElementById('tsHeadColor').value=c.headColor||'#3867d6';document.getElementById('tsTextColor').value=c.textColor||'#25324a';document.getElementById('tsCellColor').value=c.cellColor||'#ffffff';document.getElementById('tsBorderColor').value=c.borderColor||'#d9e2f0';document.getElementById('tsFont').value=c.font||'Tahoma,Arial,sans-serif';document.getElementById('tsFontSize').value=c.fontSize||14;document.getElementById('tsFontOut').value=(c.fontSize||14)+'px';document.getElementById('tsZebra').checked=c.zebra!==false;document.getElementById('tsShadow').checked=c.shadow!==false;document.getElementById('tsRound').checked=c.round!==false;const table=document.getElementById('tsTable');if(c.html)table.innerHTML=c.html;else tsBuildTable(5,4);tsApplyStyle();table.oninput=()=>tsSaveDraft()}
+function tsBuildTable(rows,cols){const table=document.getElementById('tsTable');const thead=document.createElement('thead'),hr=document.createElement('tr'),tbody=document.createElement('tbody');for(let c=0;c<cols;c++){const th=document.createElement('th');th.contentEditable='true';th.textContent='العنوان '+(c+1);hr.appendChild(th)}thead.appendChild(hr);for(let r=0;r<rows;r++){const tr=document.createElement('tr');for(let c=0;c<cols;c++){const td=document.createElement('td');td.contentEditable='true';td.textContent='';tr.appendChild(td)}tbody.appendChild(tr)}table.replaceChildren(thead,tbody)}
+async function tsResizeTable(){const rows=Math.max(1,Math.min(30,parseInt(document.getElementById('tsRows').value)||1)),cols=Math.max(1,Math.min(12,parseInt(document.getElementById('tsCols').value)||1));if(!await studyDialog({title:'تغيير حجم الجدول؟',message:'تطبيق الحجم الجديد سيعيد بناء الخلايا الحالية. هل تريد المتابعة؟',ok:'تطبيق التغيير',danger:true}))return;tsBuildTable(rows,cols);tsApplyStyle();tsSaveDraft();studyToast('تم تحديث حجم الجدول','▦')}
+function tsApplyStyle(){const table=document.getElementById('tsTable'),wrap=document.getElementById('tsTableWrap');if(!table)return;table.style.setProperty('--ts-head',document.getElementById('tsHeadColor').value);table.style.setProperty('--ts-text',document.getElementById('tsTextColor').value);table.style.setProperty('--ts-cell',document.getElementById('tsCellColor').value);table.style.setProperty('--ts-border',document.getElementById('tsBorderColor').value);table.style.setProperty('--ts-font',document.getElementById('tsFont').value);table.style.setProperty('--ts-size',document.getElementById('tsFontSize').value+'px');table.classList.toggle('ts-zebra',document.getElementById('tsZebra').checked);wrap.classList.toggle('ts-shadow',document.getElementById('tsShadow').checked);wrap.classList.toggle('ts-round',document.getElementById('tsRound').checked);tsSaveDraft()}
+function tsAddRow(){const tbody=document.querySelector('#tsTable tbody'),cols=document.querySelectorAll('#tsTable thead th').length;const tr=document.createElement('tr');for(let i=0;i<cols;i++){const td=document.createElement('td');td.contentEditable='true';tr.appendChild(td)}tbody.appendChild(tr);tsSaveDraft()}
+function tsAddColumn(){const table=document.getElementById('tsTable');const th=document.createElement('th');th.contentEditable='true';th.textContent='عنوان '+(table.tHead.rows[0].cells.length+1);table.tHead.rows[0].appendChild(th);[...table.tBodies[0].rows].forEach(r=>{const td=document.createElement('td');td.contentEditable='true';r.appendChild(td)});document.getElementById('tsCols').value=table.tHead.rows[0].cells.length;tsSaveDraft();studyToast('تمت إضافة عمود جديد','＋')}
+async function tsClearTable(){if(!await studyDialog({title:'مسح محتوى الجدول؟',message:'سيتم مسح النصوص من جميع الخلايا مع الاحتفاظ بعدد الصفوف والأعمدة.',ok:'مسح المحتوى',danger:true}))return;document.querySelectorAll('#tsTable th,#tsTable td').forEach(c=>c.textContent='');tsSaveDraft();studyToast('تم مسح محتوى الجدول','⌫')}
+function tsMinimize(){tsSaveDraft();tsShowShelf()}
+function tsExportCurrent(){const c=tsCapture();if(!c)return;const html='<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><title>'+String(c.title).replace(/[<>]/g,'')+'</title><body style="font-family:'+c.font+';color:'+c.textColor+'"><h2>'+String(c.title).replace(/[<>]/g,'')+'</h2><table style="border-collapse:collapse;width:100%">'+c.html+'</table></body></html>';const blob=new Blob([html],{type:'text/html;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=(c.title||'table').replace(/[\\/:*?"<>|]+/g,'_')+'.html';a.click();URL.revokeObjectURL(url)}
 
 </script>
 
-</body>
+    </body>
 </html>
