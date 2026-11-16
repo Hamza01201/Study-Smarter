@@ -1527,6 +1527,7 @@ body.dark .mindCanvas{
 }
 
 #mindConnections{
+    pointer-events:auto;
     position:absolute;
     left:0;
     top:0;
@@ -3177,8 +3178,392 @@ body.drMahtActive .study-footer{display:none !important;}
 .mindLinkCurveToggle{width:100%;min-height:36px;padding:7px 8px;border-radius:9px;font-size:12px;font-weight:800;white-space:normal;line-height:1.35;box-sizing:border-box;}
 .mindLinkCurveToggle:disabled{opacity:.45;cursor:not-allowed;}
 
+
+/* Smooth TaskFlow status changes and task entrance */
+@keyframes tfTaskEnter{from{opacity:0;transform:translateY(9px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+#taskFlowApp .tfTask{animation:tfTaskEnter .28s cubic-bezier(.2,.75,.25,1) both}
+#taskFlowApp .tfStatusTab{transition:color .3s ease,transform .3s ease}
+#taskFlowApp .tfStatusTab:active{transform:scale(.97)}
+@media(prefers-reduced-motion:reduce){#taskFlowApp .tfTask,#taskFlowApp .tfStatusBar:before{animation:none!important;transition:none!important}}
+/* ===== TaskFlow refined board-card experience ===== */
+#taskFlowApp{--tf-bg:#f4f7fc;--tf-card:#fff;--tf-text:#1e2b40;--tf-muted:#8290a5;--tf-border:#e4eaf3;--tf-accent:#3568c9;--tf-soft:#edf3ff;min-height:100vh;padding:24px clamp(14px,3vw,42px) 50px;background:radial-gradient(ellipse at 8% 0%,#dce9ff99,transparent 36%),radial-gradient(ellipse at 95% 90%,#e7e1ff88,transparent 32%),var(--tf-bg);color:var(--tf-text);transition:background .25s,color .25s}
+#taskFlowApp .tfTop{max-width:1440px;margin:0 auto 34px;min-height:76px;padding:14px 20px;border-radius:20px;background:linear-gradient(115deg,#1f5fbf,#477fe0 62%,#6c71dc);color:#fff;display:flex;justify-content:space-between;align-items:center;gap:18px;box-shadow:0 14px 34px #315fae2b}
+#taskFlowApp .tfTopBrand{display:flex;align-items:center;gap:12px}.tfBrandMark{width:44px;height:44px;border-radius:14px;background:#ffffff22;border:1px solid #ffffff45;display:grid;place-items:center;font-size:25px;font-weight:900}.tfBrand{font-size:22px;font-weight:950;letter-spacing:-.4px}.tfTop small{display:block;color:#e3edff;font-size:11px;margin-top:3px}
+#taskFlowApp .tfTopActions{display:flex;gap:8px;flex-wrap:wrap}.tfBtn{border:1px solid #ffffff55;background:#ffffff1c;color:inherit;border-radius:11px;padding:10px 14px;font-weight:800;cursor:pointer;transition:.2s}.tfBtn:hover{background:#ffffff30;transform:translateY(-2px)}
+#taskFlowApp .tfShelf,#taskFlowApp .tfBoardView{max-width:1280px;margin:auto}#taskFlowApp [hidden]{display:none!important}
+#taskFlowApp .tfShelfHead{display:flex;align-items:end;justify-content:space-between;gap:20px;margin:34px 0 25px}.tfEyebrow{font-size:11px;color:#4778c7;font-weight:900;letter-spacing:1px}.tfShelfHead h1{font-size:clamp(27px,4vw,38px);margin:7px 0 8px;font-weight:950;letter-spacing:-1px}.tfShelfHead p{color:var(--tf-muted);font-size:14px;line-height:1.8}
+#taskFlowApp .tfPrimary{border:0;border-radius:13px;padding:13px 19px;background:linear-gradient(135deg,#2868ce,#695ed6);color:#fff;font-weight:900;box-shadow:0 9px 22px #496bd52b;cursor:pointer;transition:.22s;white-space:nowrap}.tfPrimary:hover{transform:translateY(-3px);box-shadow:0 14px 28px #496bd53b}
+#taskFlowApp .tfBoardCards{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:17px}
+#taskFlowApp .tfBoardCard{position:relative;min-height:205px;padding:17px;border:1px solid var(--tf-border);border-radius:20px;background:var(--tf-card);box-shadow:0 8px 26px #2038580b;display:flex;flex-direction:column;transition:transform .22s,border-color .22s,box-shadow .22s;overflow:hidden}
+#taskFlowApp .tfBoardCard:before{content:"";position:absolute;width:145px;height:145px;left:-72px;bottom:-85px;border-radius:50%;background:linear-gradient(135deg,#4c80e51a,#8064dc19);pointer-events:none}
+#taskFlowApp .tfBoardCard:hover{transform:translateY(-5px);border-color:#9ab8ed;box-shadow:0 17px 38px #20385816}
+#taskFlowApp .tfBoardCardOpen{width:100%;display:flex;flex-direction:column;align-items:flex-start;text-align:right;gap:9px;border:0;background:transparent;color:var(--tf-text);cursor:pointer;flex:1;position:relative;z-index:1}
+#taskFlowApp .tfBoardCardIcon{width:53px;height:53px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,#eaf1ff,#f0edff);font-size:28px;margin-bottom:3px}
+#taskFlowApp .tfBoardCardOpen strong{font-size:18px;font-weight:950;overflow-wrap:anywhere}
+#taskFlowApp .tfBoardCardMeta{font-size:12px;color:var(--tf-muted)}
+#taskFlowApp .tfProgress{width:100%;height:5px;background:var(--tf-soft);border-radius:20px;overflow:hidden;margin-top:7px}.tfProgress i{display:block;height:100%;border-radius:20px;background:linear-gradient(90deg,#3477d7,#7b68dc)}
+#taskFlowApp .tfBoardCardActions{display:flex;justify-content:flex-end;gap:7px;margin-top:13px;position:relative;z-index:2}.tfBoardCardActions button{border:1px solid var(--tf-border);background:var(--tf-soft);color:var(--tf-text);border-radius:9px;padding:7px 11px;font-size:11px;font-weight:800;cursor:pointer}.tfBoardCardActions button:last-child{color:#c34d5c;background:#fff1f2;border-color:#f5d7dc}
+#taskFlowApp .tfShelfEmpty{grid-column:1/-1;min-height:230px;border:1px dashed var(--tf-border);border-radius:20px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:9px;color:var(--tf-muted);background:var(--tf-card)}.tfShelfEmpty div{font-size:35px;color:#6485d5}.tfShelfEmpty strong{color:var(--tf-text)}
+#taskFlowApp .tfBoardHeading{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:35px 0 24px}.tfBoardTitleWrap{display:flex;align-items:center;gap:14px}.tfBoardIcon{width:58px;height:58px;border-radius:18px;background:linear-gradient(135deg,#e7efff,#eeeaff);display:grid;place-items:center;font-size:30px;box-shadow:inset 0 0 0 1px #dce6fb}.tfBoardHeading h1{font-size:29px;font-weight:950;letter-spacing:-.6px}.tfBoardHeading p{color:var(--tf-muted);font-size:13px;margin-top:5px}.tfBackBtn{color:var(--tf-text);background:var(--tf-card);border:1px solid var(--tf-border)}
+#taskFlowApp .tfStatusBar{position:relative;isolation:isolate;display:flex;gap:8px;padding:6px;border:1px solid var(--tf-border);background:var(--tf-card);border-radius:15px;width:max-content;max-width:100%;margin:0 0 22px;box-shadow:0 5px 18px #1b355508;overflow:hidden}.tfStatusBar:before{content:"";position:absolute;z-index:0;right:6px;top:6px;bottom:6px;width:calc(50% - 4px);border-radius:10px;background:var(--tf-soft);box-shadow:inset 0 0 0 1px #cbdcf8;transition:transform .38s cubic-bezier(.2,.85,.25,1),background .25s}.tfStatusBar:has([data-view="done"].active):before{transform:translateX(calc(-100% - 8px))}.tfStatusTab{position:relative;z-index:1}
+#taskFlowApp .tfStatusTab{display:flex;align-items:center;gap:9px;border:0;border-radius:10px;padding:11px 17px;background:transparent;color:var(--tf-muted);font-weight:900;cursor:pointer;transition:.2s;white-space:nowrap}.tfStatusTab b{font-size:11px;min-width:22px;padding:4px 6px;border-radius:7px;background:var(--tf-soft);color:var(--tf-muted)}.tfStatusTab.active{background:transparent;color:var(--tf-accent);box-shadow:none}.tfStatusTab.active b{background:#dbe8ff;color:#245bb4;transition:background .28s,color .28s,transform .28s;transform:scale(1.04)}.tfStatusDot{width:8px;height:8px;border-radius:50%}.openDot{background:#d79b37}.doneDot{background:#31a77c}
+#taskFlowApp .tfAddBox{display:flex;align-items:center;gap:10px;padding:9px 10px;border:1px solid var(--tf-border);border-radius:15px;background:var(--tf-card);box-shadow:0 6px 22px #1b355508;margin-bottom:18px}.tfAddPlus{font-size:23px;color:#4779d2;padding:0 5px}.tfAddBox input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--tf-text);padding:10px 4px;font-size:14px}.tfAddBox input::placeholder{color:#9aa8bb}.tfAddBox button{border:0;border-radius:10px;background:linear-gradient(135deg,#2868ce,#5d72d4);color:#fff;padding:10px 17px;font-weight:900;cursor:pointer}
+#taskFlowApp .tfTaskList{display:grid;gap:10px}.tfTask{display:flex;align-items:center;gap:12px;min-height:59px;padding:12px 14px;border:1px solid var(--tf-border);border-radius:14px;background:var(--tf-card);box-shadow:0 4px 14px #1b355506;transition:.2s}.tfTask:hover{border-color:#b6c9e9;transform:translateY(-1px);box-shadow:0 8px 20px #1b35550d}.tfTask input[type=checkbox]{appearance:none;width:20px;height:20px;border:1.7px solid #9aabc1;border-radius:50%;background:transparent;display:grid;place-content:center;cursor:pointer;flex:0 0 20px}.tfTask input[type=checkbox]:checked{background:#2fa47d;border-color:#2fa47d}.tfTask input[type=checkbox]:checked:before{content:'✓';font-size:12px;color:white;font-weight:900}.tfTaskText{flex:1;min-width:0;outline:0;overflow-wrap:anywhere;color:var(--tf-text);font-size:14px;line-height:1.7}.tfTask.done .tfTaskText{text-decoration:line-through;color:var(--tf-muted)}.tfTask button{width:34px;height:34px;border:0;border-radius:9px;background:transparent;color:var(--tf-muted);font-size:18px;cursor:pointer;transition:.18s}.tfTask button:hover{background:var(--tf-soft);color:var(--tf-accent)}.tfTask button.star.active{color:#e4a52d;background:#fff7e5}.tfTask button.tfDeleteTask:hover{color:#c94c5b;background:#fff0f1}
+#taskFlowApp .tfEmpty{min-height:220px;align-items:center;justify-content:center;flex-direction:column;gap:9px;border:1px dashed var(--tf-border);border-radius:17px;background:var(--tf-card);color:var(--tf-muted)}.tfEmptyIcon{font-size:30px;color:#7190d2}.tfEmpty strong{color:var(--tf-text);font-size:15px}.tfEmpty span{font-size:12px}
+#taskFlowApp.tf-dark{--tf-bg:#101827;--tf-card:#1b293d;--tf-text:#e8effb;--tf-muted:#9eacc1;--tf-border:#35465e;--tf-soft:#263b55;--tf-accent:#a9caff;background:radial-gradient(ellipse at 8% 0%,#1c3557aa,transparent 38%),#101827;color-scheme:dark}
+#taskFlowApp.tf-dark .tfBoardCardIcon,#taskFlowApp.tf-dark .tfBoardIcon{background:linear-gradient(135deg,#263b55,#343252);box-shadow:inset 0 0 0 1px #435575}
+#taskFlowApp.tf-dark .tfStatusBar:before{box-shadow:inset 0 0 0 1px #405d87}#taskFlowApp.tf-dark .tfStatusTab.active{box-shadow:none}#taskFlowApp.tf-dark .tfStatusTab.active b{background:#304b70;color:#d5e5ff}
+#taskFlowApp.tf-dark .tfBoardCardActions button:last-child{background:#432b37;border-color:#63404b;color:#ff9eaa}
+#taskFlowApp.tf-dark .tfTask input[type=checkbox]{border-color:#8092aa}#taskFlowApp.tf-dark .tfTask input[type=checkbox]:checked{background:#2fa47d;border-color:#2fa47d}
+.tfIconDialog{max-width:390px}.tfIconPicker{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0 20px}.tfIconPicker button{height:51px;border:1px solid var(--border);border-radius:12px;background:var(--card2);font-size:24px;cursor:pointer;transition:.18s}.tfIconPicker button:hover,.tfIconPicker button.selected{border-color:#4779d2;background:#eaf1ff;transform:translateY(-2px);box-shadow:0 0 0 3px #4779d21c}
+@media(max-width:760px){#taskFlowApp{padding:12px 12px 35px}#taskFlowApp .tfTop{align-items:flex-start;flex-direction:column;padding:14px;margin-bottom:22px}#taskFlowApp .tfTopActions{width:100%}#taskFlowApp .tfTopActions button{flex:1}#taskFlowApp .tfShelfHead{align-items:flex-start;flex-direction:column;margin:20px 0}#taskFlowApp .tfBoardHeading{align-items:flex-start;flex-direction:column;margin:22px 0}#taskFlowApp .tfStatusBar{width:100%}#taskFlowApp .tfStatusTab{flex:1;justify-content:center;padding:10px 7px}#taskFlowApp .tfAddBox button{padding:10px 11px;font-size:12px}}
+
+
+/* === Precision fixes: Table Studio theme/footer, cards, print, and Mind Map links === */
+body:has(#tableStudioApp.ts-dark:not(.hidden)) .study-footer,
+body:has(#tableStudioApp.ts-dark:not(.hidden)) .study-footer *{
+  background-color:#1b293d!important;color:#edf4ff!important;border-color:#435671!important;
+}
+body:has(#tableStudioApp:not(.ts-dark):not(.hidden)) .study-footer{background:rgba(255,255,255,.97)!important;color:#172033!important;border-color:#dfe6f0!important}
+body:has(#tableStudioApp:not(.ts-dark):not(.hidden)) .study-footer-copy{color:#718096!important}
+#tableStudioApp.ts-dark .tsCard{background:linear-gradient(145deg,#1b293d,#172438)!important;color:#e5edf8!important;border-color:#40536d!important}
+#tableStudioApp.ts-dark .tsCard h3{color:#edf4ff!important}
+#tableStudioApp.ts-dark .tsCard p{color:#a5b3c7!important}
+.mindShelfEdit,.mindShelfPrint{position:absolute;bottom:16px;z-index:3;border:1px solid var(--border);border-radius:10px;padding:7px 9px;background:var(--card2);color:var(--text);font-weight:800;cursor:pointer;font-size:11px}
+.mindShelfEdit{left:132px}.mindShelfPrint{left:16px;bottom:58px}
+.mindShelfOpen{left:16px;bottom:16px}
+#mindConnections{pointer-events:none!important;overflow:visible}
+#mindConnections .mindLinkHit{pointer-events:stroke!important;cursor:pointer!important;stroke:transparent!important;stroke-width:24!important;vector-effect:non-scaling-stroke}
+#mindConnections .mindLinkHit:hover{stroke:rgba(65,125,220,.22)!important;stroke-width:28!important}
+#mindConnections .mindLinkVisible{pointer-events:none!important}
+@media print{
+  body.printTableStudio *{visibility:hidden!important}
+  body.printTableStudio #tableStudioApp,body.printTableStudio #tableStudioApp *,body.printTableStudio #tsEditor,body.printTableStudio #tsEditor *{visibility:visible!important}
+  body.printTableStudio #tableStudioApp{position:absolute!important;inset:0!important;width:100%!important;padding:0!important;background:#fff!important;color:#000!important}
+  body.printTableStudio #tsTop,body.printTableStudio .tsTop,body.printTableStudio .tsTools,body.printTableStudio .tsWorkBar,body.printTableStudio .study-footer{display:none!important}
+  body.printTableStudio #tsEditor{display:block!important;position:static!important}
+  body.printTableStudio .tsWork{display:block!important;padding:0!important}
+  body.printTableStudio #tsTableWrap{overflow:visible!important;box-shadow:none!important}
+  body.printTableStudio #tsTable{width:100%!important;break-inside:auto}
+  body.printTableStudio #tsTable tr{break-inside:avoid}
+  body.printMindMap *{visibility:hidden!important}
+  body.printMindMap #mindMapApp,body.printMindMap #mindMapApp .mindWorkspace,body.printMindMap #mindMapApp .mindCanvas,body.printMindMap #mindMapApp .mindStage,body.printMindMap #mindMapApp #mindConnections,body.printMindMap #mindMapApp #mindNodes,body.printMindMap #mindMapApp #mindNodes *{visibility:visible!important}
+  body.printMindMap #mindMapApp{display:block!important;position:absolute!important;inset:0!important;width:100%!important;height:100vh!important;background:#fff!important}
+  body.printMindMap .mindToolbar,body.printMindMap .mindProjectShelf,body.printMindMap .mindSidebarToggle,body.printMindMap .study-footer{display:none!important}
+  body.printMindMap .mindWorkspace,body.printMindMap .mindCanvas{position:static!important;width:100%!important;height:100vh!important;overflow:visible!important;background:#fff!important}
+  body.printMindMap .mindStage{transform:none!important;transform-origin:top left!important}
+  @page{margin:12mm}
+}
+
+
+
+/* ===== FINAL FIX: Mind Map saved-project card layout =====
+   Keep every control in normal document flow to prevent text/button overlap.
+*/
+#mindProjectShelfGrid .mindShelfCard{
+    min-height:0!important;
+    height:auto!important;
+    padding:18px!important;
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    grid-template-areas:
+        "icon icon icon"
+        "name name name"
+        "meta meta meta"
+        "edit print open"!important;
+    align-items:stretch!important;
+    gap:10px!important;
+    overflow:hidden!important;
+    text-align:right!important;
+    border-radius:20px!important;
+    background:linear-gradient(145deg,var(--card),var(--card2))!important;
+    box-shadow:0 8px 24px rgba(30,41,59,.09)!important;
+}
+#mindProjectShelfGrid .mindShelfIcon{
+    grid-area:icon!important;
+    width:54px!important;height:54px!important;
+    margin:0 0 2px auto!important;
+    flex:none!important;
+}
+#mindProjectShelfGrid .mindShelfName{
+    grid-area:name!important;
+    width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+    font-size:18px!important;
+    line-height:1.45!important;
+    overflow-wrap:anywhere!important;
+}
+#mindProjectShelfGrid .mindShelfMeta{
+    grid-area:meta!important;
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0 0 4px!important;
+    font-size:11px!important;
+    line-height:1.8!important;
+    overflow-wrap:anywhere!important;
+    white-space:normal!important;
+}
+#mindProjectShelfGrid .mindShelfEdit,
+#mindProjectShelfGrid .mindShelfPrint,
+#mindProjectShelfGrid .mindShelfOpen{
+    position:static!important;
+    inset:auto!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:38px!important;
+    margin:0!important;
+    padding:8px 5px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    border:1px solid var(--border)!important;
+    border-radius:11px!important;
+    font-size:11px!important;
+    font-weight:850!important;
+    line-height:1.3!important;
+    white-space:normal!important;
+    text-align:center!important;
+    box-sizing:border-box!important;
+    z-index:2!important;
+}
+#mindProjectShelfGrid .mindShelfEdit{
+    grid-area:edit!important;
+    background:color-mix(in srgb,var(--primary) 10%,var(--card))!important;
+    color:var(--primary)!important;
+}
+#mindProjectShelfGrid .mindShelfPrint{
+    grid-area:print!important;
+    background:var(--card2)!important;
+    color:var(--text)!important;
+}
+#mindProjectShelfGrid .mindShelfOpen{
+    grid-area:open!important;
+    background:var(--primary)!important;
+    border-color:transparent!important;
+    color:#fff!important;
+}
+#mindProjectShelfGrid .mindShelfEdit:hover,
+#mindProjectShelfGrid .mindShelfPrint:hover,
+#mindProjectShelfGrid .mindShelfOpen:hover{
+    transform:translateY(-2px)!important;
+    filter:brightness(1.04)!important;
+}
+#mindProjectShelfGrid .mindShelfCard::after{
+    z-index:0!important;
+    pointer-events:none!important;
+}
+#mindProjectShelfGrid .mindShelfCard>*{
+    position:relative!important;
+    z-index:1!important;
+}
+@media(max-width:520px){
+    #mindProjectShelfGrid{
+        grid-template-columns:1fr!important;
+    }
+    #mindProjectShelfGrid .mindShelfCard{
+        padding:16px!important;
+    }
+}
+
+
+/* ===== Preserve original login -> platform flow, with a footer on each screen ===== */
+/* Hidden must always win: otherwise the platform picker appears before login. */
+#authScreen.hidden,
+#productSelector.hidden{
+    display:none!important;
+}
+#authScreen.authScreen:not(.hidden),
+#productSelector.productSelector:not(.hidden){
+    min-height:100vh!important;
+    min-height:100svh!important;
+    height:auto!important;
+    box-sizing:border-box!important;
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    align-items:center!important;
+    gap:14px!important;
+    padding:24px 20px!important;
+    overflow:visible!important;
+}
+#authScreen .authBox,
+#productSelector .productSelectorBox{
+    flex:0 0 auto!important;
+    margin:0 auto!important;
+}
+#authScreen .screen-footer,
+#productSelector .screen-footer{
+    position:relative!important;
+    inset:auto!important;
+    transform:none!important;
+    flex:0 0 auto!important;
+    width:min(500px,100%)!important;
+    box-sizing:border-box!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    text-align:center!important;
+    gap:3px!important;
+    padding:11px 18px!important;
+    margin:0 auto!important;
+    border:1px solid var(--border)!important;
+    border-radius:16px!important;
+    background:rgba(255,255,255,.92)!important;
+    color:var(--text)!important;
+    box-shadow:0 8px 24px rgba(30,41,59,.09)!important;
+    z-index:2!important;
+}
+body.dark #authScreen .screen-footer,
+body.dark #productSelector .screen-footer{
+    background:rgba(27,33,56,.94)!important;
+    border-color:var(--border)!important;
+    color:var(--text)!important;
+}
+#authScreen .screen-footer .study-footer-title,
+#productSelector .screen-footer .study-footer-title{
+    font-size:14px!important;
+    font-weight:850!important;
+    line-height:1.35!important;
+    margin:0!important;
+}
+#authScreen .screen-footer .study-footer-copy,
+#productSelector .screen-footer .study-footer-copy{
+    font-size:11px!important;
+    line-height:1.5!important;
+    color:var(--muted)!important;
+}
+@media(max-width:600px){
+    #authScreen.authScreen:not(.hidden),
+    #productSelector.productSelector:not(.hidden){
+        padding:14px 12px!important;
+        gap:10px!important;
+    }
+    #authScreen .authBox,
+    #productSelector .productSelectorBox{
+        width:100%!important;
+        padding:24px 20px!important;
+    }
+}
+
+/* ===== Exam Maker saved cards: keep all action buttons inside card ===== */
+#examCardsView .examCardsGrid{
+    min-width:0!important;
+    width:100%!important;
+}
+#examCardsView .examProjectCard{
+    box-sizing:border-box!important;
+    min-width:0!important;
+    width:100%!important;
+    overflow:hidden!important;
+    padding:16px!important;
+    gap:10px!important;
+}
+#examCardsView .examProjectOpen{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+    flex:1 1 auto!important;
+    overflow:hidden!important;
+    text-align:right!important;
+}
+#examCardsView .examProjectName,
+#examCardsView .examProjectMeta{
+    max-width:100%!important;
+    overflow-wrap:anywhere!important;
+    word-break:break-word!important;
+}
+#examCardsView .examProjectActions{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+    gap:7px!important;
+    padding-top:10px!important;
+    margin:0!important;
+    justify-content:stretch!important;
+    align-items:stretch!important;
+}
+#examCardsView .examProjectActions button{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    min-height:38px!important;
+    box-sizing:border-box!important;
+    padding:7px 4px!important;
+    margin:0!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    word-break:break-word!important;
+    text-align:center!important;
+    font-size:12px!important;
+    line-height:1.25!important;
+}
+@media(max-width:380px){
+    #examCardsView .examProjectActions{gap:5px!important}
+    #examCardsView .examProjectActions button{font-size:11px!important;padding:6px 2px!important}
+}
+
 </style>
-    </head>
+        <style>
+
+/* Table Studio saved-card polish and custom rename/icon dialog */
+#tableStudioApp .tsCard{min-width:0;gap:13px;padding:18px;border-radius:20px;position:relative;overflow:hidden}
+#tableStudioApp .tsCard:before{content:"";position:absolute;inset:0 0 auto;height:4px;background:linear-gradient(90deg,#3977d8,#7c5ce7);opacity:.9}
+#tableStudioApp .tsCardHead{display:flex;align-items:center;gap:12px;min-width:0;padding-top:3px}
+#tableStudioApp .tsCardIcon{width:52px;height:52px;flex:0 0 52px;border-radius:16px;display:grid;place-items:center;font-size:26px;background:linear-gradient(145deg,#eaf2ff,#f4f0ff);color:#285fb7;border:1px solid #dce7fa;box-shadow:inset 0 1px #fff}
+#tableStudioApp .tsCardTitleWrap{min-width:0;flex:1}#tableStudioApp .tsCard h3{font-size:16px;line-height:1.5;overflow-wrap:anywhere}
+#tableStudioApp .tsCard p{padding-inline-start:64px;font-size:11px}
+#tableStudioApp .tsCardActions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:4px}
+#tableStudioApp .tsCardActions button{min-width:0;min-height:40px;border-radius:11px;font-weight:800;transition:transform .18s,box-shadow .18s,background .18s}
+#tableStudioApp .tsCardActions button:hover{transform:translateY(-2px);box-shadow:0 6px 14px #1a31501c}
+#tableStudioApp .tsCardActions button:active{transform:scale(.97)}
+#tableStudioApp.ts-dark .tsCardIcon{background:linear-gradient(145deg,#263e60,#302c52);border-color:#405779;color:#d8e8ff;box-shadow:none}
+.tsEditDialog{width:min(460px,100%);padding:24px;border-radius:24px;background:var(--card,#fff);color:var(--text,#243047)}
+.tsEditTop{display:flex;align-items:center;gap:13px;margin-bottom:20px}.tsEditMark{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(145deg,#eaf2ff,#f3edff);font-size:23px}
+.tsEditTop h3{margin:0 0 4px;font-size:19px}.tsEditTop p{margin:0;color:var(--muted,#8290a4);font-size:12px}
+.tsEditLabel{display:block;font-size:13px;font-weight:900;margin:12px 0 8px;color:var(--text,#243047)}
+.tsEditName{width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid var(--border,#dce4ef);border-radius:12px;background:var(--card,#fff);color:var(--text,#243047);font:inherit;outline:none;transition:border-color .18s,box-shadow .18s}
+.tsEditName:focus{border-color:#3977d8;box-shadow:0 0 0 3px #3977d822}.tsEditName.invalid{border-color:#d84b58}
+.tsEditIconGrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.tsEditIcon{height:43px;border:1px solid var(--border,#e0e7f0);border-radius:12px;background:var(--card,#fff);font-size:21px;cursor:pointer;transition:transform .16s,border-color .16s,background .16s}
+.tsEditIcon:hover{transform:translateY(-2px);border-color:#6a96df;background:#edf4ff}.tsEditIcon.selected{border:2px solid #3977d8;background:#eaf2ff;box-shadow:0 0 0 3px #3977d81c}
+.tsEditPreviewRow{display:flex;align-items:center;gap:10px;margin:14px 0 18px;color:var(--muted,#8290a4);font-size:12px}
+.tsEditPreview{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:#edf4ff;color:#285fb7;font-size:21px;border:1px solid #dce7fa}
+.tsEditActions{margin-top:5px}.tsEditActions button{min-width:110px}
+#tableStudioApp.ts-dark .tsEditDialog{background:#1b293d;color:#e5edf8;border-color:#40536d}
+#tableStudioApp.ts-dark .tsEditTop p,#tableStudioApp.ts-dark .tsEditPreviewRow{color:#a5b3c7}
+#tableStudioApp.ts-dark .tsEditName,#tableStudioApp.ts-dark .tsEditIcon{background:#142237;color:#e5edf8;border-color:#40536d}
+#tableStudioApp.ts-dark .tsEditIcon.selected{background:#263d5d;border-color:#78aaff}
+#tableStudioApp.ts-dark .tsEditPreview{background:#263d5d;color:#d8e8ff;border-color:#405779}
+@media(max-width:420px){.tsEditIconGrid{grid-template-columns:repeat(5,minmax(0,1fr))}.tsEditDialog{padding:18px}}
+
+</style>
+
+        <style id="wholeSiteThemeSync">
+/* One theme switch controls the complete site, including every platform. */
+body.dark #drMahtPro{background:#101827!important;color:#e5edf8!important;color-scheme:dark}
+body.dark #drMahtPro .drMathHeader,body.dark #drMahtPro .drMathPanel,body.dark #drMahtPro .drMathHero,body.dark #drMahtPro .drMathDisplay,body.dark #drMahtPro .drSolution{background-color:#1b293d!important;color:#e5edf8!important;border-color:#40536d!important}
+body.dark #drMahtPro input,body.dark #drMahtPro textarea,body.dark #drMahtPro select{background:#111c2d!important;color:#edf4ff!important;border-color:#40536d!important}
+body.dark #drMahtPro .drMathHero p,body.dark #drMahtPro .drUniversalHint{color:#a5b3c7!important}
+body.dark #tableStudioApp:not(.ts-dark){color-scheme:dark}
+body.dark #tableStudioApp:not(.ts-dark) .tsTop,body.dark #tableStudioApp:not(.ts-dark) .tsTools,body.dark #tableStudioApp:not(.ts-dark) .tsWork,body.dark #tableStudioApp:not(.ts-dark) .tsCard{background:#1b293d!important;color:#e5edf8!important;border-color:#35465e!important}
+body.dark #tableStudioApp:not(.ts-dark) .tsTable td{background:#172438!important;color:#e5edf8!important;border-color:#40536d!important}
+body.dark #tableStudioApp:not(.ts-dark) .tsTable th{background:#2e5fae!important;color:#fff!important;border-color:#40536d!important}
+body.dark #tableStudioApp:not(.ts-dark) input:not([type=color]),body.dark #tableStudioApp:not(.ts-dark) select{background:#111c2d!important;color:#edf4ff!important;border-color:#40536d!important}
+</style>
+        \n</head>
 
     <body>
 
@@ -3260,6 +3645,13 @@ body.drMahtActive .study-footer{display:none !important;}
                 </div>
 
             </div>
+
+            <div class="screen-footer" aria-label="تذييل الصفحة">
+                <div class="study-footer-title">☠️ Studying Is Easy</div>
+                <div class="study-footer-copy">© 2026 • Developed by Hamza
+                    Alsaid</div>
+            </div>
+
         </div>
 
         <!-- ================= PRODUCT SELECTOR ================= -->
@@ -3388,6 +3780,13 @@ body.drMahtActive .study-footer{display:none !important;}
                 </button>
 
             </div>
+
+            <div class="screen-footer" aria-label="تذييل الصفحة">
+                <div class="study-footer-title">📚 Study Cards Pro</div>
+                <div class="study-footer-copy">© 2026 • Developed by Hamza
+                    Alsaid</div>
+            </div>
+
         </div>
 
         <!-- ================= STUDY CARDS APP ================= -->
@@ -4058,6 +4457,10 @@ overscroll-behavior-x:contain;
                             onclick="openEditMindProjectModal()">✏️ تعديل
                             العنوان</button>
                         <button class="mindProjectBtn" type="button"
+                            onclick="printMindMap()"
+                            title="طباعة الخريطة الحالية">🖨️ طباعة
+                            الخريطة</button>
+                        <button class="mindProjectBtn" type="button"
                             onclick="exportMindProjectsToDevice()"
                             title="تنزيل نسخة من مشاريع الخرائط">⬇️ تنزيل
                             الخريطة</button>
@@ -4073,6 +4476,7 @@ overscroll-behavior-x:contain;
                     <button onclick="addMindNode()">＋ إضافة عقدة</button>
                     <button onclick="toggleConnectMode()">🔗 ربط العقد</button>
                     <button onclick="centerMindMap()">🎯 توسيط الخريطة</button>
+
                     <button onclick="clearMindMap()">🗑️ مسح الخريطة</button>
 
                     <div class="mindToolbarRow">
@@ -4093,7 +4497,7 @@ overscroll-behavior-x:contain;
                             class="mindToolbarRow mindStyleControls mindLinkControls mindLinkSelectRow">
                             <label for="mindLinkSelect">الربطة المحددة</label>
                             <select id="mindLinkSelect"
-                                onchange="loadSelectedMindLinkStyle()"
+                                onchange="selectedMindLinkPair=null;loadSelectedMindLinkStyle()"
                                 title="اختر ربطة واحدة لتعديلها"><option
                                     value>اختر ربطة</option></select>
                         </div>
@@ -4457,6 +4861,11 @@ overscroll-behavior-x:contain;
                     <input id="mindProjectTitle" type="text" maxlength="80"
                         placeholder="مثال: أحياء — الفصل الأول"
                         autocomplete="off">
+                </div>
+                <div class="field">
+                    <label>رمز بطاقة المشروع (Emoji)</label>
+                    <input id="mindProjectIcon" type="text" maxlength="8"
+                        value="🧠" placeholder="🧠" autocomplete="off">
                 </div>
                 <div class="mindShortcut">
                     💡 كل مشروع مستقل: له عنوانه وخريطته وعقده وروابطه، ويمكنك
@@ -7382,34 +7791,35 @@ if(button){
 }
 
 
+function applyWholeSiteTheme(isDark){
+    const dark=!!isDark;
+    document.body.classList.toggle("dark",dark);
+    // Keep every platform on the same site-wide theme.
+    const task=document.getElementById('taskFlowApp');
+    if(task) task.classList.toggle('tf-dark',dark);
+    const table=document.getElementById('tableStudioApp');
+    if(table) table.classList.toggle('ts-dark',dark);
+    const exam=document.getElementById('examMaker');
+    if(exam) exam.classList.toggle('exam-dark',dark);
+    if(typeof tfState!=='undefined' && tfState){tfState.theme=dark?'dark':'light';try{tfSave()}catch(e){}}
+    if(typeof tsTheme!=='undefined'){tsTheme=dark?'dark':'light';try{localStorage.setItem('tsThemeV1_'+(currentUser?.email||'guest'),tsTheme)}catch(e){}}
+    updateThemeToggle();
+    const label=dark?'☀️ الوضع الفاتح':'🌙 الوضع الداكن';
+    ['tfThemeBtn','tsThemeBtn','examThemeToggle'].forEach(id=>{const b=document.getElementById(id);if(b)b.textContent=label});
+    const mindBtn=document.getElementById('mindThemeToggle');if(mindBtn)mindBtn.innerHTML='<span id="mindThemeIcon">'+(dark?'☀️':'🌙')+'</span> الوضع';
+}
+
 function toggleDark(){
-
-document.body.classList.toggle("dark");
-
-localStorage.setItem(
-DARK_KEY,
-document.body.classList.contains("dark")
-? "1"
-: "0"
-);
-
-updateThemeToggle();
-
+    const dark=!document.body.classList.contains('dark');
+    applyWholeSiteTheme(dark);
+    try{localStorage.setItem(DARK_KEY,dark?'1':'0')}catch(e){}
 }
 
 
 function restoreDark(){
-
-if(
-localStorage.getItem(DARK_KEY) === "1"
-){
-
-document.body.classList.add("dark");
-
-}
-
-updateThemeToggle();
-
+    let dark=false;try{dark=localStorage.getItem(DARK_KEY)==="1"}catch(e){}
+    document.body.classList.toggle('dark',dark);
+    updateThemeToggle();
 }
 
 
@@ -7546,9 +7956,14 @@ nodeIds.has(String(link.from)) &&
 nodeIds.has(String(link.to)) &&
 String(link.from) !== String(link.to)
 )
-.map(link => ({
+ .map(link => ({
 from:String(link.from),
-to:String(link.to)
+to:String(link.to),
+color:link.color || "#8b8bff",
+width:Number.isFinite(Number(link.width)) ? Number(link.width) : 3,
+pattern:["solid","dashed","dotted"].includes(link.pattern) ? link.pattern : "solid",
+curveType:["straight","gentle","right-angle"].includes(link.curveType) ? link.curveType : (link.curved ? "gentle" : "straight"),
+curved:Boolean(link.curved)
 }));
 
 return normalized;
@@ -7753,6 +8168,18 @@ mindProjects.forEach(project=>{
     const saved=project.updatedAt ? new Date(project.updatedAt).toLocaleString("ar-EG",{dateStyle:"short",timeStyle:"short"}) : "";
     meta.textContent=`${project.nodes.length} عقدة • ${project.links.length} رابط${saved ? " • آخر حفظ: "+saved : ""}`;
 
+    const edit=document.createElement("button");
+    edit.type="button";
+    edit.className="mindShelfEdit";
+    edit.textContent="✏️ الاسم والرمز";
+    edit.addEventListener("click",event=>{event.stopPropagation();openMindProjectModal(project.id);});
+
+    const print=document.createElement("button");
+    print.type="button";
+    print.className="mindShelfPrint";
+    print.textContent="🖨️ طباعة";
+    print.addEventListener("click",event=>{event.stopPropagation();openMindProjectFromShelf(project.id);setTimeout(printMindMap,180);});
+
     const open=document.createElement("button");
     open.type="button";
     open.className="mindShelfOpen";
@@ -7762,7 +8189,7 @@ mindProjects.forEach(project=>{
         openMindProjectFromShelf(project.id);
     });
 
-    card.append(icon,name,meta,open);
+    card.append(icon,name,meta,edit,print,open);
     card.addEventListener("click",()=>openMindProjectFromShelf(project.id));
     card.addEventListener("keydown",event=>{
         if(event.key==="Enter" || event.key===" "){
@@ -7957,6 +8384,7 @@ if(dropdown && !dropdown.contains(event.target)) closeMindProjectDropdown();
 });
 
 
+function printMindMap(){syncActiveMindMap();document.body.classList.add('printMindMap');window.print();setTimeout(()=>document.body.classList.remove('printMindMap'),500);}
 function exportMindProjectsToDevice(){
     try{
         if(!Array.isArray(mindProjects) || !mindProjects.length){toast("⚠️ لا توجد خرائط لتنزيلها");return;}
@@ -8069,6 +8497,8 @@ title.textContent =
 "✏️ تعديل مشروع الخريطة";
 
 input.value = project.title;
+const iconInput=document.getElementById("mindProjectIcon");
+if(iconInput) iconInput.value=project.icon || "🧠";
 
 }else{
 
@@ -8076,6 +8506,8 @@ title.textContent =
 "🧠 إنشاء مشروع خريطة";
 
 input.value = "";
+const iconInput=document.getElementById("mindProjectIcon");
+if(iconInput) iconInput.value="🧠";
 
 }
 
@@ -8137,10 +8569,12 @@ item => item.id === mindProjectEditingId
 if(!project) return;
 
 project.title = title;
+project.icon = (document.getElementById("mindProjectIcon")?.value || "🧠").trim() || "🧠";
 project.updatedAt = Date.now();
 
 saveMindProjects();
 renderMindProjects();
+renderMindProjectShelf();
 closeMindProjectModal();
 
 toast("✅ تم تعديل عنوان المشروع");
@@ -8164,6 +8598,7 @@ return;
 
 const project =
 createMindProject(title);
+project.icon = (document.getElementById("mindProjectIcon")?.value || "🧠").trim() || "🧠";
 
 mindProjects.push(project);
 activeMindProjectId = project.id;
@@ -8179,11 +8614,14 @@ mindConnectFrom = null;
 
 saveMindProjects();
 renderMindProjects();
+renderMindProjectShelf();
 renderMindMap();
 updateMindMode();
 closeMindProjectModal();
 
 toast(`🎉 تم إنشاء مشروع "${title}"`);
+showMindProjectShelf();
+renderMindProjectShelf();
 
 requestAnimationFrame(() => {
 centerMindMap();
@@ -9221,14 +9659,54 @@ shape.setAttribute("stroke-width", String(link.width || 3));
 shape.style.setProperty("stroke-width", String(link.width || 3), "important");
 shape.style.setProperty("opacity", "0.85", "important");
 shape.setAttribute("stroke-linecap", "round");
+shape.classList.add("mindLinkVisible");
 if(link.pattern === "dashed") shape.setAttribute("stroke-dasharray", "10 7");
 else if(link.pattern === "dotted") shape.setAttribute("stroke-dasharray", "2 7");
+
+/* The visible connector stays visually clean; a wider transparent hit
+   target makes the exact line easy to select without selecting a node. */
+const hit = shape.cloneNode(true);
+hit.removeAttribute("stroke-dasharray");
+hit.setAttribute("stroke", "transparent");
+hit.style.setProperty("stroke", "transparent", "important");
+hit.setAttribute("stroke-width", "20");
+hit.style.setProperty("stroke-width", "20", "important");
+hit.style.setProperty("opacity", "1", "important");
+hit.classList.add("mindLinkHit");
+hit.setAttribute("fill", "none");
+hit.addEventListener("pointerdown", event => {
+    event.preventDefault();
+    event.stopPropagation();
+});
+hit.addEventListener("click", event => {
+    event.preventDefault();
+    event.stopPropagation();
+    selectMindLinkDirectly(link);
+});
 svg.appendChild(shape);
+svg.appendChild(hit);
 
 });
 
 }
 
+
+let selectedMindLinkPair = null;
+function selectMindLinkDirectly(link){
+    if(!link) return;
+    selectedMindLinkPair = {from:String(link.from),to:String(link.to)};
+    selectedMindNodeId = link.from;
+    refreshMindLinkSelect();
+    const related = (mindMap.links || []).filter(item =>
+        item.from === selectedMindNodeId || item.to === selectedMindNodeId
+    );
+    const index = related.indexOf(link);
+    const select = document.getElementById("mindLinkSelect");
+    if(select && index >= 0) select.value = String(index);
+    loadSelectedMindLinkStyle();
+    drawMindConnections();
+    toast("🔗 تم تحديد الربطة نفسها — عدّل لونها أو شكلها من أدوات الربط");
+}
 
 /* =========================================================
    NODE DRAG
@@ -9271,7 +9749,7 @@ const canvasRect = canvas.getBoundingClientRect();
 const elementRect = element.getBoundingClientRect();
 
 const pointerMapX =
-    (event.clientX - canvasRect.left - mindPanX) / mindZoom;
+    (event.clientX - canvasRect.left + canvas.scrollLeft - mindPanX) / mindZoom;
 
 const pointerMapY =
     (event.clientY - canvasRect.top - mindPanY) / mindZoom;
@@ -9288,7 +9766,7 @@ try{
 function moveHandler(moveEvent){
 
     const currentMapX =
-        (moveEvent.clientX - canvasRect.left - mindPanX) / mindZoom;
+        (moveEvent.clientX - canvasRect.left + canvas.scrollLeft - mindPanX) / mindZoom;
 
     const currentMapY =
         (moveEvent.clientY - canvasRect.top - mindPanY) / mindZoom;
@@ -9386,6 +9864,10 @@ function changeSelectedNodeTextColor(){
 }
 
 function getSelectedMindLink(){
+    if(selectedMindLinkPair){
+        const direct=(mindMap.links||[]).find(link => String(link.from)===selectedMindLinkPair.from && String(link.to)===selectedMindLinkPair.to);
+        if(direct) return direct;
+    }
     const select = document.getElementById("mindLinkSelect");
     if(!select || select.value === "") return null;
     const node = getSelectedMindNode();
@@ -10432,49 +10914,184 @@ body.dark .examProduct .productArrow{color:#7c83ff!important}
 @media(max-width:560px){.tsTools{grid-template-columns:1fr}.tsTopActions{width:100%}.tsTopActions button{flex:1}}
 .examShelfActions{display:flex;gap:8px;flex-wrap:wrap}
 
+
+/* ===== Universal footer across platforms (Mind Map intentionally excluded) ===== */
+.study-footer{left:50%!important;right:auto!important;transform:translateX(-50%)!important;bottom:14px!important;width:min(500px,calc(100% - 32px))!important;background:rgba(255,255,255,.96)!important;border-color:#dfe6f0!important;color:#172033!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 9px 28px rgba(20,35,60,.14)!important}
+.study-footer-copy{color:#718096!important}
+/* The main study app has a fixed side navigation: center in the remaining content area. */
+body:has(#app:not(.hidden)) .study-footer{left:calc(50% - 130px)!important}
+body:has(#examMaker:not(.hidden) #examLayout:not([hidden])) .study-footer{left:calc(50% - 155px)!important}
+body:has(#tableStudioApp:not(.hidden) #tsEditor:not([hidden])) .study-footer{left:calc(50% - 135px)!important}
+/* Show the same footer in every platform except Mind Map and the platform picker. */
+body:has(#drMahtPro:not(.hidden)) .study-footer,
+body:has(#taskFlowApp:not(.hidden)) .study-footer,
+body:has(#tableStudioApp:not(.hidden)) .study-footer,
+body:has(#examMaker:not(.hidden)) .study-footer{display:flex!important}
+body:has(#mindMapApp:not(.hidden)) .study-footer,
+body:has(#productSelector:not(.hidden)) .study-footer,
+body:has(#authScreen:not(.hidden)) .study-footer{display:none!important}
+/* Match each platform's own dark theme. */
+body.dark .study-footer,
+#taskFlowApp.tf-dark:not(.hidden)~.study-footer,
+body:has(#taskFlowApp.tf-dark:not(.hidden)) .study-footer,
+body:has(#tableStudioApp.ts-dark:not(.hidden)) .study-footer,
+body:has(#examMaker.exam-dark:not(.hidden)) .study-footer{background:rgba(27,41,61,.96)!important;border-color:#3b4d66!important;color:#edf4ff!important;box-shadow:0 10px 30px rgba(0,0,0,.3)!important}
+body.dark .study-footer-copy,
+body:has(#taskFlowApp.tf-dark:not(.hidden)) .study-footer-copy,
+body:has(#tableStudioApp.ts-dark:not(.hidden)) .study-footer-copy,
+body:has(#examMaker.exam-dark:not(.hidden)) .study-footer-copy{color:#aebdd1!important}
+@media(max-width:760px){body:has(#app:not(.hidden)) .study-footer{left:50%!important}.study-footer{bottom:10px!important;width:calc(100% - 22px)!important;padding:9px 13px!important}}
+
+/* TaskFlow: stable status switch, gentle row exit, and clear edit/delete hover feedback */
+#taskFlowApp .tfStatusBar{width:min(100%,430px);}
+#taskFlowApp .tfStatusBar .tfStatusTab{flex:1;justify-content:center;min-width:0;}
+#taskFlowApp .tfStatusBar:before{width:calc(50% - 4px);transform:translateX(0);transition:transform .48s cubic-bezier(.22,.8,.22,1),background-color .3s,box-shadow .3s;will-change:transform}
+#taskFlowApp .tfStatusBar:has([data-view="done"].active):before{transform:translateX(calc(-100% - 8px));}
+#taskFlowApp .tfTaskList{transition:opacity .16s ease,transform .16s ease;}
+#taskFlowApp .tfTaskList.tf-switching{opacity:0;transform:translateY(5px);pointer-events:none;}
+#taskFlowApp .tfTaskList.tf-switch-arrive{animation:tfListArrive .24s ease both;}
+@keyframes tfListArrive{from{opacity:.25;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+#taskFlowApp .tfTask{animation:none;transition:opacity .22s ease,transform .22s ease,max-height .24s ease,min-height .24s ease,padding .24s ease,margin .24s ease,border-width .24s ease,box-shadow .2s ease,border-color .2s ease;overflow:hidden;}
+#taskFlowApp .tfTask.tfTaskLeaving{opacity:0;transform:translateY(-7px) scale(.985);max-height:0;min-height:0;padding-top:0;padding-bottom:0;border-top-width:0;border-bottom-width:0;box-shadow:none;}
+#taskFlowApp .tfTaskText[contenteditable="true"]{border-radius:7px;transition:background .18s,box-shadow .18s,padding .18s;cursor:text;}
+#taskFlowApp .tfTaskText[contenteditable="true"]:hover{background:var(--tf-soft);box-shadow:0 0 0 5px var(--tf-soft);}
+#taskFlowApp .tfTaskText[contenteditable="true"]:focus{background:var(--tf-soft);box-shadow:0 0 0 5px var(--tf-soft);}
+#taskFlowApp .tfTask button{transition:transform .2s cubic-bezier(.2,.8,.2,1),background .2s,color .2s,box-shadow .2s;}
+#taskFlowApp .tfTask button:hover{transform:translateY(-2px) scale(1.08);box-shadow:0 5px 12px #18365a18;}
+#taskFlowApp .tfTask button:active{transform:scale(.92);}
+#taskFlowApp .tfTask button.tfDeleteTask:hover{background:#ffe4e7;color:#b42332;box-shadow:0 5px 13px #c94c5b22;}
+#taskFlowApp .tfTask button.star:hover{background:#fff4d6;color:#bd8213;box-shadow:0 5px 13px #e6a32625;}
+#taskFlowApp .tfBoardCardActions button{transition:transform .2s,box-shadow .2s,background .2s,border-color .2s;}
+#taskFlowApp .tfBoardCardActions button:hover{transform:translateY(-2px);box-shadow:0 6px 14px #20385820;}
+#taskFlowApp .tfBoardCardActions button:last-child:hover{background:#ffe1e5;border-color:#eeb8c0;color:#a52b3a;}
+#taskFlowApp .tfBoardCardActions button:active{transform:scale(.96);}
+/* Extra scroll room only on platforms where the footer could cover the last content */
+#taskFlowApp{padding-bottom:125px!important;}
+#tableStudioApp{padding-bottom:125px!important;}
+#tableStudioApp .tsShelf,#tableStudioApp .tsEditor{padding-bottom:12px;}
+#drMahtPro .drMathMain{padding-bottom:115px!important;}
+#examMaker .examLayout{padding-bottom:125px!important;}
+@media(max-width:850px){#examMaker .examLayout{padding-bottom:115px!important;}}
+@media(max-width:760px){#taskFlowApp{padding-bottom:115px!important;}#tableStudioApp{padding-bottom:115px!important;}}
+@media(prefers-reduced-motion:reduce){#taskFlowApp .tfTask,#taskFlowApp .tfTaskList,#taskFlowApp .tfStatusBar:before,#taskFlowApp .tfTask button{animation:none!important;transition:none!important}}
+
+
+/* Table Studio: fully theme-aware footer and table canvas */
+body:has(#tableStudioApp.ts-dark:not(.hidden)) .study-footer{
+  background:rgba(27,41,61,.97)!important;
+  border-color:#40536d!important;
+  color:#edf4ff!important;
+  box-shadow:0 12px 34px rgba(0,0,0,.38)!important;
+}
+body:has(#tableStudioApp.ts-dark:not(.hidden)) .study-footer-title{color:#f3f7ff!important;}
+body:has(#tableStudioApp.ts-dark:not(.hidden)) .study-footer-copy{color:#b6c5d9!important;}
+#tableStudioApp.ts-dark .tsTop,
+#tableStudioApp.ts-dark .tsTools,
+#tableStudioApp.ts-dark .tsWork,
+#tableStudioApp.ts-dark .tsCard{
+  background:#1b293d!important;
+  border-color:#3b4d66!important;
+  color:#e5edf8!important;
+}
+#tableStudioApp.ts-dark .tsShelfHead h2,
+#tableStudioApp.ts-dark .tsTools h3,
+#tableStudioApp.ts-dark .tsCard h3,
+#tableStudioApp.ts-dark .tsWorkBar{color:#e5edf8!important;}
+#tableStudioApp.ts-dark .tsShelfHead p,
+#tableStudioApp.ts-dark .tsCard p,
+#tableStudioApp.ts-dark .tsHint{color:#a5b3c7!important;}
+#tableStudioApp.ts-dark .tsTools input:not([type=checkbox]):not([type=color]),
+#tableStudioApp.ts-dark .tsTools select{
+  background:#142236!important;
+  color:#e5edf8!important;
+  border-color:#465a75!important;
+  color-scheme:dark;
+}
+#tableStudioApp.ts-dark .tsTable,
+#tableStudioApp.ts-dark .tsTable td{
+  background:#172438!important;
+  color:#e5edf8!important;
+}
+#tableStudioApp.ts-dark .tsTable th{
+  background:#294f80!important;
+  color:#fff!important;
+}
+#tableStudioApp.ts-dark .tsTable th,
+#tableStudioApp.ts-dark .tsTable td{
+  border-color:#40536d!important;
+}
+#tableStudioApp.ts-dark .tsTable.ts-zebra tbody tr:nth-child(even) td{background:#20334c!important;}
+#tableStudioApp.ts-dark .tsTable td:focus,
+#tableStudioApp.ts-dark .tsTable th:focus{box-shadow:inset 0 0 0 2px #79aef0!important;}
+#tableStudioApp:not(.ts-dark) .tsTable td{color:var(--ts-text,#25324a);}
+
+
+/* Direct connector selection: generous hit area, precise visual feedback */
+#mindConnections .mindLinkVisible{pointer-events:none;transition:stroke-width .16s,filter .16s;}
+#mindConnections .mindLinkHit{pointer-events:stroke;cursor:pointer;}
+#mindConnections .mindLinkHit:hover{stroke:rgba(65,125,220,.18)!important;stroke-width:22!important;}
 </style>
 
         <!-- ================= TASKFLOW TO DO ================= -->
         <section id="taskFlowApp" class="taskFlowApp hidden" dir="rtl">
             <header class="tfTop">
-                <div><div class="tfBrand">☑️ TaskFlow</div><small>رتّب يومك،
-                        خطوة بخطوة</small></div>
+                <div class="tfTopBrand">
+                    <div class="tfBrandMark">✓</div>
+                    <div><div class="tfBrand">TaskFlow</div><small>مساحة هادئة
+                            لإنجاز مهامك</small></div>
+                </div>
                 <div class="tfTopActions">
                     <button class="tfBtn" onclick="tfToggleTheme()"
                         id="tfThemeBtn">🌙 الوضع الداكن</button>
                     <button class="tfBtn" onclick="showProductSelector()">↩
                         المنصات</button>
+                    <button class="tfBtn" id="tfMinimizeBtn"
+                        onclick="tfMinimizeBoard()" hidden>▁ تصغير إلى
+                        بطاقة</button>
                 </div>
             </header>
-            <div class="tfShell">
-                <aside class="tfSidebar">
-                    <button class="tfNav active"
-                        onclick="tfSetView('today',this)">☀️ يومي</button>
-                    <button class="tfNav"
-                        onclick="tfSetView('important',this)">⭐ مهم</button>
-                    <button class="tfNav" onclick="tfSetView('all',this)">📋 كل
-                        المهام</button>
-                    <button class="tfNav" onclick="tfSetView('done',this)">✓
-                        مكتملة</button>
-                    <div class="tfListsTitle">قوائمي <button
-                            onclick="tfAddList()"
-                            title="إضافة قائمة">＋</button></div>
-                    <div id="tfLists"></div>
-                </aside>
-                <main class="tfMain">
-                    <div class="tfHeading"><div><h1 id="tfViewTitle">يومي</h1><p
-                                id="tfViewSub">ابدأ بأهم خطوة
-                                عندك</p></div><span id="tfCount"
-                            class="tfCount">0 مهام</span></div>
-                    <div class="tfAddBox"><input id="tfNewTask"
-                            placeholder="أضف مهمة..."
-                            onkeydown="if(event.key==='Enter')tfAddTask()"><button
-                            onclick="tfAddTask()">إضافة</button></div>
-                    <div id="tfTaskList" class="tfTaskList"></div>
-                    <div id="tfEmpty" class="tfEmpty">✨ لا توجد مهام هنا
-                        الآن</div>
-                </main>
+            <div id="tfShelf" class="tfShelf">
+                <div class="tfShelfHead">
+                    <div><span class="tfEyebrow">مساحة التنظيم</span><h1>قوائم
+                            مهامي</h1><p>كل مساحة عمل محفوظة في بطاقة مستقلة،
+                            افتحها وأكمل من حيث توقفت.</p></div>
+                    <button class="tfPrimary" onclick="tfCreateBoard()">＋ مساحة
+                        جديدة</button>
+                </div>
+                <div id="tfBoardCards" class="tfBoardCards"></div>
             </div>
+            <main id="tfBoardView" class="tfBoardView" hidden>
+                <div class="tfBoardHeading">
+                    <div class="tfBoardTitleWrap"><div id="tfBoardIcon"
+                            class="tfBoardIcon">☑️</div><div><h1
+                                id="tfViewTitle">مهامي</h1><p
+                                id="tfViewSub">رتّب أفكارك وحوّلها إلى
+                                إنجازات</p></div></div>
+                    <div class="tfBoardHeadActions"><button
+                            class="tfBtn tfBackBtn" onclick="tfShowShelf()">← كل
+                            البطاقات</button></div>
+                </div>
+                <div class="tfStatusBar" role="tablist"
+                    aria-label="حالة المهام">
+                    <button class="tfStatusTab active" data-view="open"
+                        onclick="tfSetView('open',this)"><span
+                            class="tfStatusDot openDot"></span>غير مكتملة <b
+                            id="tfOpenCount">0</b></button>
+                    <button class="tfStatusTab" data-view="done"
+                        onclick="tfSetView('done',this)"><span
+                            class="tfStatusDot doneDot"></span>مكتملة <b
+                            id="tfDoneCount">0</b></button>
+                </div>
+                <div class="tfAddBox"><span class="tfAddPlus">＋</span><input
+                        id="tfNewTask" placeholder="اكتب المهمة التالية..."
+                        onkeydown="if(event.key==='Enter')tfAddTask()"><button
+                        onclick="tfAddTask()">إضافة مهمة</button></div>
+                <div id="tfTaskList" class="tfTaskList"></div>
+                <div id="tfEmpty" class="tfEmpty"><div
+                        class="tfEmptyIcon">✦</div><strong>لا توجد مهام في هذا
+                        القسم</strong><span>أضف مهمة جديدة وابدأ خطوة
+                        بخطوة.</span></div>
+            </main>
         </section>
 
         <!-- ================= TABLE STUDIO PRO ================= -->
@@ -10491,6 +11108,8 @@ body.dark .examProduct .productArrow{color:#7c83ff!important}
                         جداولي</button>
                     <button class="tsBtn primary" onclick="tsExportCurrent()">⬇
                         تصدير</button>
+                    <button class="tsBtn primary" onclick="tsPrintCurrent()">🖨️
+                        طباعة الجدول</button>
                     <button class="tsBtn" onclick="tsMinimize()">▁ تصغير إلى
                         بطاقة</button>
                 </div>
@@ -10507,6 +11126,9 @@ body.dark .examProduct .productArrow{color:#7c83ff!important}
                     <h3>تنسيق الجدول</h3>
                     <label>اسم الجدول<input id="tsTitle" value="جدول جديد"
                             oninput="tsSaveDraft()"></label>
+                    <label>رمز بطاقة الجدول<input id="tsIcon" value="▦"
+                            maxlength="8" oninput="tsSaveDraft()"
+                            placeholder="▦"></label>
                     <div class="tsToolGrid">
                         <label>عدد الصفوف<input id="tsRows" type="number"
                                 min="1" max="30" value="5"></label>
@@ -10739,7 +11361,7 @@ function examApplyTheme(theme){
  const btn=document.getElementById('examThemeToggle');if(btn){btn.textContent=dark?'☀️ الوضع الفاتح':'🌙 الوضع الداكن';btn.title=dark?'التبديل إلى الوضع الفاتح':'التبديل إلى الوضع الداكن'}
  try{localStorage.setItem(EXAM_THEME_KEY,dark?'dark':'light')}catch(e){}
 }
-function examToggleTheme(){const root=document.getElementById('examMaker');examApplyTheme(root&&root.classList.contains('exam-dark')?'light':'dark')}
+function examToggleTheme(){toggleDark()}
 let examLanguage='ar';
 const examTranslations={
  'مصمم أوراق الامتحانات والمراجعات':'Exam papers and revision designer','الوضع الداكن':'Dark mode','الوضع الفاتح':'Light mode','↩ المنصات':'↩ Platforms','⬇ تصدير PDF':'⬇ Export PDF','نسخة احتياطية':'Backup','استعادة نسخة':'Restore backup','إعدادات الورقة':'Paper settings','عنوان الورقة':'Paper title','امتحان المراجعة':'Revision exam','المادة':'Subject','مثال: اللغة العربية':'e.g. Arabic','الصف':'Grade','الصف الدراسي':'Grade','الزمن':'Duration','ساعتان':'Two hours','اسم المدرسة / الجهة':'School / organization','اسم المدرسة':'School name','لون العنوان':'Title color','لون النص':'Text color','لون التمييز':'Accent color','لون خلفية الورقة':'Paper background','نوع الخط':'Font','حجم الخط':'Font size','نمط رأس الورقة':'Header style','كلاسيكي':'Classic','حديث':'Modern','بسيط':'Minimal','＋ سؤال اختياري':'＋ Multiple choice','＋ سؤال مقالي':'＋ Essay question','＋ عنوان قسم':'＋ Section heading','＋ مجموعة أسئلة':'＋ Question group','استعادة التنسيق':'Reset style','يمكنك تعديل نص السؤال والاختيارات مباشرة، وتغيير الألوان والخطوط قبل حفظ الورقة PDF.':'Edit questions and choices directly, and customize colors and fonts before exporting to PDF.','معاينة الورقة — اضغط على النص لتعديله':'Paper preview — click text to edit','لون النص المحدد':'Selected text color','طباعة / حفظ PDF':'Print / Save PDF','الاسم:':'Name:','ابدأ بإضافة سؤال اختياري أو مقالي من لوحة الإعدادات.':'Add a multiple-choice or essay question from the settings panel to begin.','مع أطيب التمنيات بالتوفيق والنجاح':'Best wishes for success','اختياري':'Multiple choice','مقالي':'Essay','اضغط هنا واكتب نص السؤال...':'Click here and type the question...','اكتب الاختيار...':'Enter an option...','＋ إضافة سؤال فرعي':'＋ Add sub-question','↑':'↑','↓':'↓','＋ سطر':'＋ Line','▧ صورة':'▧ Image','حذف':'Delete','أعلى':'Move up','أسفل':'Move down','زيادة مساحة':'Add answer line','إضافة صورة':'Add image','حذف السؤال':'Delete question','إزالة الصورة':'Remove image','＋ سؤال فرعي':'＋ Sub-question','اكتب نص السؤال الفرعي...':'Enter sub-question...','حذف السؤال الفرعي':'Delete sub-question','اكتب عنوان المجموعة...':'Enter group title...','مجموعة أسئلة — أضف الأسئلة الخاصة بهذا السؤال الشامل من الأزرار بالأسفل':'Question group — add its questions using the buttons below','＋ سؤال اختياري':'＋ Multiple choice','＋ سؤال مقالي':'＋ Essay question','حذف المجموعة بكل أسئلتها':'Delete group and all its questions','حذف مجموعة الأسئلة؟':'Delete question group?','سيتم حذف المجموعة وجميع الأسئلة والصور الموجودة بداخلها. لا يمكن التراجع عن هذا الإجراء.':'The group, all its questions, and images will be deleted. This cannot be undone.','إلغاء':'Cancel','نعم، احذف':'Yes, delete','حذف السؤال؟':'Delete question?','هل تريد حذف هذا السؤال من ورقة الامتحان؟ لن يمكن استعادته بعد الحذف.':'Delete this question from the exam paper? This cannot be undone.','اختر ملف صورة صالحًا.':'Choose a valid image file.','حجم الصورة كبير. اختر صورة أقل من 12 ميجابايت.':'Image is too large. Choose an image smaller than 12 MB.','تعذر قراءة الصورة.':'Could not read the image.','تعذر تحميل الصورة.':'Could not load the image.','اكتب عنوان القسم...':'Enter section title...','المادة:':'Subject: ','حذف العنوان':'Delete heading','حذف عنوان القسم':'Delete section title'
@@ -10760,7 +11382,7 @@ function openExamMaker(){
   document.body.classList.remove('drMahtActive');
   document.getElementById('examMaker').classList.remove('hidden');
   let savedTheme='';try{savedTheme=localStorage.getItem(EXAM_THEME_KEY)||''}catch(e){}
-  examApplyTheme(savedTheme||(document.body.classList.contains('dark')?'dark':'light'));
+  examApplyTheme(document.body.classList.contains('dark')?'dark':'light');
   let lang='ar';try{lang=localStorage.getItem('examMakerLanguageV1')||'ar'}catch(e){}examApplyLanguage(lang);
   examShowCards();
 }
@@ -10938,37 +11560,123 @@ function examImportCardFile(event){
 /* ===== Polished UI messages ===== */
 function studyToast(message,icon='✓'){let old=document.querySelector('.studyToast');if(old)old.remove();const el=document.createElement('div');el.className='studyToast';el.innerHTML='<span style="font-size:17px">'+icon+'</span><span></span>';el.lastChild.textContent=message;document.body.appendChild(el);setTimeout(()=>el.remove(),2300)}
 function studyDialog({title='تأكيد',message='',ok='تأكيد',cancel='إلغاء',danger=false,input=false,placeholder='' }={}){return new Promise(resolve=>{const overlay=document.createElement('div');overlay.className='studyUiOverlay';const dialog=document.createElement('div');dialog.className='studyUiDialog';const h=document.createElement('h3');h.textContent=title;const p=document.createElement('p');p.textContent=message;dialog.append(h,p);let field=null;if(input){field=document.createElement('input');field.placeholder=placeholder;dialog.appendChild(field)}const actions=document.createElement('div');actions.className='studyUiActions';const no=document.createElement('button');no.className='studyUiCancel';no.textContent=cancel;const yes=document.createElement('button');yes.className='studyUiOk'+(danger?' danger':'');yes.textContent=ok;actions.append(no,yes);dialog.append(actions);overlay.append(dialog);document.body.append(overlay);const finish=value=>{overlay.remove();resolve(value)};no.onclick=()=>finish(input?null:false);yes.onclick=()=>finish(input?(field.value.trim()||null):true);overlay.onclick=e=>{if(e.target===overlay)finish(input?null:false)};if(field){field.focus();field.addEventListener('keydown',e=>{if(e.key==='Enter')finish(field.value.trim()||null);if(e.key==='Escape')finish(null)})}else{yes.focus();overlay.addEventListener('keydown',e=>{if(e.key==='Escape')finish(false);if(e.key==='Enter')finish(true)})}})}
-function tfCompletionSound(){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const ctx=new C(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.type='sine';osc.frequency.setValueAtTime(660,ctx.currentTime);osc.frequency.exponentialRampToValueAtTime(880,ctx.currentTime+.075);gain.gain.setValueAtTime(.0001,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(.045,ctx.currentTime+.012);gain.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.16);osc.connect(gain);gain.connect(ctx.destination);osc.start();osc.stop(ctx.currentTime+.17);osc.onended=()=>ctx.close()}catch(e){}}
+function tfCompletionSound(){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const ctx=new C();const now=ctx.currentTime;const master=ctx.createGain();master.gain.setValueAtTime(.0001,now);master.gain.exponentialRampToValueAtTime(.19,now+.018);master.gain.exponentialRampToValueAtTime(.0001,now+.62);master.connect(ctx.destination);[[784,0,.28],[1046.5,.13,.42]].forEach(([hz,delay,duration])=>{const osc=ctx.createOscillator(),tone=ctx.createGain();osc.type='sine';osc.frequency.setValueAtTime(hz,now+delay);tone.gain.setValueAtTime(.0001,now+delay);tone.gain.exponentialRampToValueAtTime(.72,now+delay+.018);tone.gain.exponentialRampToValueAtTime(.0001,now+delay+duration);osc.connect(tone);tone.connect(master);osc.start(now+delay);osc.stop(now+delay+duration+.02)});setTimeout(()=>ctx.close().catch(()=>{}),850)}catch(e){}}
 
-/* ===== TaskFlow To Do ===== */
+/* ===== TaskFlow To Do — boards, cards, completed / incomplete ===== */
 const TF_KEY='studySmarterTaskFlowV1_';
-let tfState={tasks:[],lists:[{id:'inbox',name:'مهامي'}],view:'today',activeList:'inbox',theme:'light'};
+const TF_ICONS=['☑️','📚','🎯','💡','📝','🚀','🌿','⭐','🧠','💼','🏠','🎨','📌','🔥','🗂️','✨','📖','🏆','🧪','🎓'];
+let tfState={boards:[],currentBoardId:null,view:'open',theme:'light',tasks:[],lists:[{id:'inbox',name:'مهامي'}]};
 function tfStorageKey(){return TF_KEY+(currentUser?.email||'guest')}
-function tfLoad(){try{const d=JSON.parse(localStorage.getItem(tfStorageKey())||'null')||currentUser?.taskFlowData;if(d)tfState={...tfState,...d};}catch(e){}tfRender()}
-function tfSave(){try{localStorage.setItem(tfStorageKey(),JSON.stringify(tfState));if(currentUser){currentUser.taskFlowData=tfState;saveCurrentUser()}}catch(e){}}
+function tfSave(){try{localStorage.setItem(tfStorageKey(),JSON.stringify(tfState));if(currentUser){currentUser.taskFlowData=tfState;saveCurrentUser()}}catch(e){studyToast('تعذر حفظ البيانات على هذا الجهاز','!')}}
+function tfNormalize(){
+ if(!Array.isArray(tfState.boards))tfState.boards=[];
+ if(!tfState.boards.length){
+  const oldTasks=Array.isArray(tfState.tasks)?tfState.tasks:[];
+  tfState.boards=[{id:'board-'+Date.now(),name:'مهامي',icon:'☑️',tasks:oldTasks.map(t=>({...t,listId:undefined})),updatedAt:Date.now()}];
+ }
+ tfState.boards.forEach(b=>{if(!Array.isArray(b.tasks))b.tasks=[];if(!b.name)b.name='مهامي';if(!b.icon)b.icon='☑️'});
+ if(!tfState.currentBoardId||!tfState.boards.some(b=>b.id===tfState.currentBoardId))tfState.currentBoardId=null;
+ tfState.view=tfState.view==='done'?'done':'open';
+}
+function tfLoad(){try{const d=JSON.parse(localStorage.getItem(tfStorageKey())||'null')||currentUser?.taskFlowData;if(d)tfState={...tfState,...d}}catch(e){}tfNormalize();tfSave();tfRender()}
+function tfCurrentBoard(){return tfState.boards.find(b=>b.id===tfState.currentBoardId)||null}
+function tfApplyTheme(){const root=document.getElementById('taskFlowApp');if(!root)return;tfState.theme=document.body.classList.contains('dark')?'dark':'light';root.classList.toggle('tf-dark',tfState.theme==='dark');const btn=document.getElementById('tfThemeBtn');if(btn)btn.textContent=tfState.theme==='dark'?'☀️ الوضع الفاتح':'🌙 الوضع الداكن'}
+function tfToggleTheme(){toggleDark()}
 function openTaskFlow(){
  if(!currentUser)return;
  ['authScreen','productSelector','app','mindMapApp','drMahtPro','examMaker','tableStudioApp'].forEach(id=>document.getElementById(id)?.classList.add('hidden'));
  document.body.classList.remove('drMahtActive');document.getElementById('taskFlowApp').classList.remove('hidden');
- tfLoad();tfApplyTheme();
+ tfLoad();tfApplyTheme();tfShowShelf();
 }
-function tfApplyTheme(){const root=document.getElementById('taskFlowApp');root.classList.toggle('tf-dark',tfState.theme==='dark');document.getElementById('tfThemeBtn').textContent=tfState.theme==='dark'?'☀️ الوضع الفاتح':'🌙 الوضع الداكن'}
-function tfToggleTheme(){tfState.theme=tfState.theme==='dark'?'light':'dark';tfApplyTheme();tfSave()}
-function tfSetView(view,btn){tfState.view=view;tfState.activeList=view==='list'?tfState.activeList:'inbox';document.querySelectorAll('.tfNav').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');tfRender()}
-function tfAddTask(){const input=document.getElementById('tfNewTask');const title=input.value.trim();if(!title)return;tfState.tasks.unshift({id:'task-'+Date.now()+Math.random().toString(36).slice(2,5),title,done:false,important:false,listId:tfState.activeList||'inbox',createdAt:Date.now()});input.value='';tfSave();tfRender();studyToast('تمت إضافة المهمة','＋')}
-async function tfAddList(){const name=await studyDialog({title:'قائمة جديدة',message:'اكتب اسم القائمة التي تريد تنظيم مهامك بداخلها.',ok:'إنشاء القائمة',input:true,placeholder:'اسم القائمة'});if(!name)return;const list={id:'list-'+Date.now(),name};tfState.lists.push(list);tfState.view='list';tfState.activeList=list.id;tfSave();tfRender();studyToast('تم إنشاء القائمة','☷')}
-async function tfDeleteList(id){if(id==='inbox')return;const ok=await studyDialog({title:'حذف القائمة؟',message:'سيتم نقل المهام الموجودة بها إلى «مهامي».',ok:'حذف القائمة',danger:true});if(!ok)return;tfState.tasks.forEach(t=>{if(t.listId===id)t.listId='inbox'});tfState.lists=tfState.lists.filter(l=>l.id!==id);tfState.activeList='inbox';tfState.view='today';tfSave();tfRender();studyToast('تم حذف القائمة','🗑')}
+function tfShowShelf(){tfState.currentBoardId=null;document.getElementById('tfShelf').hidden=false;document.getElementById('tfBoardView').hidden=true;document.getElementById('tfMinimizeBtn').hidden=true;tfSave();tfRenderCards()}
+function tfOpenBoard(id){if(!tfState.boards.some(b=>b.id===id))return;tfState.currentBoardId=id;tfState.view='open';document.getElementById('tfShelf').hidden=true;document.getElementById('tfBoardView').hidden=false;document.getElementById('tfMinimizeBtn').hidden=false;tfSave();tfRender()}
+function tfMinimizeBoard(){const b=tfCurrentBoard();if(b){b.updatedAt=Date.now();tfSave();studyToast('تم تصغير المساحة وحفظها كبطاقة','▣')}tfShowShelf()}
+async function tfChooseIcon(current='☑️'){
+ return new Promise(resolve=>{
+  const overlay=document.createElement('div');overlay.className='studyUiOverlay tfIconOverlay';
+  const box=document.createElement('div');box.className='studyUiDialog tfIconDialog';
+  const h=document.createElement('h3');h.textContent='اختر رمز المساحة';
+  const p=document.createElement('p');p.textContent='اختر الرمز الذي يميز هذه المساحة.';
+  const grid=document.createElement('div');grid.className='tfIconPicker';
+  let selected=current;
+  const finish=v=>{overlay.remove();resolve(v)};
+  TF_ICONS.forEach(icon=>{const b=document.createElement('button');b.type='button';b.textContent=icon;b.classList.toggle('selected',icon===selected);b.onclick=()=>{selected=icon;grid.querySelectorAll('button').forEach(x=>x.classList.toggle('selected',x===b))};grid.appendChild(b)});
+  const actions=document.createElement('div');actions.className='studyUiActions';const cancel=document.createElement('button');cancel.className='studyUiCancel';cancel.textContent='إلغاء';cancel.onclick=()=>finish(null);const ok=document.createElement('button');ok.className='studyUiOk';ok.textContent='اختيار الرمز';ok.onclick=()=>finish(selected);actions.append(cancel,ok);box.append(h,p,grid,actions);overlay.append(box);overlay.onclick=e=>{if(e.target===overlay)finish(null)};document.body.append(overlay);
+ });
+}
+async function tfCreateBoard(){
+ const name=await studyDialog({title:'مساحة مهام جديدة',message:'اكتب اسمًا واضحًا لمساحة العمل الجديدة.',ok:'التالي',input:true,placeholder:'مثال: مذاكرة الرياضيات'});
+ if(!name)return;
+ const icon=await tfChooseIcon('☑️');if(!icon)return;
+ const board={id:'board-'+Date.now()+'-'+Math.random().toString(36).slice(2,6),name,icon,tasks:[],updatedAt:Date.now()};
+ tfState.boards.unshift(board);tfState.currentBoardId=board.id;tfState.view='open';tfSave();tfOpenBoard(board.id);studyToast('تم إنشاء مساحة جديدة','✦');
+}
+async function tfEditBoard(id){
+ const b=tfState.boards.find(x=>x.id===id);if(!b)return;
+ const name=await studyDialog({title:'تعديل اسم المساحة',message:'غيّر الاسم الذي يظهر على البطاقة.',ok:'حفظ الاسم',input:true,placeholder:'اسم المساحة'});
+ if(!name)return;b.name=name;
+ const icon=await tfChooseIcon(b.icon);if(icon)b.icon=icon;
+ b.updatedAt=Date.now();tfSave();tfRenderCards();if(tfCurrentBoard()?.id===id)tfRender();studyToast('تم تحديث البطاقة','✎');
+}
+async function tfDeleteBoard(id){
+ const b=tfState.boards.find(x=>x.id===id);if(!b)return;
+ if(!await studyDialog({title:'حذف مساحة المهام؟',message:'سيتم حذف البطاقة وجميع المهام الموجودة بداخلها. لا يمكن التراجع عن ذلك.',ok:'حذف المساحة',danger:true}))return;
+ tfState.boards=tfState.boards.filter(x=>x.id!==id);if(tfState.currentBoardId===id)tfState.currentBoardId=null;tfSave();tfRenderCards();studyToast('تم حذف المساحة','🗑');
+}
+function tfRenderCards(){
+ const box=document.getElementById('tfBoardCards');if(!box)return;box.innerHTML='';
+ if(!tfState.boards.length){const empty=document.createElement('div');empty.className='tfShelfEmpty';empty.innerHTML='<div>✦</div><strong>ابدأ بمساحتك الأولى</strong><span>أنشئ بطاقة لتنظيم المهام ومتابعة إنجازك.</span>';box.append(empty);return}
+ tfState.boards.forEach(board=>{
+  const card=document.createElement('article');card.className='tfBoardCard';
+  const open=document.createElement('button');open.type='button';open.className='tfBoardCardOpen';open.onclick=()=>tfOpenBoard(board.id);
+  const icon=document.createElement('span');icon.className='tfBoardCardIcon';icon.textContent=board.icon;
+  const title=document.createElement('strong');title.textContent=board.name;
+  const meta=document.createElement('span');meta.className='tfBoardCardMeta';const done=board.tasks.filter(t=>t.done).length;meta.textContent=`${board.tasks.length} مهام · ${done} مكتملة`;
+  const progress=document.createElement('span');progress.className='tfProgress';const fill=document.createElement('i');fill.style.width=(board.tasks.length?Math.round(done/board.tasks.length*100):0)+'%';progress.append(fill);
+  open.append(icon,title,meta,progress);
+  const actions=document.createElement('div');actions.className='tfBoardCardActions';
+  const edit=document.createElement('button');edit.type='button';edit.textContent='✎ تعديل';edit.onclick=()=>tfEditBoard(board.id);
+  const del=document.createElement('button');del.type='button';del.textContent='حذف';del.onclick=()=>tfDeleteBoard(board.id);
+  actions.append(edit,del);card.append(open,actions);box.append(card);
+ });
+}
+let tfViewSwitchTimer=null;
+function tfSetView(view,btn){
+ const next=view==='done'?'done':'open';if(next===tfState.view)return;
+ const list=document.getElementById('tfTaskList');if(list)list.classList.add('tf-switching');
+ if(tfViewSwitchTimer)clearTimeout(tfViewSwitchTimer);
+ tfViewSwitchTimer=setTimeout(()=>{
+  tfState.view=next;document.querySelectorAll('.tfStatusTab').forEach(x=>x.classList.toggle('active',x.dataset.view===tfState.view));tfSave();tfRender();
+  requestAnimationFrame(()=>{if(list){list.classList.remove('tf-switching');list.classList.add('tf-switch-arrive');requestAnimationFrame(()=>list.classList.remove('tf-switch-arrive'))}});
+  tfViewSwitchTimer=null;
+ },125);
+}
+function tfAddTask(){
+ const board=tfCurrentBoard();const input=document.getElementById('tfNewTask');const title=input.value.trim();if(!board||!title)return;
+ board.tasks.unshift({id:'task-'+Date.now()+Math.random().toString(36).slice(2,5),title,done:false,important:false,createdAt:Date.now()});
+ board.updatedAt=Date.now();input.value='';tfSave();tfRender();studyToast('تمت إضافة المهمة','＋');
+}
 function tfRender(){
- const lists=document.getElementById('tfLists');if(!lists)return;lists.innerHTML='';
- tfState.lists.forEach(l=>{const row=document.createElement('div');row.className='tfListItem';const b=document.createElement('button');b.textContent='☷ '+l.name;b.classList.toggle('active',tfState.view==='list'&&tfState.activeList===l.id);b.onclick=()=>{tfState.view='list';tfState.activeList=l.id;tfRender()};row.appendChild(b);if(l.id!=='inbox'){const d=document.createElement('button');d.className='tfListDelete';d.textContent='×';d.title='حذف القائمة';d.onclick=()=>tfDeleteList(l.id);row.appendChild(d)}lists.appendChild(row)});
- const titles={today:'يومي',important:'مهم',all:'كل المهام',done:'مكتملة',list:(tfState.lists.find(l=>l.id===tfState.activeList)?.name||'قائمتي')};document.getElementById('tfViewTitle').textContent=titles[tfState.view]||'مهامي';
- document.getElementById('tfViewSub').textContent=tfState.view==='today'?'ابدأ بأهم خطوة عندك':tfState.view==='important'?'المهام التي وضعتها في قائمة المهم':tfState.view==='done'?'إنجازاتك التي أكملتها':'نظرة منظمة على مهامك';
- let items=tfState.tasks.filter(t=>tfState.view==='all'||(tfState.view==='today'&&!t.done)||(tfState.view==='important'&&t.important&&!t.done)||(tfState.view==='done'&&t.done)||(tfState.view==='list'&&t.listId===tfState.activeList));
- if(tfState.view!=='done')items=items.filter(t=>!t.done);
- document.getElementById('tfCount').textContent=items.length+' مهام';const box=document.getElementById('tfTaskList');box.innerHTML='';document.getElementById('tfEmpty').style.display=items.length?'none':'block';
- items.forEach(t=>{const row=document.createElement('div');row.className='tfTask'+(t.done?' done':'');const check=document.createElement('input');check.type='checkbox';check.checked=!!t.done;check.onchange=()=>{t.done=check.checked;if(t.done)tfCompletionSound();tfSave();tfRender();if(t.done)studyToast('أحسنت! تم إكمال المهمة','✓')};const text=document.createElement('div');text.className='tfTaskText';text.textContent=t.title;text.contentEditable='true';text.onblur=()=>{t.title=text.textContent.trim()||t.title;tfSave()};const star=document.createElement('button');star.className='star'+(t.important?' active':'');star.textContent='★';star.title='مهمة مهمة';star.onclick=()=>{t.important=!t.important;tfSave();tfRender()};const del=document.createElement('button');del.textContent='×';del.title='حذف المهمة';del.onclick=async()=>{if(await studyDialog({title:'حذف المهمة؟',message:'لن تظهر هذه المهمة في قائمتك بعد الحذف.',ok:'حذف المهمة',danger:true})){tfState.tasks=tfState.tasks.filter(x=>x.id!==t.id);tfSave();tfRender();studyToast('تم حذف المهمة','🗑')}};row.append(check,text,star,del);box.appendChild(row)});
+ const board=tfCurrentBoard();if(!board){tfRenderCards();return}
+ document.getElementById('tfBoardIcon').textContent=board.icon;
+ document.getElementById('tfViewTitle').textContent=board.name;
+ document.getElementById('tfViewSub').textContent='رتّب أفكارك وحوّلها إلى إنجازات';
+ const openCount=board.tasks.filter(t=>!t.done).length,doneCount=board.tasks.filter(t=>t.done).length;
+ document.getElementById('tfOpenCount').textContent=openCount;document.getElementById('tfDoneCount').textContent=doneCount;
+ document.querySelectorAll('.tfStatusTab').forEach(x=>x.classList.toggle('active',x.dataset.view===tfState.view));
+ const items=board.tasks.filter(t=>tfState.view==='done'?t.done:!t.done);
+ const box=document.getElementById('tfTaskList');box.innerHTML='';
+ document.getElementById('tfEmpty').style.display=items.length?'none':'flex';
+ items.forEach(t=>{
+  const row=document.createElement('div');row.className='tfTask'+(t.done?' done':'');
+  const check=document.createElement('input');check.type='checkbox';check.checked=!!t.done;check.setAttribute('aria-label','تغيير حالة المهمة');
+  check.onchange=()=>{t.done=check.checked;board.updatedAt=Date.now();if(t.done)tfCompletionSound();tfSave();check.disabled=true;row.classList.add('tfTaskLeaving');setTimeout(()=>{tfRender();if(t.done)studyToast('أحسنت! تم إكمال المهمة','✓')},240)};
+  const text=document.createElement('div');text.className='tfTaskText';text.textContent=t.title;text.contentEditable='true';text.setAttribute('role','textbox');text.setAttribute('aria-label','تعديل نص المهمة');text.onblur=()=>{const v=text.textContent.trim();if(v)t.title=v;else text.textContent=t.title;board.updatedAt=Date.now();tfSave()};
+  const star=document.createElement('button');star.className='star'+(t.important?' active':'');star.textContent='★';star.title=t.important?'إزالة الأهمية':'تمييز كمهمة';star.onclick=()=>{t.important=!t.important;tfSave();tfRender()};
+  const del=document.createElement('button');del.className='tfDeleteTask';del.textContent='×';del.title='حذف المهمة';del.onclick=async()=>{if(await studyDialog({title:'حذف المهمة؟',message:'لن تظهر هذه المهمة في المساحة بعد الحذف.',ok:'حذف المهمة',danger:true})){board.tasks=board.tasks.filter(x=>x.id!==t.id);board.updatedAt=Date.now();tfSave();tfRender();studyToast('تم حذف المهمة','🗑')}};
+  row.append(check,text,star,del);box.append(row);
+ });
 }
-
 /* ===== Table Studio Pro ===== */
 const TS_KEY='studySmarterTableStudioV1_';
 let tsCurrentId=null,tsTheme='light';
@@ -10976,15 +11684,15 @@ function tsKey(){return TS_KEY+(currentUser?.email||'guest')}
 function tsGetCards(){try{const local=JSON.parse(localStorage.getItem(tsKey())||'null');return Array.isArray(local)?local:(currentUser?.tableStudioCards||[])}catch(e){return currentUser?.tableStudioCards||[]}}
 function tsSaveCards(cards){try{localStorage.setItem(tsKey(),JSON.stringify(cards));if(currentUser){currentUser.tableStudioCards=cards;saveCurrentUser()}}catch(e){}}
 function tsCurrent(){return tsGetCards().find(c=>c.id===tsCurrentId)}
-function tsCapture(){const table=document.getElementById('tsTable');if(!table)return null;return {title:document.getElementById('tsTitle').value||'جدول بدون عنوان',html:table.innerHTML,headColor:document.getElementById('tsHeadColor').value,textColor:document.getElementById('tsTextColor').value,cellColor:document.getElementById('tsCellColor').value,borderColor:document.getElementById('tsBorderColor').value,font:document.getElementById('tsFont').value,fontSize:document.getElementById('tsFontSize').value,zebra:document.getElementById('tsZebra').checked,shadow:document.getElementById('tsShadow').checked,round:document.getElementById('tsRound').checked}}
+function tsCapture(){const table=document.getElementById('tsTable');if(!table)return null;return {title:document.getElementById('tsTitle').value||'جدول بدون عنوان',icon:document.getElementById('tsIcon')?.value||'▦',html:table.innerHTML,headColor:document.getElementById('tsHeadColor').value,textColor:document.getElementById('tsTextColor').value,cellColor:document.getElementById('tsCellColor').value,borderColor:document.getElementById('tsBorderColor').value,font:document.getElementById('tsFont').value,fontSize:document.getElementById('tsFontSize').value,zebra:document.getElementById('tsZebra').checked,shadow:document.getElementById('tsShadow').checked,round:document.getElementById('tsRound').checked}}
 function tsSaveDraft(){if(!tsCurrentId)return;const cards=tsGetCards(),c=cards.find(x=>x.id===tsCurrentId);if(c){Object.assign(c,tsCapture(),{updatedAt:Date.now()});tsSaveCards(cards)}}
-function openTableStudio(){if(!currentUser)return;['authScreen','productSelector','app','mindMapApp','drMahtPro','examMaker','taskFlowApp'].forEach(id=>document.getElementById(id)?.classList.add('hidden'));document.body.classList.remove('drMahtActive');document.getElementById('tableStudioApp').classList.remove('hidden');try{tsTheme=localStorage.getItem('tsThemeV1_'+(currentUser?.email||'guest'))||'light'}catch(e){}tsApplyTheme();tsShowShelf()}
-function tsApplyTheme(){const root=document.getElementById('tableStudioApp');root.classList.toggle('ts-dark',tsTheme==='dark');document.getElementById('tsThemeBtn').textContent=tsTheme==='dark'?'☀️ الوضع الفاتح':'🌙 الوضع الداكن';try{localStorage.setItem('tsThemeV1_'+(currentUser?.email||'guest'),tsTheme)}catch(e){}}
-function tsToggleTheme(){tsTheme=tsTheme==='dark'?'light':'dark';tsApplyTheme()}
+function openTableStudio(){if(!currentUser)return;['authScreen','productSelector','app','mindMapApp','drMahtPro','examMaker','taskFlowApp'].forEach(id=>document.getElementById(id)?.classList.add('hidden'));document.body.classList.remove('drMahtActive');document.getElementById('tableStudioApp').classList.remove('hidden');tsTheme=document.body.classList.contains('dark')?'dark':'light';tsApplyTheme();tsShowShelf()}
+function tsApplyTheme(){const root=document.getElementById('tableStudioApp');tsTheme=document.body.classList.contains('dark')?'dark':'light';root.classList.toggle('ts-dark',tsTheme==='dark');const btn=document.getElementById('tsThemeBtn');if(btn)btn.textContent=tsTheme==='dark'?'☀️ الوضع الفاتح':'🌙 الوضع الداكن';try{localStorage.setItem('tsThemeV1_'+(currentUser?.email||'guest'),tsTheme)}catch(e){}}
+function tsToggleTheme(){toggleDark()}
 function tsShowShelf(){tsSaveDraft();document.getElementById('tsShelf').hidden=false;document.getElementById('tsEditor').hidden=true;tsRenderCards()}
-function tsRenderCards(){const box=document.getElementById('tsCards');if(!box)return;box.innerHTML='';const cards=tsGetCards().sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));if(!cards.length){box.innerHTML='<div class="tsCard"><h3>📊 لا توجد جداول بعد</h3><p>أنشئ أول جدول واحفظه في بطاقة.</p></div>';return}cards.forEach(c=>{const card=document.createElement('article');card.className='tsCard';const h=document.createElement('h3');h.textContent='▦ '+c.title;const p=document.createElement('p');p.textContent='آخر تعديل: '+new Date(c.updatedAt||Date.now()).toLocaleDateString('ar-EG');const actions=document.createElement('div');actions.className='tsCardActions';const open=document.createElement('button');open.className='tsBtn primary';open.textContent='فتح';open.onclick=()=>tsOpenCard(c.id);const del=document.createElement('button');del.className='tsBtn danger';del.textContent='حذف';del.onclick=async()=>{if(await studyDialog({title:'حذف بطاقة الجدول؟',message:'سيتم حذف الجدول المحفوظ نهائيًا من بطاقاتك.',ok:'حذف البطاقة',danger:true})){tsSaveCards(tsGetCards().filter(x=>x.id!==c.id));tsRenderCards();studyToast('تم حذف بطاقة الجدول','🗑')}};actions.append(open,del);card.append(h,p,actions);box.appendChild(card)})}
-function tsCreateNew(){const id='table-'+Date.now()+'-'+Math.random().toString(36).slice(2,6);const cards=tsGetCards();cards.unshift({id,title:'جدول جديد',updatedAt:Date.now(),html:'',headColor:'#3867d6',textColor:'#25324a',cellColor:'#ffffff',borderColor:'#d9e2f0',font:'Tahoma,Arial,sans-serif',fontSize:'14',zebra:true,shadow:true,round:true});tsSaveCards(cards);tsOpenCard(id)}
-function tsOpenCard(id){tsCurrentId=id;const c=tsCurrent();if(!c)return;document.getElementById('tsShelf').hidden=true;document.getElementById('tsEditor').hidden=false;document.getElementById('tsTitle').value=c.title||'';document.getElementById('tsHeadColor').value=c.headColor||'#3867d6';document.getElementById('tsTextColor').value=c.textColor||'#25324a';document.getElementById('tsCellColor').value=c.cellColor||'#ffffff';document.getElementById('tsBorderColor').value=c.borderColor||'#d9e2f0';document.getElementById('tsFont').value=c.font||'Tahoma,Arial,sans-serif';document.getElementById('tsFontSize').value=c.fontSize||14;document.getElementById('tsFontOut').value=(c.fontSize||14)+'px';document.getElementById('tsZebra').checked=c.zebra!==false;document.getElementById('tsShadow').checked=c.shadow!==false;document.getElementById('tsRound').checked=c.round!==false;const table=document.getElementById('tsTable');if(c.html)table.innerHTML=c.html;else tsBuildTable(5,4);tsApplyStyle();table.oninput=()=>tsSaveDraft()}
+function tsRenderCards(){const box=document.getElementById('tsCards');if(!box)return;box.innerHTML='';const cards=tsGetCards().sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));if(!cards.length){box.innerHTML='<div class="tsCard"><h3>📊 لا توجد جداول بعد</h3><p>أنشئ أول جدول واحفظه في بطاقة.</p></div>';return}cards.forEach(c=>{const card=document.createElement('article');card.className='tsCard';const head=document.createElement('div');head.className='tsCardHead';const icon=document.createElement('div');icon.className='tsCardIcon';icon.textContent=c.icon||'▦';const titleWrap=document.createElement('div');titleWrap.className='tsCardTitleWrap';const h=document.createElement('h3');h.textContent=c.title||'جدول بدون عنوان';titleWrap.append(h);head.append(icon,titleWrap);const p=document.createElement('p');p.textContent='آخر تعديل: '+new Date(c.updatedAt||Date.now()).toLocaleDateString('ar-EG');const actions=document.createElement('div');actions.className='tsCardActions';const open=document.createElement('button');open.className='tsBtn primary';open.textContent='فتح';open.onclick=()=>tsOpenCard(c.id);const rename=document.createElement('button');rename.className='tsBtn';rename.textContent='✏️ الاسم والرمز';rename.onclick=()=>tsEditCardDetails(c.id);const print=document.createElement('button');print.className='tsBtn';print.textContent='🖨️ طباعة';print.onclick=()=>{tsOpenCard(c.id);setTimeout(tsPrintCurrent,100)};const del=document.createElement('button');del.className='tsBtn danger';del.textContent='حذف';del.onclick=async()=>{if(await studyDialog({title:'حذف بطاقة الجدول؟',message:'سيتم حذف الجدول المحفوظ نهائيًا من بطاقاتك.',ok:'حذف البطاقة',danger:true})){tsSaveCards(tsGetCards().filter(x=>x.id!==c.id));tsRenderCards();studyToast('تم حذف بطاقة الجدول','🗑')}};actions.append(open,rename,print,del);card.append(head,p,actions);box.appendChild(card)})}
+function tsCreateNew(){const id='table-'+Date.now()+'-'+Math.random().toString(36).slice(2,6);const cards=tsGetCards();cards.unshift({id,title:'جدول جديد',icon:'▦',updatedAt:Date.now(),html:'',headColor:'#3867d6',textColor:'#25324a',cellColor:'#ffffff',borderColor:'#d9e2f0',font:'Tahoma,Arial,sans-serif',fontSize:'14',zebra:true,shadow:true,round:true});tsSaveCards(cards);tsOpenCard(id)}
+function tsOpenCard(id){tsCurrentId=id;const c=tsCurrent();if(!c)return;document.getElementById('tsShelf').hidden=true;document.getElementById('tsEditor').hidden=false;document.getElementById('tsTitle').value=c.title||'';if(document.getElementById('tsIcon'))document.getElementById('tsIcon').value=c.icon||'▦';document.getElementById('tsHeadColor').value=c.headColor||'#3867d6';document.getElementById('tsTextColor').value=c.textColor||'#25324a';document.getElementById('tsCellColor').value=c.cellColor||'#ffffff';document.getElementById('tsBorderColor').value=c.borderColor||'#d9e2f0';document.getElementById('tsFont').value=c.font||'Tahoma,Arial,sans-serif';document.getElementById('tsFontSize').value=c.fontSize||14;document.getElementById('tsFontOut').value=(c.fontSize||14)+'px';document.getElementById('tsZebra').checked=c.zebra!==false;document.getElementById('tsShadow').checked=c.shadow!==false;document.getElementById('tsRound').checked=c.round!==false;const table=document.getElementById('tsTable');if(c.html)table.innerHTML=c.html;else tsBuildTable(5,4);tsApplyStyle();table.oninput=()=>tsSaveDraft()}
 function tsBuildTable(rows,cols){const table=document.getElementById('tsTable');const thead=document.createElement('thead'),hr=document.createElement('tr'),tbody=document.createElement('tbody');for(let c=0;c<cols;c++){const th=document.createElement('th');th.contentEditable='true';th.textContent='العنوان '+(c+1);hr.appendChild(th)}thead.appendChild(hr);for(let r=0;r<rows;r++){const tr=document.createElement('tr');for(let c=0;c<cols;c++){const td=document.createElement('td');td.contentEditable='true';td.textContent='';tr.appendChild(td)}tbody.appendChild(tr)}table.replaceChildren(thead,tbody)}
 async function tsResizeTable(){const rows=Math.max(1,Math.min(30,parseInt(document.getElementById('tsRows').value)||1)),cols=Math.max(1,Math.min(12,parseInt(document.getElementById('tsCols').value)||1));if(!await studyDialog({title:'تغيير حجم الجدول؟',message:'تطبيق الحجم الجديد سيعيد بناء الخلايا الحالية. هل تريد المتابعة؟',ok:'تطبيق التغيير',danger:true}))return;tsBuildTable(rows,cols);tsApplyStyle();tsSaveDraft();studyToast('تم تحديث حجم الجدول','▦')}
 function tsApplyStyle(){const table=document.getElementById('tsTable'),wrap=document.getElementById('tsTableWrap');if(!table)return;table.style.setProperty('--ts-head',document.getElementById('tsHeadColor').value);table.style.setProperty('--ts-text',document.getElementById('tsTextColor').value);table.style.setProperty('--ts-cell',document.getElementById('tsCellColor').value);table.style.setProperty('--ts-border',document.getElementById('tsBorderColor').value);table.style.setProperty('--ts-font',document.getElementById('tsFont').value);table.style.setProperty('--ts-size',document.getElementById('tsFontSize').value+'px');table.classList.toggle('ts-zebra',document.getElementById('tsZebra').checked);wrap.classList.toggle('ts-shadow',document.getElementById('tsShadow').checked);wrap.classList.toggle('ts-round',document.getElementById('tsRound').checked);tsSaveDraft()}
@@ -10992,7 +11700,69 @@ function tsAddRow(){const tbody=document.querySelector('#tsTable tbody'),cols=do
 function tsAddColumn(){const table=document.getElementById('tsTable');const th=document.createElement('th');th.contentEditable='true';th.textContent='عنوان '+(table.tHead.rows[0].cells.length+1);table.tHead.rows[0].appendChild(th);[...table.tBodies[0].rows].forEach(r=>{const td=document.createElement('td');td.contentEditable='true';r.appendChild(td)});document.getElementById('tsCols').value=table.tHead.rows[0].cells.length;tsSaveDraft();studyToast('تمت إضافة عمود جديد','＋')}
 async function tsClearTable(){if(!await studyDialog({title:'مسح محتوى الجدول؟',message:'سيتم مسح النصوص من جميع الخلايا مع الاحتفاظ بعدد الصفوف والأعمدة.',ok:'مسح المحتوى',danger:true}))return;document.querySelectorAll('#tsTable th,#tsTable td').forEach(c=>c.textContent='');tsSaveDraft();studyToast('تم مسح محتوى الجدول','⌫')}
 function tsMinimize(){tsSaveDraft();tsShowShelf()}
-function tsExportCurrent(){const c=tsCapture();if(!c)return;const html='<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><title>'+String(c.title).replace(/[<>]/g,'')+'</title><body style="font-family:'+c.font+';color:'+c.textColor+'"><h2>'+String(c.title).replace(/[<>]/g,'')+'</h2><table style="border-collapse:collapse;width:100%">'+c.html+'</table></body></html>';const blob=new Blob([html],{type:'text/html;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=(c.title||'table').replace(/[\\/:*?"<>|]+/g,'_')+'.html';a.click();URL.revokeObjectURL(url)}
+function tsEditCardDetails(id){
+ const cards=tsGetCards(),c=cards.find(x=>x.id===id);if(!c)return;
+ const overlay=document.createElement('div');overlay.className='studyUiOverlay tsEditOverlay';
+ const dialog=document.createElement('div');dialog.className='studyUiDialog tsEditDialog';
+ const top=document.createElement('div');top.className='tsEditTop';
+ const mark=document.createElement('div');mark.className='tsEditMark';mark.textContent='✏️';
+ const heading=document.createElement('div');const h=document.createElement('h3');h.textContent='تعديل بطاقة الجدول';const sub=document.createElement('p');sub.textContent='خصص اسم البطاقة والرمز الذي يميزها.';heading.append(h,sub);top.append(mark,heading);
+ const nameLabel=document.createElement('label');nameLabel.className='tsEditLabel';nameLabel.textContent='اسم البطاقة';
+ const input=document.createElement('input');input.className='tsEditName';input.value=c.title||'جدول جديد';input.maxLength=48;input.placeholder='اكتب اسمًا واضحًا للجدول';nameLabel.append(input);
+ const iconLabel=document.createElement('div');iconLabel.className='tsEditLabel';iconLabel.textContent='اختر رمزًا للبطاقة';
+ const icons=['▦','📊','📋','🧮','📚','📝','📅','📈','📌','💡','⭐','🎯','🗂️','🧪','🌟','🏆','🔬','📖','✏️','🧠','💼','🗃️','🧾','📐'];
+ const grid=document.createElement('div');grid.className='tsEditIconGrid';let selected=c.icon||'▦';
+ icons.forEach(ic=>{const b=document.createElement('button');b.type='button';b.className='tsEditIcon'+(ic===selected?' selected':'');b.textContent=ic;b.title='اختيار '+ic;b.onclick=()=>{selected=ic;grid.querySelectorAll('button').forEach(x=>x.classList.toggle('selected',x===b));preview.textContent=selected};grid.append(b)});
+ const preview=document.createElement('div');preview.className='tsEditPreview';preview.textContent=selected;
+ const previewText=document.createElement('span');previewText.textContent='معاينة الرمز';const previewRow=document.createElement('div');previewRow.className='tsEditPreviewRow';previewRow.append(preview,previewText);
+ const actions=document.createElement('div');actions.className='studyUiActions tsEditActions';const cancel=document.createElement('button');cancel.type='button';cancel.className='studyUiCancel';cancel.textContent='إلغاء';const save=document.createElement('button');save.type='button';save.className='studyUiOk';save.textContent='حفظ التعديلات';
+ const finish=()=>overlay.remove();cancel.onclick=finish;save.onclick=()=>{const title=input.value.trim();if(!title){input.focus();input.classList.add('invalid');return}c.title=title;c.icon=selected;c.updatedAt=Date.now();tsSaveCards(cards);tsRenderCards();finish();studyToast('تم تحديث بطاقة الجدول','✦')};
+ actions.append(cancel,save);dialog.append(top,nameLabel,iconLabel,grid,previewRow,actions);overlay.append(dialog);overlay.addEventListener('click',e=>{if(e.target===overlay)finish()});input.addEventListener('keydown',e=>{if(e.key==='Enter')save.click();if(e.key==='Escape')finish()});document.body.append(overlay);setTimeout(()=>input.focus(),30);
+}
+function tsPrintCurrent(){tsSaveDraft();document.body.classList.add('printTableStudio');window.print();setTimeout(()=>document.body.classList.remove('printTableStudio'),500);}
+function tsExportCurrent(){const c=tsCapture();if(!c)return;const html=`<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><title>'+String(c.title).replace(/[<>]/g,'')+'</title><body style="font-family:'+c.font+';color:'+c.textColor+'"><h2>'+String(c.title).replace(/[<>]/g,'')+'</h2><table style="border-collapse:collapse;width:100%">'+c.html+'</table><style>\n
+/* ===== Mind Map: cleaner saved project cards ===== */
+.mindShelfCard{
+    min-height:218px!important;
+    padding:20px 20px 76px!important;
+    display:flex;flex-direction:column;align-items:flex-start;
+    gap:0;
+    border-radius:22px!important;
+    background:linear-gradient(145deg,var(--card),var(--card2))!important;
+}
+.mindShelfIcon{flex:0 0 52px;margin-bottom:12px!important}
+.mindShelfName{width:100%;padding:0!important;line-height:1.5!important;margin-bottom:3px}
+.mindShelfMeta{width:100%;max-width:none!important;padding:0!important;margin-top:5px!important;line-height:1.8!important;overflow-wrap:anywhere}
+.mindShelfEdit,.mindShelfPrint,.mindShelfOpen{
+    bottom:14px!important;min-height:36px;padding:8px 10px!important;
+    border-radius:10px!important;font-size:11px!important;
+}
+.mindShelfOpen{left:14px!important}
+.mindShelfEdit{left:128px!important}
+.mindShelfPrint{left:auto!important;right:14px!important;bottom:58px!important}
+.mindShelfCard::after{z-index:0}
+.mindShelfCard>*{position:relative;z-index:1}
+
+/* Footer appears on the login home and platform-selection home, but never in Mind Map. */
+body:has(#authScreen:not(.hidden)) .study-footer,
+body:has(#productSelector:not(.hidden)) .study-footer{
+    display:flex!important;
+    left:50%!important;right:auto!important;transform:translateX(-50%)!important;
+    bottom:14px!important;
+}
+body:has(#authScreen:not(.hidden)) .authScreen,
+body:has(#productSelector:not(.hidden)) .productSelector{
+    padding-bottom:105px!important;
+}
+body:has(#mindMapApp:not(.hidden)) .study-footer{display:none!important}
+@media(max-width:650px){
+    .mindShelfCard{min-height:230px!important}
+    .mindShelfEdit{left:112px!important}
+    body:has(#authScreen:not(.hidden)) .study-footer,
+    body:has(#productSelector:not(.hidden)) .study-footer{bottom:9px!important}
+}
+\n</style>
+</body></html>`;const blob=new Blob([html],{type:'text/html;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=(c.title||'table').replace(/[\\/:*?"<>|]+/g,'_')+'.html';a.click();URL.revokeObjectURL(url)}
 
 </script>
 
